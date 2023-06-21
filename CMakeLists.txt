@@ -30,6 +30,12 @@ set(PROJECT_SOURCES
         StylesheedFileForm.cpp
         StylesheedFileForm.h
         StylesheedFileForm.ui
+        InitialDataForm.cpp
+        InitialDataForm.h
+        InitialDataForm.ui
+        DatabaseForm.cpp
+        DatabaseForm.h
+        DatabaseForm.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

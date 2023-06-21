@@ -25,6 +25,7 @@ private slots:
     void onCloseAndDiscardDb();
 
     void onAddStylesheet();
+    void onFinishDbCreation();
 
 
 private:

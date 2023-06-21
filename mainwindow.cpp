@@ -16,10 +16,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->openDbButton, &QPushButton::clicked, this, &MainWindow::onOpenDb);
     connect(ui->quitButton, &QPushButton::clicked, this, &QMainWindow::close);
 
-    connectDbStatusControls(ui->dbStatusWidget);
-    connectDbStatusControls(ui->dbStatusWidget_2);
-
-    connect(ui->addStylesheetButton, &QAbstractButton::clicked, this, &MainWindow::onAddStylesheet);
+    connect(ui->createWidget, &InitialDataForm::confirm, this, &MainWindow::onFinishDbCreation);
+    connect(ui->createWidget, &InitialDataForm::cancel, this, &MainWindow::onCloseAndDiscardDb);
 
     ui->stackedWidget->setCurrentWidget(ui->startWidget);
 }
@@ -38,7 +36,6 @@ void MainWindow::onCreateDb()
     {
         controller.createDb(dbFile);
         ui->stackedWidget->setCurrentWidget(ui->createWidget);
-        ui->dbStatusWidget->setDbFile(dbFile);
     }
 }
 
@@ -50,7 +47,7 @@ void MainWindow::onOpenDb()
     if (!dbFile.isEmpty())
     {
         ui->stackedWidget->setCurrentWidget(ui->mainWidget);
-        ui->dbStatusWidget_2->setDbFile(dbFile);
+        //ui->dbStatusWidget_2->setDbFile(dbFile);
     }
 }
 
@@ -69,7 +66,18 @@ void MainWindow::onCloseAndDiscardDb()
 
 void MainWindow::onAddStylesheet()
 {
-    ui->stylesheetsLayout->addWidget(new StylesheedFileForm());
+    const QString title = tr("Select an Invoice Stylesheet");
+    const QString typeDescription = tr("Stylesheet (*.css)");
+    const QString styleFile = QFileDialog::getOpenFileName(this, title, QString(), typeDescription);
+    if (!styleFile.isEmpty())
+    {
+    }
+}
+
+void MainWindow::onFinishDbCreation()
+{
+    controller.save();
+    ui->stackedWidget->setCurrentWidget(ui->mainWidget);
 }
 
 void MainWindow::connectDbStatusControls(DbStatusForm *dbStatusForm)
