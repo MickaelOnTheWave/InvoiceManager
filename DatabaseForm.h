@@ -15,6 +15,10 @@ public:
     explicit DatabaseForm(QWidget *parent = nullptr);
     ~DatabaseForm();
 
+signals:
+    void closeAndSave();
+    void closeAndDiscard();
+
 private:
     Ui::DatabaseForm *ui;
 };

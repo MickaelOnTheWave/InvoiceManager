@@ -19,6 +19,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->createWidget, &InitialDataForm::confirm, this, &MainWindow::onFinishDbCreation);
     connect(ui->createWidget, &InitialDataForm::cancel, this, &MainWindow::onCloseAndDiscardDb);
 
+    connect(ui->mainWidget, &DatabaseForm::closeAndSave, this, &MainWindow::onCloseAndSaveDb);
+    connect(ui->mainWidget, &DatabaseForm::closeAndDiscard, this, &MainWindow::onCloseAndDiscardDb);
+
     ui->stackedWidget->setCurrentWidget(ui->startWidget);
 }
 

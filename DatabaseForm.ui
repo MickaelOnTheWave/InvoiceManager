@@ -159,7 +159,7 @@
     </layout>
    </item>
    <item>
-    <widget class="DbStatusForm" name="dbStatusWidget_2" native="true"/>
+    <widget class="DbStatusForm" name="dbStatusWidget" native="true"/>
    </item>
   </layout>
  </widget>
