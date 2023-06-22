@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+#include <QAbstractItemModel>
+
 namespace Ui {
 class InitialDataForm;
 }
@@ -15,6 +17,8 @@ public:
     explicit InitialDataForm(QWidget *parent = nullptr);
     ~InitialDataForm();
 
+    void setModel(QAbstractItemModel* model);
+
 signals:
     void confirm();
     void cancel();
@@ -23,7 +27,10 @@ private slots:
     void onAddStylesheet();
 
 private:
+    void insertIntoModel(const QString& stylesheetPath);
+
     Ui::InitialDataForm *ui;
+    QAbstractItemModel* stylesheetModel;
 };
 
 #endif // INITIALDATAFORM_H
