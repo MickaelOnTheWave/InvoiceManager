@@ -4,7 +4,9 @@
 #include <QFileDialog>
 #include <QPushButton>
 
-#include "StylesheedFileForm.h"
+// TODO Next :
+// - Add data models (even with dummy data) to have UI showing something
+// - Add forms for New Invoice and More
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -38,7 +40,10 @@ void MainWindow::onCreateDb()
     if (!dbFile.isEmpty())
     {
         controller.createDb(dbFile);
+        createModels();
+
         ui->stackedWidget->setCurrentWidget(ui->createWidget);
+        ui->createWidget->setModel(stylesheetModel);
     }
 }
 
@@ -49,8 +54,10 @@ void MainWindow::onOpenDb()
     const QString dbFile = QFileDialog::getOpenFileName(this, title, QString(), typeDescription);
     if (!dbFile.isEmpty())
     {
+        controller.openDb(dbFile);
+
         ui->stackedWidget->setCurrentWidget(ui->mainWidget);
-        //ui->dbStatusWidget_2->setDbFile(dbFile);
+        ui->createWidget->setModel(stylesheetModel);
     }
 }
 
@@ -67,16 +74,6 @@ void MainWindow::onCloseAndDiscardDb()
     ui->stackedWidget->setCurrentWidget(ui->startWidget);
 }
 
-void MainWindow::onAddStylesheet()
-{
-    const QString title = tr("Select an Invoice Stylesheet");
-    const QString typeDescription = tr("Stylesheet (*.css)");
-    const QString styleFile = QFileDialog::getOpenFileName(this, title, QString(), typeDescription);
-    if (!styleFile.isEmpty())
-    {
-    }
-}
-
 void MainWindow::onFinishDbCreation()
 {
     controller.save();
@@ -87,5 +84,11 @@ void MainWindow::connectDbStatusControls(DbStatusForm *dbStatusForm)
 {
     connect(dbStatusForm, &DbStatusForm::closeAndSave, this, &MainWindow::onCloseAndSaveDb);
     connect(dbStatusForm, &DbStatusForm::closeAndDiscard, this, &MainWindow::onCloseAndDiscardDb);
+}
+
+void MainWindow::createModels()
+{
+    stylesheetModel = new QStringListModel(this);
+    stylesheetModel->setHeaderData(0, Qt::Horizontal, "Stylesheet path");
 }
 

@@ -10,6 +10,8 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
+#include <QStringListModel>
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -24,15 +26,16 @@ private slots:
     void onCloseAndSaveDb();
     void onCloseAndDiscardDb();
 
-    void onAddStylesheet();
     void onFinishDbCreation();
 
 
 private:
     void connectDbStatusControls(DbStatusForm* dbStatusForm);
+    void createModels();
 
     Ui::MainWindow *ui;
 
     InvoiceDbController controller;
+    QStringListModel* stylesheetModel;
 };
 #endif // MAINWINDOW_H

@@ -27,15 +27,15 @@ set(PROJECT_SOURCES
         AddressForm.cpp
         AddressForm.h
         AddressForm.ui
-        StylesheedFileForm.cpp
-        StylesheedFileForm.h
-        StylesheedFileForm.ui
         InitialDataForm.cpp
         InitialDataForm.h
         InitialDataForm.ui
         DatabaseForm.cpp
         DatabaseForm.h
         DatabaseForm.ui
+        DataHandlerWidget.h
+        DataHandlerWidget.cpp
+        DataHandlerWidget.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
