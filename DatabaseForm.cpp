@@ -14,3 +14,8 @@ DatabaseForm::~DatabaseForm()
 {
     delete ui;
 }
+
+void DatabaseForm::setCompanyName(const QString &value)
+{
+    ui->companyNameLabel->setText(value);
+}

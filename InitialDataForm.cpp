@@ -26,6 +26,11 @@ void InitialDataForm::setModel(QAbstractItemModel *model)
     ui->stylesheedsDataWidget->setModel(stylesheetModel);
 }
 
+QString InitialDataForm::getCompanyName() const
+{
+    return ui->nameEdit->text();
+}
+
 void InitialDataForm::onAddStylesheet()
 {
     const QString title = tr("Select an Invoice Stylesheet");

@@ -18,6 +18,7 @@ public:
     ~InitialDataForm();
 
     void setModel(QAbstractItemModel* model);
+    QString getCompanyName() const;
 
 signals:
     void confirm();

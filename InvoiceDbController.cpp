@@ -1,18 +1,17 @@
 #include "InvoiceDbController.h"
 
-#include <QtSql/qsqldatabase.h>
 #include <QtSql/QSqlQuery>
+#include <qsqlerror.h>
 
 InvoiceDbController::InvoiceDbController()
 {
-
 }
 
 void InvoiceDbController::createDb(const QString &filename)
 {
     dbFilename = filename;
 
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(filename);
     db.open();
 
@@ -29,12 +28,35 @@ void InvoiceDbController::openDb(const QString &filename)
     dbFilename = filename;
 }
 
-void InvoiceDbController::save()
+void InvoiceDbController::closeDb()
 {
 
 }
 
-void InvoiceDbController::closeDb()
+void InvoiceDbController::write(const QString &companyName, QStringListModel *stylesheetsModel)
 {
+    QSqlQuery query;
+    query.exec("INSERT INTO company (name) VALUES ('" + companyName + "')");
 
+    /*
+    for ()
+    {
+        stylesheetsModel->data(index);
+        query.exec("INSERT INTO stylesheet (file) VALUES ('" + stylesheet + "')");
+    }*/
+}
+
+QString InvoiceDbController::getCompanyName() const
+{
+    QSqlQuery query(db);
+    const bool result = query.exec("SELECT name FROM company ORDER BY id DESC LIMIT 1");
+    if (!result)
+    {
+        QSqlError error = query.lastError();
+        auto errorDesc = error.text();
+        int lala = 3;
+    }
+
+    auto jkjk = query.value(0);
+    return query.value(0).toString();
 }

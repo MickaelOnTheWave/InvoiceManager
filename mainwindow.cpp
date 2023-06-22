@@ -57,13 +57,14 @@ void MainWindow::onOpenDb()
         controller.openDb(dbFile);
 
         ui->stackedWidget->setCurrentWidget(ui->mainWidget);
-        ui->createWidget->setModel(stylesheetModel);
+        ui->mainWidget->setCompanyName(controller.getCompanyName());
+        //ui->mainWidget->setModel(stylesheetModel);
     }
 }
 
 void MainWindow::onCloseAndSaveDb()
 {
-    controller.save();
+    //controller.save();
     controller.closeDb();
     ui->stackedWidget->setCurrentWidget(ui->startWidget);
 }
@@ -76,7 +77,7 @@ void MainWindow::onCloseAndDiscardDb()
 
 void MainWindow::onFinishDbCreation()
 {
-    controller.save();
+    controller.write(ui->createWidget->getCompanyName(), stylesheetModel);
     ui->stackedWidget->setCurrentWidget(ui->mainWidget);
 }
 

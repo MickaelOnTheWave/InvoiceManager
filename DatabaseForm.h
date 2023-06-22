@@ -15,6 +15,8 @@ public:
     explicit DatabaseForm(QWidget *parent = nullptr);
     ~DatabaseForm();
 
+    void setCompanyName(const QString& value);
+
 signals:
     void closeAndSave();
     void closeAndDiscard();
