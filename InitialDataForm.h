@@ -19,6 +19,8 @@ public:
 
     void setModel(QAbstractItemModel* model);
     QString getCompanyName() const;
+    QString getCompanyAddress() const;
+    QString getCompanyEmail() const;
 
 signals:
     void confirm();

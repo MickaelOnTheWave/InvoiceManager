@@ -29,17 +29,42 @@ void InvoiceDbController::closeDb()
     db.close();
 }
 
-void InvoiceDbController::write(const QString &companyName, QStringListModel *stylesheetsModel)
+QString InvoiceDbController::getLastError() const
+{
+    return lastErrorMessage;
+}
+
+bool InvoiceDbController::writeUserCompany(const Company &company)
 {
     QSqlQuery query;
-    query.exec("INSERT INTO company (name) VALUES ('" + companyName + "')");
-
-    /*
-    for ()
+    query.prepare("INSERT INTO company (name, address, email) VALUES (:name, :address, :email)");
+    query.bindValue(":name", company.name);
+    query.bindValue(":address", company.address);
+    query.bindValue(":email", company.email);
+    const bool result = query.exec();
+    if (!result)
     {
-        stylesheetsModel->data(index);
-        query.exec("INSERT INTO stylesheet (file) VALUES ('" + stylesheet + "')");
-    }*/
+        lastErrorMessage = query.lastError().text();
+    }
+    return result;
+}
+
+bool InvoiceDbController::writeStylesheets(const QStringList& stylesheets)
+{
+    bool result = true;
+    for (const auto& stylesheet : stylesheets)
+    {
+        QSqlQuery query;
+        query.prepare("INSERT INTO stylesheet (file) VALUES (':file')");
+        query.bindValue(":file", stylesheet);
+        result = query.exec();
+        if (!result)
+        {
+            lastErrorMessage = query.lastError().text();
+            break;
+        }
+    }
+    return result;
 }
 
 QString InvoiceDbController::getCompanyName() const

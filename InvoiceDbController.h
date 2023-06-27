@@ -6,6 +6,8 @@
 #include <QObject>
 #include <QString>
 
+#include "Company.h"
+
 class InvoiceDbController : public QObject
 {
     Q_OBJECT
@@ -17,7 +19,10 @@ public:
     void openDb(const QString& filename);
     void closeDb();
 
-    void write(const QString& companyName, QStringListModel* stylesheetsModel);
+    QString getLastError() const;
+
+    bool writeUserCompany(const Company& company);
+    bool writeStylesheets(const QStringList &stylesheets);
 
     QString getCompanyName() const;
 
@@ -25,7 +30,8 @@ private:
     void createDbConnection(const QString& filename);
 
     QString dbFilename;
-    QSqlDatabase db;
+    QSqlDatabase db; // TODO : remove this. See tip from Qt documentqtion.
+    QString lastErrorMessage;
 };
 
 #endif // INVOICEDBCONTROLLER_H

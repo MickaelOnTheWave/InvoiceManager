@@ -36,6 +36,7 @@ set(PROJECT_SOURCES
         DataHandlerWidget.h
         DataHandlerWidget.cpp
         DataHandlerWidget.ui
+        Company.h Company.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

@@ -31,6 +31,18 @@ QString InitialDataForm::getCompanyName() const
     return ui->nameEdit->text();
 }
 
+QString InitialDataForm::getCompanyAddress() const
+{
+    return ui->addressLineEdit1->text() + "\n" +
+           ui->addressLineEdit2->text() + "\n" +
+            ui->addressLineEdit3->text();
+}
+
+QString InitialDataForm::getCompanyEmail() const
+{
+    return ui->emailEdit->text();
+}
+
 void InitialDataForm::onAddStylesheet()
 {
     const QString title = tr("Select an Invoice Stylesheet");
