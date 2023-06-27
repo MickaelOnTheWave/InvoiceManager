@@ -9,11 +9,7 @@ InvoiceDbController::InvoiceDbController()
 
 void InvoiceDbController::createDb(const QString &filename)
 {
-    dbFilename = filename;
-
-    db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName(filename);
-    db.open();
+    createDbConnection(filename);
 
     QSqlQuery query;
     query.exec("CREATE TABLE client (id INTEGER primary key, name TEXT, address TEXT)");
@@ -25,12 +21,12 @@ void InvoiceDbController::createDb(const QString &filename)
 
 void InvoiceDbController::openDb(const QString &filename)
 {
-    dbFilename = filename;
+    createDbConnection(filename);
 }
 
 void InvoiceDbController::closeDb()
 {
-
+    db.close();
 }
 
 void InvoiceDbController::write(const QString &companyName, QStringListModel *stylesheetsModel)
@@ -50,13 +46,18 @@ QString InvoiceDbController::getCompanyName() const
 {
     QSqlQuery query(db);
     const bool result = query.exec("SELECT name FROM company ORDER BY id DESC LIMIT 1");
-    if (!result)
+    if (result && query.next())
     {
-        QSqlError error = query.lastError();
-        auto errorDesc = error.text();
-        int lala = 3;
+        return query.value(0).toString();
     }
 
-    auto jkjk = query.value(0);
-    return query.value(0).toString();
+    return query.lastError().text();
+}
+
+void InvoiceDbController::createDbConnection(const QString &filename)
+{
+    dbFilename = filename;
+    db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName(filename);
+    db.open();
 }

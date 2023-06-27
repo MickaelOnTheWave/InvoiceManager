@@ -22,6 +22,8 @@ public:
     QString getCompanyName() const;
 
 private:
+    void createDbConnection(const QString& filename);
+
     QString dbFilename;
     QSqlDatabase db;
 };
