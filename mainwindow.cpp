@@ -77,7 +77,17 @@ void MainWindow::onCloseAndDiscardDb()
 
 void MainWindow::onFinishDbCreation()
 {
-    controller.write(ui->createWidget->getCompanyName(), stylesheetModel);
+    Company userCompany(ui->createWidget->getCompanyName(),
+                        ui->createWidget->getCompanyAddress(),
+                        ui->createWidget->getCompanyEmail());
+
+    const bool r1 = controller.writeUserCompany(userCompany);
+    const bool r2 = controller.writeStylesheets(stylesheetModel->stringList());
+    if (!r1 || !r2)
+    {
+        // display error
+        int i= 0;
+    }
     ui->stackedWidget->setCurrentWidget(ui->mainWidget);
 }
 
