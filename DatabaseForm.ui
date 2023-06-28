@@ -130,14 +130,14 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="newInvoiceButton">
        <property name="text">
         <string>New Invoice</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_2">
+      <widget class="QPushButton" name="moreButton">
        <property name="text">
         <string>More Options</string>
        </property>

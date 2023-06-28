@@ -20,6 +20,8 @@ public:
 signals:
     void closeAndSave();
     void closeAndDiscard();
+    void createNewInvoice();
+    void goToMore();
 
 private:
     Ui::DatabaseForm *ui;

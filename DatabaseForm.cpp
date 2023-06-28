@@ -6,6 +6,9 @@ DatabaseForm::DatabaseForm(QWidget *parent) :
     ui(new Ui::DatabaseForm)
 {
     ui->setupUi(this);
+    connect(ui->newInvoiceButton, &QAbstractButton::clicked, this, &DatabaseForm::createNewInvoice);
+    connect(ui->moreButton, &QAbstractButton::clicked, this, &DatabaseForm::goToMore);
+
     connect(ui->dbStatusWidget, &DbStatusForm::closeAndSave, this, &DatabaseForm::closeAndSave);
     connect(ui->dbStatusWidget, &DbStatusForm::closeAndDiscard, this, &DatabaseForm::closeAndDiscard);
 }

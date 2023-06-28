@@ -16,27 +16,16 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets Sql REQUIRED)
 
 set(PROJECT_SOURCES
         main.cpp
-        mainwindow.cpp
-        mainwindow.h
-        mainwindow.ui
-        DbStatusForm.cpp
-        DbStatusForm.h
-        DbStatusForm.ui
-        InvoiceDbController.cpp
-        InvoiceDbController.h
-        AddressForm.cpp
-        AddressForm.h
-        AddressForm.ui
-        InitialDataForm.cpp
-        InitialDataForm.h
-        InitialDataForm.ui
-        DatabaseForm.cpp
-        DatabaseForm.h
-        DatabaseForm.ui
-        DataHandlerWidget.h
-        DataHandlerWidget.cpp
-        DataHandlerWidget.ui
+        InvoiceDbController.h InvoiceDbController.cpp
         Company.h Company.cpp
+        mainwindow.h mainwindow.cpp mainwindow.ui
+        DbStatusForm.h DbStatusForm.cpp DbStatusForm.ui
+        AddressForm.h AddressForm.cpp AddressForm.ui
+        InitialDataForm.h InitialDataForm.cpp InitialDataForm.ui
+        DatabaseForm.h DatabaseForm.cpp DatabaseForm.ui
+        DataHandlerWidget.h DataHandlerWidget.cpp DataHandlerWidget.ui
+        NewInvoicePage.h NewInvoicePage.cpp NewInvoicePage.ui
+        MorePage.h MorePage.cpp MorePage.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

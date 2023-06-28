@@ -4,6 +4,8 @@
 #include <QFileDialog>
 #include <QPushButton>
 
+#include "NewInvoicePage.h"
+
 // TODO Next :
 // - Add data models (even with dummy data) to have UI showing something
 // - Add forms for New Invoice and More
@@ -18,13 +20,18 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->openDbButton, &QPushButton::clicked, this, &MainWindow::onOpenDb);
     connect(ui->quitButton, &QPushButton::clicked, this, &QMainWindow::close);
 
-    connect(ui->createWidget, &InitialDataForm::confirm, this, &MainWindow::onFinishDbCreation);
-    connect(ui->createWidget, &InitialDataForm::cancel, this, &MainWindow::onCloseAndDiscardDb);
+    connect(ui->createPage, &InitialDataForm::confirm, this, &MainWindow::onFinishDbCreation);
+    connect(ui->createPage, &InitialDataForm::cancel, this, &MainWindow::onCloseAndDiscardDb);
 
+    connect(ui->mainWidget, &DatabaseForm::createNewInvoice, this, &MainWindow::onGoToCreateNewInvoice);
+    connect(ui->mainWidget, &DatabaseForm::goToMore, this, &MainWindow::onGoToMore);
     connect(ui->mainWidget, &DatabaseForm::closeAndSave, this, &MainWindow::onCloseAndSaveDb);
     connect(ui->mainWidget, &DatabaseForm::closeAndDiscard, this, &MainWindow::onCloseAndDiscardDb);
 
-    ui->stackedWidget->setCurrentWidget(ui->startWidget);
+    connect(ui->newInvoicePage, &NewInvoicePage::create, this, &MainWindow::onCreateNewInvoice);
+    connect(ui->newInvoicePage, &NewInvoicePage::cancel, this, &MainWindow::onBackToMainPage);
+
+    ui->stackedWidget->setCurrentWidget(ui->startPage);
 }
 
 MainWindow::~MainWindow()
@@ -42,8 +49,8 @@ void MainWindow::onCreateDb()
         controller.createDb(dbFile);
         createModels();
 
-        ui->stackedWidget->setCurrentWidget(ui->createWidget);
-        ui->createWidget->setModel(stylesheetModel);
+        ui->stackedWidget->setCurrentWidget(ui->createPage);
+        ui->createPage->setModel(stylesheetModel);
     }
 }
 
@@ -56,9 +63,7 @@ void MainWindow::onOpenDb()
     {
         controller.openDb(dbFile);
 
-        ui->stackedWidget->setCurrentWidget(ui->mainWidget);
-        ui->mainWidget->setCompanyName(controller.getCompanyName());
-        //ui->mainWidget->setModel(stylesheetModel);
+        switchToMainWidget();
     }
 }
 
@@ -66,20 +71,20 @@ void MainWindow::onCloseAndSaveDb()
 {
     //controller.save();
     controller.closeDb();
-    ui->stackedWidget->setCurrentWidget(ui->startWidget);
+    ui->stackedWidget->setCurrentWidget(ui->startPage);
 }
 
 void MainWindow::onCloseAndDiscardDb()
 {
     controller.closeDb();
-    ui->stackedWidget->setCurrentWidget(ui->startWidget);
+    ui->stackedWidget->setCurrentWidget(ui->startPage);
 }
 
 void MainWindow::onFinishDbCreation()
 {
-    Company userCompany(ui->createWidget->getCompanyName(),
-                        ui->createWidget->getCompanyAddress(),
-                        ui->createWidget->getCompanyEmail());
+    Company userCompany(ui->createPage->getCompanyName(),
+                        ui->createPage->getCompanyAddress(),
+                        ui->createPage->getCompanyEmail());
 
     const bool r1 = controller.writeUserCompany(userCompany);
     const bool r2 = controller.writeStylesheets(stylesheetModel->stringList());
@@ -88,7 +93,29 @@ void MainWindow::onFinishDbCreation()
         // display error
         int i= 0;
     }
+    else
+        switchToMainWidget();
+
+}
+
+void MainWindow::onGoToCreateNewInvoice()
+{
+    ui->stackedWidget->setCurrentWidget(ui->newInvoicePage);
+}
+
+void MainWindow::onCreateNewInvoice()
+{
     ui->stackedWidget->setCurrentWidget(ui->mainWidget);
+}
+
+void MainWindow::onBackToMainPage()
+{
+    ui->stackedWidget->setCurrentWidget(ui->mainWidget);
+}
+
+void MainWindow::onGoToMore()
+{
+    ui->stackedWidget->setCurrentWidget(ui->morePage);
 }
 
 void MainWindow::connectDbStatusControls(DbStatusForm *dbStatusForm)
@@ -101,5 +128,13 @@ void MainWindow::createModels()
 {
     stylesheetModel = new QStringListModel(this);
     stylesheetModel->setHeaderData(0, Qt::Horizontal, "Stylesheet path");
+}
+
+void MainWindow::switchToMainWidget()
+{
+    ui->mainWidget->setCompanyName(controller.getCompanyName());
+    //ui->mainWidget->setModel(stylesheetModel);
+
+    ui->stackedWidget->setCurrentWidget(ui->mainWidget);
 }
 

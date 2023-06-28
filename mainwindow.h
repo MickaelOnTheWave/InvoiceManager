@@ -28,10 +28,16 @@ private slots:
 
     void onFinishDbCreation();
 
+    void onGoToCreateNewInvoice();
+    void onGoToMore();
+    void onCreateNewInvoice();
+    void onBackToMainPage();
+
 
 private:
     void connectDbStatusControls(DbStatusForm* dbStatusForm);
     void createModels();
+    void switchToMainWidget();
 
     Ui::MainWindow *ui;
 

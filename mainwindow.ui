@@ -18,9 +18,9 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>4</number>
       </property>
-      <widget class="QWidget" name="startWidget">
+      <widget class="QWidget" name="startPage">
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <spacer name="verticalSpacer">
@@ -105,10 +105,12 @@
         </item>
        </layout>
       </widget>
-      <widget class="InitialDataForm" name="createWidget">
+      <widget class="InitialDataForm" name="createPage">
        <layout class="QVBoxLayout" name="verticalLayout_5"/>
       </widget>
       <widget class="DatabaseForm" name="mainWidget"/>
+      <widget class="NewInvoicePage" name="newInvoicePage"/>
+      <widget class="MorePage" name="morePage"/>
      </widget>
     </item>
    </layout>
@@ -125,6 +127,18 @@
    <class>DatabaseForm</class>
    <extends>QWidget</extends>
    <header>DatabaseForm.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>NewInvoicePage</class>
+   <extends>QWidget</extends>
+   <header>NewInvoicePage.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MorePage</class>
+   <extends>QWidget</extends>
+   <header>MorePage.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
