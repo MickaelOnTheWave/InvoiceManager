@@ -15,7 +15,7 @@ class InvoiceDbController : public QObject
 public:
     InvoiceDbController();
 
-    void createDb(const QString& filename);
+    bool createDb(const QString& filename);
     void openDb(const QString& filename);
     void closeDb();
 

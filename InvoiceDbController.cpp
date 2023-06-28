@@ -1,5 +1,6 @@
 #include "InvoiceDbController.h"
 
+#include <QFile>
 #include <QtSql/QSqlQuery>
 #include <qsqlerror.h>
 
@@ -7,8 +8,13 @@ InvoiceDbController::InvoiceDbController()
 {
 }
 
-void InvoiceDbController::createDb(const QString &filename)
+bool InvoiceDbController::createDb(const QString &filename)
 {
+    QFile file(filename);
+    const bool result = file.remove();
+    if (!result)
+        return false;
+
     createDbConnection(filename);
 
     QSqlQuery query;
@@ -17,6 +23,8 @@ void InvoiceDbController::createDb(const QString &filename)
     query.exec("CREATE TABLE stylesheet (id INTEGER primary key, file TEXT)");
     query.exec("CREATE TABLE invoice (id INTEGER primary key, companyId INTEGER, clientId INTEGER, "
                "stylesheetId INTEGER, value DOUBLE, date TEXT)");
+
+    return true;
 }
 
 void InvoiceDbController::openDb(const QString &filename)
@@ -55,7 +63,7 @@ bool InvoiceDbController::writeStylesheets(const QStringList& stylesheets)
     for (const auto& stylesheet : stylesheets)
     {
         QSqlQuery query;
-        query.prepare("INSERT INTO stylesheet (file) VALUES (':file')");
+        query.prepare("INSERT INTO stylesheet (file) VALUES (:file)");
         query.bindValue(":file", stylesheet);
         result = query.exec();
         if (!result)
