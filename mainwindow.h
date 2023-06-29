@@ -39,6 +39,8 @@ private:
     void createModels();
     void switchToMainWidget();
 
+    void showError(const QString& title, const QString& details);
+
     Ui::MainWindow *ui;
 
     InvoiceDbController controller;

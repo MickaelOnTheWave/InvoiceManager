@@ -5,6 +5,8 @@
 
 #include <QAbstractItemModel>
 
+#include "Company.h"
+
 namespace Ui {
 class InitialDataForm;
 }
@@ -17,10 +19,9 @@ public:
     explicit InitialDataForm(QWidget *parent = nullptr);
     ~InitialDataForm();
 
+    CompanyData getCompanyData() const;
+
     void setModel(QAbstractItemModel* model);
-    QString getCompanyName() const;
-    QString getCompanyAddress() const;
-    QString getCompanyEmail() const;
 
 signals:
     void confirm();

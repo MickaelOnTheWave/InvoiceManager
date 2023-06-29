@@ -3,15 +3,16 @@
 
 #include <QString>
 
-class Company
+class CompanyData
 {
 public:
-    Company();
-    Company(const QString& _name, const QString& _address, const QString& _email);
+    CompanyData();
+    CompanyData(const QString& _name, const QString& _address, const QString& _email);
 
     QString name;
     QString address;
     QString email;
+    QString phoneNumber;
 };
 
 #endif // COMPANY_H

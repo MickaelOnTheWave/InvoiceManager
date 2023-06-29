@@ -2,6 +2,7 @@
 #include "./ui_mainwindow.h"
 
 #include <QFileDialog>
+#include <QMessageBox>
 #include <QPushButton>
 
 #include "NewInvoicePage.h"
@@ -82,20 +83,22 @@ void MainWindow::onCloseAndDiscardDb()
 
 void MainWindow::onFinishDbCreation()
 {
-    Company userCompany(ui->createPage->getCompanyName(),
-                        ui->createPage->getCompanyAddress(),
-                        ui->createPage->getCompanyEmail());
-
-    const bool r1 = controller.writeUserCompany(userCompany);
-    const bool r2 = controller.writeStylesheets(stylesheetModel->stringList());
-    if (!r1 || !r2)
+    CompanyData userCompany = ui->createPage->getCompanyData();
+    if (!controller.writeUserCompany(userCompany))
     {
-        // display error
-        int i= 0;
+        showError("Write User Company Table", controller.getLastError());
+        ui->stackedWidget->setCurrentWidget(ui->startPage);
+        return;
     }
-    else
-        switchToMainWidget();
 
+    if (!controller.writeStylesheets(stylesheetModel->stringList()))
+    {
+        showError("Write stylesheets Table", controller.getLastError());
+        ui->stackedWidget->setCurrentWidget(ui->startPage);
+        return;
+    }
+
+    switchToMainWidget();
 }
 
 void MainWindow::onGoToCreateNewInvoice()
@@ -136,5 +139,10 @@ void MainWindow::switchToMainWidget()
     //ui->mainWidget->setModel(stylesheetModel);
 
     ui->stackedWidget->setCurrentWidget(ui->mainWidget);
+}
+
+void MainWindow::showError(const QString &title, const QString &details)
+{
+    QMessageBox::warning(this, title, details);
 }
 

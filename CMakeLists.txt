@@ -20,12 +20,12 @@ set(PROJECT_SOURCES
         Company.h Company.cpp
         mainwindow.h mainwindow.cpp mainwindow.ui
         DbStatusForm.h DbStatusForm.cpp DbStatusForm.ui
-        AddressForm.h AddressForm.cpp AddressForm.ui
         InitialDataForm.h InitialDataForm.cpp InitialDataForm.ui
         DatabaseForm.h DatabaseForm.cpp DatabaseForm.ui
         DataHandlerWidget.h DataHandlerWidget.cpp DataHandlerWidget.ui
         NewInvoicePage.h NewInvoicePage.cpp NewInvoicePage.ui
         MorePage.h MorePage.cpp MorePage.ui
+        CompanyDetailsWidget.h CompanyDetailsWidget.cpp CompanyDetailsWidget.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

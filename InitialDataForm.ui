@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>746</width>
-    <height>404</height>
+    <width>1257</width>
+    <height>773</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -63,6 +63,9 @@
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Fixed</enum>
+       </property>
        <property name="sizeHint" stdset="0">
         <size>
          <width>40</width>
@@ -76,61 +79,18 @@
        <property name="title">
         <string>Your Company Info</string>
        </property>
-       <layout class="QFormLayout" name="formLayout">
-        <item row="0" column="0" colspan="2">
-         <widget class="QLabel" name="label">
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QLabel" name="messageLabel">
           <property name="text">
            <string>Enter your company info here :</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>Company Name</string>
-          </property>
-         </widget>
+        <item>
+         <widget class="CompanyDetailsWidget" name="addressWidget" native="true"/>
         </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="nameEdit"/>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_3">
-          <property name="text">
-           <string>Phone Number</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QLineEdit" name="phoneEdit"/>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="label_4">
-          <property name="text">
-           <string>Email</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QLineEdit" name="emailEdit"/>
-        </item>
-        <item row="4" column="0">
-         <widget class="QLabel" name="label_5">
-          <property name="text">
-           <string>Address</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1">
-         <widget class="QLineEdit" name="addressLineEdit1"/>
-        </item>
-        <item row="5" column="1">
-         <widget class="QLineEdit" name="addressLineEdit2"/>
-        </item>
-        <item row="6" column="1">
-         <widget class="QLineEdit" name="addressLineEdit3"/>
-        </item>
-        <item row="7" column="1">
+        <item>
          <spacer name="verticalSpacer_3">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -164,6 +124,12 @@
      </item>
      <item>
       <widget class="QGroupBox" name="groupBox_2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="title">
         <string>Invoice CSS Templates</string>
        </property>
@@ -178,6 +144,9 @@
       <spacer name="horizontalSpacer_9">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Fixed</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -227,6 +196,12 @@
    <class>DataHandlerWidget</class>
    <extends>QWidget</extends>
    <header>DataHandlerWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CompanyDetailsWidget</class>
+   <extends>QWidget</extends>
+   <header>CompanyDetailsWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

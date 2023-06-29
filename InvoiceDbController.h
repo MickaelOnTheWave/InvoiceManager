@@ -21,7 +21,7 @@ public:
 
     QString getLastError() const;
 
-    bool writeUserCompany(const Company& company);
+    bool writeUserCompany(const CompanyData& company);
     bool writeStylesheets(const QStringList &stylesheets);
 
     QString getCompanyName() const;

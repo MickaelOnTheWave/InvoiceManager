@@ -42,7 +42,7 @@ QString InvoiceDbController::getLastError() const
     return lastErrorMessage;
 }
 
-bool InvoiceDbController::writeUserCompany(const Company &company)
+bool InvoiceDbController::writeUserCompany(const CompanyData &company)
 {
     QSqlQuery query;
     query.prepare("INSERT INTO company (name, address, email) VALUES (:name, :address, :email)");

@@ -20,27 +20,15 @@ InitialDataForm::~InitialDataForm()
     delete ui;
 }
 
+CompanyData InitialDataForm::getCompanyData() const
+{
+    return ui->addressWidget->getData();
+}
+
 void InitialDataForm::setModel(QAbstractItemModel *model)
 {
     stylesheetModel = model;
     ui->stylesheedsDataWidget->setModel(stylesheetModel);
-}
-
-QString InitialDataForm::getCompanyName() const
-{
-    return ui->nameEdit->text();
-}
-
-QString InitialDataForm::getCompanyAddress() const
-{
-    return ui->addressLineEdit1->text() + "\n" +
-           ui->addressLineEdit2->text() + "\n" +
-            ui->addressLineEdit3->text();
-}
-
-QString InitialDataForm::getCompanyEmail() const
-{
-    return ui->emailEdit->text();
 }
 
 void InitialDataForm::onAddStylesheet()
