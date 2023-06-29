@@ -13,8 +13,10 @@ DataHandlerWidget::DataHandlerWidget(QWidget *parent) :
     // Connect signals and slots
     connect(ui->addButton, &QPushButton::clicked, this, &DataHandlerWidget::onAddClicked);
     connect(ui->removeButton, &QPushButton::clicked, this, &DataHandlerWidget::onRemoveClicked);
-    connect(ui->dataView->selectionModel(), &QItemSelectionModel::currentChanged,
-            this, &DataHandlerWidget::onSelectionChanged);
+
+    // TODO : Finish this and solve warning
+    //connect(ui->dataView->selectionModel(), &QItemSelectionModel::currentChanged,
+    //        this, &DataHandlerWidget::onSelectionChanged);
 
     ui->dataView->horizontalHeader()->show();
     ui->dataView->verticalHeader()->hide();

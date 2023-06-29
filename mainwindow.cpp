@@ -45,14 +45,22 @@ void MainWindow::onCreateDb()
     const QString title = tr("Select an existing Invoice Database file");
     const QString typeDescription = tr("Invoice Database (*.idb)");
     const QString dbFile = QFileDialog::getSaveFileName(this, title, QString(), typeDescription);
-    if (!dbFile.isEmpty())
+    if (dbFile.isEmpty())
     {
-        controller.createDb(dbFile);
+        showError("Error", "Can't create an Invoice Database without a file");
+        return;
+    }
+
+    if (!controller.createDb(dbFile))
+    {
+        showError("Database Creation", controller.getLastError());
+        return;
+    }
+
         createModels();
 
         ui->stackedWidget->setCurrentWidget(ui->createPage);
         ui->createPage->setModel(stylesheetModel);
-    }
 }
 
 void MainWindow::onOpenDb()

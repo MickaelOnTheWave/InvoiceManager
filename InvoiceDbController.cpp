@@ -11,18 +11,43 @@ InvoiceDbController::InvoiceDbController()
 bool InvoiceDbController::createDb(const QString &filename)
 {
     QFile file(filename);
-    const bool result = file.remove();
-    if (!result)
-        return false;
+    if (file.exists())
+    {
+        const bool result = file.remove();
+        if (!result)
+        {
+            lastErrorMessage = "Can't remove previous file";
+            return false;
+        }
+    }
 
     createDbConnection(filename);
 
     QSqlQuery query;
-    query.exec("CREATE TABLE client (id INTEGER primary key, name TEXT, address TEXT)");
-    query.exec("CREATE TABLE company (id INTEGER primary key, name TEXT, address TEXT, email TEXT)");
-    query.exec("CREATE TABLE stylesheet (id INTEGER primary key, file TEXT)");
-    query.exec("CREATE TABLE invoice (id INTEGER primary key, companyId INTEGER, clientId INTEGER, "
-               "stylesheetId INTEGER, value DOUBLE, date TEXT)");
+    if (!query.exec("CREATE TABLE client (id INTEGER primary key, name TEXT, address TEXT)"))
+    {
+        lastErrorMessage = query.lastError().text();
+        return false;
+    }
+
+    if (!query.exec("CREATE TABLE company (id INTEGER primary key, name TEXT, address TEXT, email TEXT)"))
+    {
+        lastErrorMessage = query.lastError().text();
+        return false;
+    }
+
+    if (!query.exec("CREATE TABLE stylesheet (id INTEGER primary key, file TEXT)"))
+    {
+        lastErrorMessage = query.lastError().text();
+        return false;
+    }
+
+    if (!query.exec("CREATE TABLE invoice (id INTEGER primary key, companyId INTEGER, clientId INTEGER, "
+               "stylesheetId INTEGER, value DOUBLE, date TEXT)"))
+    {
+        lastErrorMessage = query.lastError().text();
+        return false;
+    }
 
     return true;
 }
