@@ -32,6 +32,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->newInvoicePage, &NewInvoicePage::create, this, &MainWindow::onCreateNewInvoice);
     connect(ui->newInvoicePage, &NewInvoicePage::cancel, this, &MainWindow::onBackToMainPage);
 
+    connect(ui->morePage, &MorePage::back, this, &MainWindow::onBackToMainPage);
+
     ui->stackedWidget->setCurrentWidget(ui->startPage);
 }
 
