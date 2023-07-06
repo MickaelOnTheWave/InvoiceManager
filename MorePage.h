@@ -15,6 +15,9 @@ public:
     explicit MorePage(QWidget *parent = nullptr);
     ~MorePage();
 
+signals:
+    void back();
+
 private:
     Ui::MorePage *ui;
 };

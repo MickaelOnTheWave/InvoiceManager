@@ -6,6 +6,8 @@ MorePage::MorePage(QWidget *parent) :
     ui(new Ui::MorePage)
 {
     ui->setupUi(this);
+
+    connect(ui->backButton, &QAbstractButton::clicked, this, &MorePage::back);
 }
 
 MorePage::~MorePage()
