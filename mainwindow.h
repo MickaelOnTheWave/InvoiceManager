@@ -44,6 +44,7 @@ private:
     Ui::MainWindow *ui;
 
     InvoiceDbController controller;
+    QAbstractItemModel* clientModel;
     QStringListModel* stylesheetModel;
 };
 #endif // MAINWINDOW_H

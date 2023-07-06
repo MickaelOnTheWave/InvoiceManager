@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>593</width>
-    <height>424</height>
+    <width>537</width>
+    <height>381</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -56,6 +56,11 @@
      <property name="title">
       <string>Clients</string>
      </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QTableView" name="clientsView"/>
+      </item>
+     </layout>
     </widget>
    </item>
    <item>
@@ -63,6 +68,11 @@
      <property name="title">
       <string>Stylesheets</string>
      </property>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
+       <widget class="QListView" name="stylesheetsView"/>
+      </item>
+     </layout>
     </widget>
    </item>
    <item>

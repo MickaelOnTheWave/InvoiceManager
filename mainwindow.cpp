@@ -4,6 +4,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QSqlTableModel>
 
 #include "NewInvoicePage.h"
 
@@ -73,7 +74,7 @@ void MainWindow::onOpenDb()
     if (!dbFile.isEmpty())
     {
         controller.openDb(dbFile);
-
+        createModels();
         switchToMainWidget();
     }
 }
@@ -141,6 +142,16 @@ void MainWindow::createModels()
 {
     stylesheetModel = new QStringListModel(this);
     stylesheetModel->setHeaderData(0, Qt::Horizontal, "Stylesheet path");
+
+    auto sqlClientModel = new QSqlTableModel(this, controller.getDatabase());
+    sqlClientModel->setTable("client");
+    sqlClientModel->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    sqlClientModel->select();
+    //sqlClientModel->setHeaderData(0, Qt::Horizontal, tr("Name"));
+    //sqlClientModel->setHeaderData(1, Qt::Horizontal, tr("Address"));
+    clientModel = sqlClientModel;
+
+    ui->morePage->connectViewsToModels(clientModel, stylesheetModel);
 }
 
 void MainWindow::switchToMainWidget()

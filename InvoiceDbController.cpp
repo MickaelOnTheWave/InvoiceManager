@@ -112,6 +112,11 @@ QString InvoiceDbController::getCompanyName() const
     return query.lastError().text();
 }
 
+QSqlDatabase InvoiceDbController::getDatabase()
+{
+    return db;
+}
+
 void InvoiceDbController::createDbConnection(const QString &filename)
 {
     dbFilename = filename;

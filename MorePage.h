@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+#include <QAbstractItemModel>
+
 namespace Ui {
 class MorePage;
 }
@@ -14,6 +16,9 @@ class MorePage : public QWidget
 public:
     explicit MorePage(QWidget *parent = nullptr);
     ~MorePage();
+
+    void connectViewsToModels(QAbstractItemModel* clientModel,
+                              QAbstractItemModel* stylesheetModel);
 
 signals:
     void back();

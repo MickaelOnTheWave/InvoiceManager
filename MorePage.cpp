@@ -14,3 +14,12 @@ MorePage::~MorePage()
 {
     delete ui;
 }
+
+void MorePage::connectViewsToModels(QAbstractItemModel *clientModel,
+                                    QAbstractItemModel *stylesheetModel)
+{
+    ui->clientsView->setModel(clientModel);
+    ui->stylesheetsView->setModel(stylesheetModel);
+
+    ui->clientsView->show();
+}
