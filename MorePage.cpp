@@ -13,6 +13,7 @@ MorePage::MorePage(QWidget *parent) :
     ui->setupUi(this);
 
     connect(ui->clientsWidget, &DataHandlerWidget::addClicked, this, &MorePage::onAddClient);
+    connect(ui->stylesheetsWidget, &DataHandlerWidget::addClicked, this, &MorePage::onAddStylesheet);
     connect(ui->backButton, &QAbstractButton::clicked, this, &MorePage::back);
 }
 
@@ -25,12 +26,10 @@ void MorePage::connectViewsToModels(QAbstractItemModel *_clientModel,
                                     QAbstractItemModel *_stylesheetModel)
 {
     ui->clientsWidget->setModel(_clientModel);
-    ui->stylesheetsView->setModel(_stylesheetModel);
+    ui->stylesheetsWidget->setModel(_stylesheetModel);
 
     clientModel = _clientModel;
     stylesheetModel = _stylesheetModel;
-
-    //    ui->clientsView->show();
 }
 
 void MorePage::onAddClient()
@@ -46,6 +45,14 @@ void MorePage::onAddClient()
     }
 }
 
+void MorePage::onAddStylesheet()
+{
+    // TODO : Implement real one, with a dialog and selecting stylesheet etc...
+
+    insertInStylesheetModel();
+
+}
+
 bool MorePage::insertInClientModel(const CompanyData &data)
 {
     const int rowIndex = clientModel->rowCount();
@@ -56,4 +63,16 @@ bool MorePage::insertInClientModel(const CompanyData &data)
     clientModel->setData(clientModel->index(rowIndex, 1), data.name);
     clientModel->setData(clientModel->index(rowIndex, 2), data.address);
     return true;
+}
+
+bool MorePage::insertInStylesheetModel()
+{
+    const int rowIndex = stylesheetModel->rowCount();
+    const bool ok = stylesheetModel->insertRow(rowIndex);
+    if (!ok)
+        return false;
+
+    stylesheetModel->setData(stylesheetModel->index(rowIndex, 0), "stylesheet.css");
+
+    return false;
 }

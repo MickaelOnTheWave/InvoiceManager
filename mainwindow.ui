@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="startPage">
      <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -112,7 +112,7 @@
      </layout>
     </widget>
     <widget class="InitialDataForm" name="createPage"/>
-    <widget class="DatabaseForm" name="mainWidget"/>
+    <widget class="DatabaseForm" name="mainPage"/>
     <widget class="NewInvoicePage" name="newInvoicePage"/>
     <widget class="MorePage" name="morePage"/>
    </widget>

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>537</width>
-    <height>381</height>
+    <width>783</width>
+    <height>793</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -57,7 +57,7 @@
       <string>Clients</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item>
+      <item alignment="Qt::AlignTop">
        <widget class="DataHandlerWidget" name="clientsWidget" native="true"/>
       </item>
      </layout>
@@ -70,7 +70,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
-       <widget class="QListView" name="stylesheetsView"/>
+       <widget class="DataHandlerWidget" name="stylesheetsWidget" native="true"/>
       </item>
      </layout>
     </widget>

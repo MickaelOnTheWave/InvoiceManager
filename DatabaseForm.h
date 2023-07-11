@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+#include <QAbstractItemModel>
+
 namespace Ui {
 class DatabaseForm;
 }
@@ -17,6 +19,9 @@ public:
 
     void setCompanyName(const QString& value);
 
+    void connectViewsToModels(QAbstractItemModel* _clientModel,
+                              QAbstractItemModel* _stylesheetModel);
+
 signals:
     void closeAndSave();
     void closeAndDiscard();
@@ -25,6 +30,8 @@ signals:
 
 private:
     Ui::DatabaseForm *ui;
+    QAbstractItemModel* clientModel;
+    QAbstractItemModel* stylesheetModel;
 };
 
 #endif // DATABASEFORM_H

@@ -25,10 +25,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->createPage, &InitialDataForm::confirm, this, &MainWindow::onFinishDbCreation);
     connect(ui->createPage, &InitialDataForm::cancel, this, &MainWindow::onCloseAndDiscardDb);
 
-    connect(ui->mainWidget, &DatabaseForm::createNewInvoice, this, &MainWindow::onGoToCreateNewInvoice);
-    connect(ui->mainWidget, &DatabaseForm::goToMore, this, &MainWindow::onGoToMore);
-    connect(ui->mainWidget, &DatabaseForm::closeAndSave, this, &MainWindow::onCloseAndSaveDb);
-    connect(ui->mainWidget, &DatabaseForm::closeAndDiscard, this, &MainWindow::onCloseAndDiscardDb);
+    connect(ui->mainPage, &DatabaseForm::createNewInvoice, this, &MainWindow::onGoToCreateNewInvoice);
+    connect(ui->mainPage, &DatabaseForm::goToMore, this, &MainWindow::onGoToMore);
+    connect(ui->mainPage, &DatabaseForm::closeAndSave, this, &MainWindow::onCloseAndSaveDb);
+    connect(ui->mainPage, &DatabaseForm::closeAndDiscard, this, &MainWindow::onCloseAndDiscardDb);
 
     connect(ui->newInvoicePage, &NewInvoicePage::create, this, &MainWindow::onCreateNewInvoice);
     connect(ui->newInvoicePage, &NewInvoicePage::cancel, this, &MainWindow::onBackToMainPage);
@@ -119,12 +119,12 @@ void MainWindow::onGoToCreateNewInvoice()
 
 void MainWindow::onCreateNewInvoice()
 {
-    ui->stackedWidget->setCurrentWidget(ui->mainWidget);
+    ui->stackedWidget->setCurrentWidget(ui->mainPage);
 }
 
 void MainWindow::onBackToMainPage()
 {
-    ui->stackedWidget->setCurrentWidget(ui->mainWidget);
+    ui->stackedWidget->setCurrentWidget(ui->mainPage);
 }
 
 void MainWindow::onGoToMore()
@@ -141,7 +141,7 @@ void MainWindow::connectDbStatusControls(DbStatusForm *dbStatusForm)
 void MainWindow::createModels()
 {
     stylesheetModel = new QStringListModel(this);
-    stylesheetModel->setHeaderData(0, Qt::Horizontal, "Stylesheet path");
+    //stylesheetModel->setHeaderData(0, Qt::Horizontal, "Stylesheet path");
 
     auto sqlClientModel = new QSqlTableModel(this, controller.getDatabase());
     sqlClientModel->setTable("client");
@@ -151,15 +151,16 @@ void MainWindow::createModels()
     //sqlClientModel->setHeaderData(1, Qt::Horizontal, tr("Address"));
     clientModel = sqlClientModel;
 
+    ui->mainPage->connectViewsToModels(clientModel, stylesheetModel);
     ui->morePage->connectViewsToModels(clientModel, stylesheetModel);
 }
 
 void MainWindow::switchToMainWidget()
 {
-    ui->mainWidget->setCompanyName(controller.getCompanyName());
+    ui->mainPage->setCompanyName(controller.getCompanyName());
     //ui->mainWidget->setModel(stylesheetModel);
 
-    ui->stackedWidget->setCurrentWidget(ui->mainWidget);
+    ui->stackedWidget->setCurrentWidget(ui->mainPage);
 }
 
 void MainWindow::showError(const QString &title, const QString &details)

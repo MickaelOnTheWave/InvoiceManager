@@ -22,3 +22,12 @@ void DatabaseForm::setCompanyName(const QString &value)
 {
     ui->companyNameLabel->setText(value);
 }
+
+void DatabaseForm::connectViewsToModels(QAbstractItemModel *_clientModel, QAbstractItemModel *_stylesheetModel)
+{
+    clientModel = _clientModel;
+    stylesheetModel = _stylesheetModel;
+
+    ui->clientsView->setModel(clientModel);
+    ui->stylesheetsView->setModel(stylesheetModel);
+}

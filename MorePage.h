@@ -27,9 +27,11 @@ signals:
 
 private slots:
     void onAddClient();
+    void onAddStylesheet();
 
 private:
     bool insertInClientModel(const CompanyData& data);
+    bool insertInStylesheetModel();
 
     Ui::MorePage *ui;
     QAbstractItemModel* clientModel;
