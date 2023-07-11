@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="startPage">
      <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -111,26 +111,14 @@
       </item>
      </layout>
     </widget>
-    <widget class="InitialDataForm" name="createPage"/>
-    <widget class="DatabaseForm" name="mainPage"/>
+    <widget class="CreatePage" name="createPage"/>
+    <widget class="MainPage" name="mainPage"/>
     <widget class="NewInvoicePage" name="newInvoicePage"/>
     <widget class="MorePage" name="morePage"/>
    </widget>
   </widget>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>InitialDataForm</class>
-   <extends>QWidget</extends>
-   <header>InitialDataForm.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>DatabaseForm</class>
-   <extends>QWidget</extends>
-   <header>DatabaseForm.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>NewInvoicePage</class>
    <extends>QWidget</extends>
@@ -141,6 +129,18 @@
    <class>MorePage</class>
    <extends>QWidget</extends>
    <header>MorePage.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MainPage</class>
+   <extends>QWidget</extends>
+   <header>MainPage.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CreatePage</class>
+   <extends>QWidget</extends>
+   <header>CreatePage.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

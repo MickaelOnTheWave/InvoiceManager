@@ -1,37 +1,37 @@
-#include "InitialDataForm.h"
-#include "ui_InitialDataForm.h"
+#include "CreatePage.h"
+#include "ui_CreatePage.h"
 
 #include <QFileDialog>
 
-InitialDataForm::InitialDataForm(QWidget *parent) :
+CreatePage::CreatePage(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::InitialDataForm)
+    ui(new Ui::CreatePage)
 {
     ui->setupUi(this);
 
-    connect(ui->stylesheedsDataWidget, &DataHandlerWidget::addClicked, this, &InitialDataForm::onAddStylesheet);
+    connect(ui->stylesheedsDataWidget, &DataHandlerWidget::addClicked, this, &CreatePage::onAddStylesheet);
 
-    connect(ui->confirmButton, &QAbstractButton::clicked, this, &InitialDataForm::confirm);
-    connect(ui->cancelButton, &QAbstractButton::clicked, this, &InitialDataForm::cancel);
+    connect(ui->confirmButton, &QAbstractButton::clicked, this, &CreatePage::confirm);
+    connect(ui->cancelButton, &QAbstractButton::clicked, this, &CreatePage::cancel);
 }
 
-InitialDataForm::~InitialDataForm()
+CreatePage::~CreatePage()
 {
     delete ui;
 }
 
-CompanyData InitialDataForm::getCompanyData() const
+CompanyData CreatePage::getCompanyData() const
 {
     return ui->addressWidget->getData();
 }
 
-void InitialDataForm::setModel(QAbstractItemModel *model)
+void CreatePage::setModel(QAbstractItemModel *model)
 {
     stylesheetModel = model;
     ui->stylesheedsDataWidget->setModel(stylesheetModel);
 }
 
-void InitialDataForm::onAddStylesheet()
+void CreatePage::onAddStylesheet()
 {
     const QString title = tr("Select an Invoice Stylesheet");
     const QString typeDescription = tr("Stylesheet (*.css)");
@@ -42,7 +42,7 @@ void InitialDataForm::onAddStylesheet()
     }
 }
 
-void InitialDataForm::insertIntoModel(const QString &stylesheetPath)
+void CreatePage::insertIntoModel(const QString &stylesheetPath)
 {
     QModelIndex parentIndex;
     int rowCount = stylesheetModel->rowCount(parentIndex);

@@ -1,5 +1,5 @@
-#ifndef INITIALDATAFORM_H
-#define INITIALDATAFORM_H
+#ifndef CreatePage_H
+#define CreatePage_H
 
 #include <QWidget>
 
@@ -8,16 +8,16 @@
 #include "Company.h"
 
 namespace Ui {
-class InitialDataForm;
+class CreatePage;
 }
 
-class InitialDataForm : public QWidget
+class CreatePage : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit InitialDataForm(QWidget *parent = nullptr);
-    ~InitialDataForm();
+    explicit CreatePage(QWidget *parent = nullptr);
+    ~CreatePage();
 
     CompanyData getCompanyData() const;
 
@@ -33,8 +33,8 @@ private slots:
 private:
     void insertIntoModel(const QString& stylesheetPath);
 
-    Ui::InitialDataForm *ui;
+    Ui::CreatePage *ui;
     QAbstractItemModel* stylesheetModel;
 };
 
-#endif // INITIALDATAFORM_H
+#endif // CreatePage_H

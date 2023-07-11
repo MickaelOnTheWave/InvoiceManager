@@ -1,21 +1,21 @@
-#ifndef DATABASEFORM_H
-#define DATABASEFORM_H
+#ifndef MainPage_H
+#define MainPage_H
 
 #include <QWidget>
 
 #include <QAbstractItemModel>
 
 namespace Ui {
-class DatabaseForm;
+class MainPage;
 }
 
-class DatabaseForm : public QWidget
+class MainPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit DatabaseForm(QWidget *parent = nullptr);
-    ~DatabaseForm();
+    explicit MainPage(QWidget *parent = nullptr);
+    ~MainPage();
 
     void setCompanyName(const QString& value);
 
@@ -29,9 +29,9 @@ signals:
     void goToMore();
 
 private:
-    Ui::DatabaseForm *ui;
+    Ui::MainPage *ui;
     QAbstractItemModel* clientModel;
     QAbstractItemModel* stylesheetModel;
 };
 
-#endif // DATABASEFORM_H
+#endif // MainPage_H

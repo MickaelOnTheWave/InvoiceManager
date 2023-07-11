@@ -22,13 +22,13 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->openDbButton, &QPushButton::clicked, this, &MainWindow::onOpenDb);
     connect(ui->quitButton, &QPushButton::clicked, this, &QMainWindow::close);
 
-    connect(ui->createPage, &InitialDataForm::confirm, this, &MainWindow::onFinishDbCreation);
-    connect(ui->createPage, &InitialDataForm::cancel, this, &MainWindow::onCloseAndDiscardDb);
+    connect(ui->createPage, &CreatePage::confirm, this, &MainWindow::onFinishDbCreation);
+    connect(ui->createPage, &CreatePage::cancel, this, &MainWindow::onCloseAndDiscardDb);
 
-    connect(ui->mainPage, &DatabaseForm::createNewInvoice, this, &MainWindow::onGoToCreateNewInvoice);
-    connect(ui->mainPage, &DatabaseForm::goToMore, this, &MainWindow::onGoToMore);
-    connect(ui->mainPage, &DatabaseForm::closeAndSave, this, &MainWindow::onCloseAndSaveDb);
-    connect(ui->mainPage, &DatabaseForm::closeAndDiscard, this, &MainWindow::onCloseAndDiscardDb);
+    connect(ui->mainPage, &MainPage::createNewInvoice, this, &MainWindow::onGoToCreateNewInvoice);
+    connect(ui->mainPage, &MainPage::goToMore, this, &MainWindow::onGoToMore);
+    connect(ui->mainPage, &MainPage::closeAndSave, this, &MainWindow::onCloseAndSaveDb);
+    connect(ui->mainPage, &MainPage::closeAndDiscard, this, &MainWindow::onCloseAndDiscardDb);
 
     connect(ui->newInvoicePage, &NewInvoicePage::create, this, &MainWindow::onCreateNewInvoice);
     connect(ui->newInvoicePage, &NewInvoicePage::cancel, this, &MainWindow::onBackToMainPage);
