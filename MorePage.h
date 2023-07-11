@@ -5,6 +5,8 @@
 
 #include <QAbstractItemModel>
 
+#include "Company.h"
+
 namespace Ui {
 class MorePage;
 }
@@ -17,14 +19,21 @@ public:
     explicit MorePage(QWidget *parent = nullptr);
     ~MorePage();
 
-    void connectViewsToModels(QAbstractItemModel* clientModel,
-                              QAbstractItemModel* stylesheetModel);
+    void connectViewsToModels(QAbstractItemModel* _clientModel,
+                              QAbstractItemModel* _stylesheetModel);
 
 signals:
     void back();
 
+private slots:
+    void onAddClient();
+
 private:
+    bool insertInClientModel(const CompanyData& data);
+
     Ui::MorePage *ui;
+    QAbstractItemModel* clientModel;
+    QAbstractItemModel* stylesheetModel;
 };
 
 #endif // MOREPAGE_H

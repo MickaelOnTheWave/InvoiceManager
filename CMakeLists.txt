@@ -26,6 +26,7 @@ set(PROJECT_SOURCES
         NewInvoicePage.h NewInvoicePage.cpp NewInvoicePage.ui
         MorePage.h MorePage.cpp MorePage.ui
         CompanyDetailsWidget.h CompanyDetailsWidget.cpp CompanyDetailsWidget.ui
+        NewDataDialog.h NewDataDialog.cpp NewDataDialog.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

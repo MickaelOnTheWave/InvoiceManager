@@ -58,7 +58,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QTableView" name="clientsView"/>
+       <widget class="DataHandlerWidget" name="clientsWidget" native="true"/>
       </item>
      </layout>
     </widget>
@@ -101,6 +101,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>DataHandlerWidget</class>
+   <extends>QWidget</extends>
+   <header>DataHandlerWidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

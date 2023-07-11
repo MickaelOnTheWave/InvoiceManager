@@ -15,8 +15,8 @@ DataHandlerWidget::DataHandlerWidget(QWidget *parent) :
     connect(ui->removeButton, &QPushButton::clicked, this, &DataHandlerWidget::onRemoveClicked);
 
     // TODO : Finish this and solve warning
-    //connect(ui->dataView->selectionModel(), &QItemSelectionModel::currentChanged,
-    //        this, &DataHandlerWidget::onSelectionChanged);
+    connect(ui->dataView->selectionModel(), &QItemSelectionModel::currentChanged,
+            this, &DataHandlerWidget::onSelectionChanged);
 
     ui->dataView->horizontalHeader()->show();
     ui->dataView->verticalHeader()->hide();
