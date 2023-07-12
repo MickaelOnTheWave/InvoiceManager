@@ -9,7 +9,6 @@
 #include "NewInvoicePage.h"
 
 // TODO Next :
-// - Add data models (even with dummy data) to have UI showing something
 // - Add forms for New Invoice and More
 
 MainWindow::MainWindow(QWidget *parent)
@@ -143,13 +142,7 @@ void MainWindow::createModels()
     stylesheetModel = new QStringListModel(this);
     //stylesheetModel->setHeaderData(0, Qt::Horizontal, "Stylesheet path");
 
-    auto sqlClientModel = new QSqlTableModel(this, controller.getDatabase());
-    sqlClientModel->setTable("client");
-    sqlClientModel->setEditStrategy(QSqlTableModel::OnManualSubmit);
-    sqlClientModel->select();
-    //sqlClientModel->setHeaderData(0, Qt::Horizontal, tr("Name"));
-    //sqlClientModel->setHeaderData(1, Qt::Horizontal, tr("Address"));
-    clientModel = sqlClientModel;
+    clientModel = new ClientModel(this, controller.getDatabase());
 
     ui->mainPage->connectViewsToModels(clientModel, stylesheetModel);
     ui->morePage->connectViewsToModels(clientModel, stylesheetModel);

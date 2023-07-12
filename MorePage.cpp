@@ -3,6 +3,7 @@
 
 #include <QMessageBox>
 
+#include "Company.h"
 #include "CompanyDetailsWidget.h"
 #include "NewDataDialog.h"
 
@@ -22,7 +23,7 @@ MorePage::~MorePage()
     delete ui;
 }
 
-void MorePage::connectViewsToModels(QAbstractItemModel *_clientModel,
+void MorePage::connectViewsToModels(ClientModel *_clientModel,
                                     QAbstractItemModel *_stylesheetModel)
 {
     ui->clientsWidget->setModel(_clientModel);
@@ -39,7 +40,7 @@ void MorePage::onAddClient()
     const int result = dialog.exec();
     if (result == QDialog::Accepted)
     {
-        const bool ok = insertInClientModel(contentWidget->getData());
+        const bool ok = clientModel->insertAtEnd(contentWidget->getData());
         if (!ok)
             QMessageBox::warning(&dialog, "Error", "Could not insert data into model");
     }
@@ -51,18 +52,6 @@ void MorePage::onAddStylesheet()
 
     insertInStylesheetModel();
 
-}
-
-bool MorePage::insertInClientModel(const CompanyData &data)
-{
-    const int rowIndex = clientModel->rowCount();
-    const bool ok = clientModel->insertRow(rowIndex);
-    if (!ok)
-        return false;
-
-    clientModel->setData(clientModel->index(rowIndex, 1), data.name);
-    clientModel->setData(clientModel->index(rowIndex, 2), data.address);
-    return true;
 }
 
 bool MorePage::insertInStylesheetModel()

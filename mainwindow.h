@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 
+#include "ClientModel.h"
 #include "InvoiceDbController.h"
 #include "DbStatusForm.h"
 
@@ -44,7 +45,7 @@ private:
     Ui::MainWindow *ui;
 
     InvoiceDbController controller;
-    QAbstractItemModel* clientModel;
+    ClientModel* clientModel;
     QStringListModel* stylesheetModel;
 };
 #endif // MAINWINDOW_H

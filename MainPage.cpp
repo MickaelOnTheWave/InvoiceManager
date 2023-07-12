@@ -23,7 +23,7 @@ void MainPage::setCompanyName(const QString &value)
     ui->companyNameLabel->setText(value);
 }
 
-void MainPage::connectViewsToModels(QAbstractItemModel *_clientModel, QAbstractItemModel *_stylesheetModel)
+void MainPage::connectViewsToModels(ClientModel *_clientModel, QAbstractItemModel *_stylesheetModel)
 {
     clientModel = _clientModel;
     stylesheetModel = _stylesheetModel;

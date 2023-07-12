@@ -21,12 +21,13 @@ set(PROJECT_SOURCES
         MainPage.h MainPage.cpp MainPage.ui
         NewInvoicePage.h NewInvoicePage.cpp NewInvoicePage.ui
         MorePage.h MorePage.cpp MorePage.ui
-        InvoiceDbController.h InvoiceDbController.cpp
-        Company.h Company.cpp
         DbStatusForm.h DbStatusForm.cpp DbStatusForm.ui
         DataHandlerWidget.h DataHandlerWidget.cpp DataHandlerWidget.ui
         CompanyDetailsWidget.h CompanyDetailsWidget.cpp CompanyDetailsWidget.ui
         NewDataDialog.h NewDataDialog.cpp NewDataDialog.ui
+        InvoiceDbController.h InvoiceDbController.cpp
+        Company.h Company.cpp
+        ClientModel.h ClientModel.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

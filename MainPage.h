@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-#include <QAbstractItemModel>
+#include "ClientModel.h"
 
 namespace Ui {
 class MainPage;
@@ -19,7 +19,7 @@ public:
 
     void setCompanyName(const QString& value);
 
-    void connectViewsToModels(QAbstractItemModel* _clientModel,
+    void connectViewsToModels(ClientModel* _clientModel,
                               QAbstractItemModel* _stylesheetModel);
 
 signals:
@@ -30,7 +30,7 @@ signals:
 
 private:
     Ui::MainPage *ui;
-    QAbstractItemModel* clientModel;
+    ClientModel* clientModel;
     QAbstractItemModel* stylesheetModel;
 };
 
