@@ -5,6 +5,7 @@
 
 #include "Company.h"
 #include "CompanyDetailsWidget.h"
+#include "StylesheetDetailsWidget.h"
 #include "NewDataDialog.h"
 
 MorePage::MorePage(QWidget *parent) :
@@ -24,7 +25,7 @@ MorePage::~MorePage()
 }
 
 void MorePage::connectViewsToModels(ClientModel *_clientModel,
-                                    QAbstractItemModel *_stylesheetModel)
+                                    StylesheetModel *_stylesheetModel)
 {
     ui->clientsWidget->setModel(_clientModel);
     ui->stylesheetsWidget->setModel(_stylesheetModel);
@@ -36,22 +37,17 @@ void MorePage::connectViewsToModels(ClientModel *_clientModel,
 void MorePage::onAddClient()
 {
     auto contentWidget = new CompanyDetailsWidget();
-    NewDataDialog dialog(contentWidget, this);
-    const int result = dialog.exec();
-    if (result == QDialog::Accepted)
-    {
-        const bool ok = clientModel->insertAtEnd(contentWidget->getData());
-        if (!ok)
-            QMessageBox::warning(&dialog, "Error", "Could not insert data into model");
-    }
+    addDataToModel(contentWidget, [this, contentWidget] () {
+        return clientModel->insertAtEnd(contentWidget->getData());
+    });
 }
 
 void MorePage::onAddStylesheet()
 {
-    // TODO : Implement real one, with a dialog and selecting stylesheet etc...
-
-    insertInStylesheetModel();
-
+    auto contentWidget = new StylesheetDetailsWidget();
+    addDataToModel(contentWidget, [this, contentWidget] () {
+        return stylesheetModel->insertAtEnd(contentWidget->getPath());
+    });
 }
 
 bool MorePage::insertInStylesheetModel()
@@ -64,4 +60,16 @@ bool MorePage::insertInStylesheetModel()
     stylesheetModel->setData(stylesheetModel->index(rowIndex, 0), "stylesheet.css");
 
     return false;
+}
+
+void MorePage::addDataToModel(QWidget *dataWidget, std::function<bool ()> insertDataFunc)
+{
+    NewDataDialog dialog(dataWidget, this);
+    const int result = dialog.exec();
+    if (result == QDialog::Accepted)
+    {
+        const bool ok = insertDataFunc();
+        if (!ok)
+            QMessageBox::warning(&dialog, "Error", "Could not insert data into model");
+    }
 }

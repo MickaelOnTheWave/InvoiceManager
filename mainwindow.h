@@ -4,6 +4,8 @@
 #include <QMainWindow>
 
 #include "ClientModel.h"
+#include "StylesheetModel.h"
+
 #include "InvoiceDbController.h"
 #include "DbStatusForm.h"
 
@@ -46,6 +48,6 @@ private:
 
     InvoiceDbController controller;
     ClientModel* clientModel;
-    QStringListModel* stylesheetModel;
+    StylesheetModel* stylesheetModel;
 };
 #endif // MAINWINDOW_H

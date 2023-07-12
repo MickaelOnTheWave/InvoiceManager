@@ -6,6 +6,7 @@
 #include <QAbstractItemModel>
 
 #include "ClientModel.h"
+#include "StylesheetModel.h"
 
 namespace Ui {
 class MorePage;
@@ -20,7 +21,7 @@ public:
     ~MorePage();
 
     void connectViewsToModels(ClientModel* _clientModel,
-                              QAbstractItemModel* _stylesheetModel);
+                              StylesheetModel* _stylesheetModel);
 
 signals:
     void back();
@@ -32,9 +33,11 @@ private slots:
 private:
     bool insertInStylesheetModel();
 
+    void addDataToModel(QWidget* dataWidget, std::function<bool()> insertDataFunc);
+
     Ui::MorePage *ui;
     ClientModel* clientModel;
-    QAbstractItemModel* stylesheetModel;
+    StylesheetModel* stylesheetModel;
 };
 
 #endif // MOREPAGE_H

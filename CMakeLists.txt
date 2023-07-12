@@ -24,10 +24,12 @@ set(PROJECT_SOURCES
         DbStatusForm.h DbStatusForm.cpp DbStatusForm.ui
         DataHandlerWidget.h DataHandlerWidget.cpp DataHandlerWidget.ui
         CompanyDetailsWidget.h CompanyDetailsWidget.cpp CompanyDetailsWidget.ui
+        StylesheetDetailsWidget.h StylesheetDetailsWidget.cpp StylesheetDetailsWidget.ui
         NewDataDialog.h NewDataDialog.cpp NewDataDialog.ui
         InvoiceDbController.h InvoiceDbController.cpp
         Company.h Company.cpp
         ClientModel.h ClientModel.cpp
+        StylesheetModel.h StylesheetModel.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

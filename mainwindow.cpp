@@ -101,7 +101,7 @@ void MainWindow::onFinishDbCreation()
         return;
     }
 
-    if (!controller.writeStylesheets(stylesheetModel->stringList()))
+    if (!controller.writeStylesheets(stylesheetModel->getPathList()))
     {
         showError("Write stylesheets Table", controller.getLastError());
         ui->stackedWidget->setCurrentWidget(ui->startPage);
@@ -139,9 +139,7 @@ void MainWindow::connectDbStatusControls(DbStatusForm *dbStatusForm)
 
 void MainWindow::createModels()
 {
-    stylesheetModel = new QStringListModel(this);
-    //stylesheetModel->setHeaderData(0, Qt::Horizontal, "Stylesheet path");
-
+    stylesheetModel = new StylesheetModel(this, controller.getDatabase());
     clientModel = new ClientModel(this, controller.getDatabase());
 
     ui->mainPage->connectViewsToModels(clientModel, stylesheetModel);
