@@ -6,8 +6,10 @@ ClientModel::ClientModel(QObject *parent, QSqlDatabase db)
     setTable("client");
     setEditStrategy(QSqlTableModel::OnManualSubmit);
     select();
-    //setHeaderData(0, Qt::Horizontal, tr("Name"));
-    //setHeaderData(1,
+
+    bool ok = setHeaderData(0, Qt::Horizontal, tr("ID"));
+    ok = setHeaderData(1, Qt::Horizontal, tr("Name"));
+    ok = setHeaderData(2, Qt::Horizontal, tr("Address"));
 }
 
 bool ClientModel::insertAtEnd(const CompanyData &data)

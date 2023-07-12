@@ -7,7 +7,6 @@ DataHandlerWidget::DataHandlerWidget(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    // Create the buttons
     ui->removeButton->setEnabled(false); // Initially disabled
 
     // Connect signals and slots
@@ -15,12 +14,14 @@ DataHandlerWidget::DataHandlerWidget(QWidget *parent) :
     connect(ui->removeButton, &QPushButton::clicked, this, &DataHandlerWidget::onRemoveClicked);
 
     // TODO : Finish this and solve warning
-    connect(ui->dataView->selectionModel(), &QItemSelectionModel::currentChanged,
-            this, &DataHandlerWidget::onSelectionChanged);
+    //connect(ui->dataView->selectionModel(), &QItemSelectionModel::currentChanged,
+    //        this, &DataHandlerWidget::onSelectionChanged);
 
     ui->dataView->horizontalHeader()->show();
     ui->dataView->verticalHeader()->hide();
     ui->dataView->setColumnWidth(0, 250);
+
+    ui->dataView->resizeColumnsToContents();
 }
 
 DataHandlerWidget::~DataHandlerWidget()
@@ -32,13 +33,22 @@ void DataHandlerWidget::setModel(QAbstractItemModel *_model)
 {
     model = _model;
     ui->dataView->setModel(model);
+    ui->dataView->resizeColumnsToContents();
+}
+
+void DataHandlerWidget::resizeEvent(QResizeEvent *event)
+{
+    ui->dataView->resizeColumnsToContents();
 }
 
 void DataHandlerWidget::onAddClicked()
 {
     // Emit the signal when Add button is clicked
     emit addClicked();
-    ui->dataView->update();
+
+    // TODO : Check if really necessary. It might be better to track for model updated event.
+    //ui->dataView->update();
+    //ui->dataView->resizeColumnsToContents();
 }
 
 void DataHandlerWidget::onRemoveClicked()
