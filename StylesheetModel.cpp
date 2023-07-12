@@ -3,7 +3,6 @@
 StylesheetModel::StylesheetModel(QObject *parent, QSqlDatabase db)
     : QSqlTableModel(parent, db)
 {
-
     setTable("stylesheet");
     setEditStrategy(QSqlTableModel::OnManualSubmit);
     select();
@@ -12,6 +11,7 @@ StylesheetModel::StylesheetModel(QObject *parent, QSqlDatabase db)
 
 QStringList StylesheetModel::getPathList() const
 {
+    // BUG : On creation, we have empty data. Check that.
     QStringList paths;
 
     for (int i=0; i<rowCount(); ++i)
