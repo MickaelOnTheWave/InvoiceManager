@@ -12,6 +12,8 @@ class ClientModel : public QSqlTableModel
 public:
     explicit ClientModel(QObject *parent = nullptr, QSqlDatabase db = QSqlDatabase());
 
+    CompanyData getDataAtRow(const int i) const;
+
     bool insertAtEnd(const CompanyData& data);
 
 private:

@@ -113,6 +113,7 @@ void MainWindow::onFinishDbCreation()
 
 void MainWindow::onGoToCreateNewInvoice()
 {
+    ui->newInvoicePage->refreshData();
     ui->stackedWidget->setCurrentWidget(ui->newInvoicePage);
 }
 
@@ -144,6 +145,8 @@ void MainWindow::createModels()
 
     ui->mainPage->connectViewsToModels(clientModel, stylesheetModel);
     ui->morePage->connectViewsToModels(clientModel, stylesheetModel);
+
+    ui->newInvoicePage->connectModels(clientModel);
 }
 
 void MainWindow::switchToMainWidget()

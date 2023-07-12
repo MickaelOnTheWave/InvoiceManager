@@ -23,6 +23,18 @@ CompanyData CompanyDetailsWidget::getData() const
     return data;
 }
 
+void CompanyDetailsWidget::fill(const CompanyData &data)
+{
+    ui->nameEdit->setText(data.name);
+    ui->emailEdit->setText(data.email);
+    ui->phoneEdit->setText(data.phoneNumber);
+
+    const QStringList explodedAddress = data.address.split("\n");
+    ui->addressLineEdit1->setText(getExplodedValue(explodedAddress, 0));
+    ui->addressLineEdit2->setText(getExplodedValue(explodedAddress, 1));
+    ui->addressLineEdit3->setText(getExplodedValue(explodedAddress, 2));
+}
+
 QString CompanyDetailsWidget::buildAddress() const
 {
     QString address = ui->addressLineEdit1->text();
@@ -35,4 +47,9 @@ void CompanyDetailsWidget::addAddressLine(QString &finalAddress, const QString &
 {
     if (!addressLine.isEmpty())
         finalAddress += "\n" + addressLine;
+}
+
+QString CompanyDetailsWidget::getExplodedValue(const QStringList &exploded, const int index)
+{
+    return (exploded.size() > index) ? exploded[index] : "";
 }

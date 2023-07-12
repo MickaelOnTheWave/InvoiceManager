@@ -18,10 +18,13 @@ public:
     ~CompanyDetailsWidget();
 
     CompanyData getData() const;
+    void fill(const CompanyData& data);
 
 private:
     QString buildAddress() const;
+
     static void addAddressLine(QString& finalAddress, const QString& addressLine);
+    static QString getExplodedValue(const QStringList& exploded, const int index);
 
     Ui::CompanyDetailsWidget *ui;
 };
