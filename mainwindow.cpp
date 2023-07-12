@@ -113,7 +113,7 @@ void MainWindow::onFinishDbCreation()
 
 void MainWindow::onGoToCreateNewInvoice()
 {
-    ui->newInvoicePage->refreshData();
+    ui->newInvoicePage->refreshData(controller.getCompanyName());
     ui->stackedWidget->setCurrentWidget(ui->newInvoicePage);
 }
 
@@ -145,15 +145,12 @@ void MainWindow::createModels()
 
     ui->mainPage->connectViewsToModels(clientModel, stylesheetModel);
     ui->morePage->connectViewsToModels(clientModel, stylesheetModel);
-
-    ui->newInvoicePage->connectModels(clientModel);
+    ui->newInvoicePage->connectModels(clientModel, stylesheetModel);
 }
 
 void MainWindow::switchToMainWidget()
 {
     ui->mainPage->setCompanyName(controller.getCompanyName());
-    //ui->mainWidget->setModel(stylesheetModel);
-
     ui->stackedWidget->setCurrentWidget(ui->mainPage);
 }
 

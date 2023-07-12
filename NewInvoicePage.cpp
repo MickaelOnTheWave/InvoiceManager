@@ -20,17 +20,18 @@ NewInvoicePage::~NewInvoicePage()
     delete ui;
 }
 
-void NewInvoicePage::connectModels(ClientModel *_clientModel)
+void NewInvoicePage::connectModels(ClientModel *_clientModel, StylesheetModel *_stylesheetModel)
 {
     clientModel = _clientModel;
+    stylesheetModel = _stylesheetModel;
 }
 
 // TODO : This should be done with a focus enter event.
-void NewInvoicePage::refreshData()
+void NewInvoicePage::refreshData(const QString& companyName)
 {
-    const QStringList clientNames = buildNames();
-    ui->clientCombo->clear();
-    ui->clientCombo->addItems(clientNames);
+    ui->companyNameLabel->setText(companyName);
+    resetComboData(ui->clientCombo, buildClientNames());
+    resetComboData(ui->stylesheetCombo, stylesheetModel->getPathList());
 }
 
 void NewInvoicePage::onClientComboChange(int index)
@@ -39,7 +40,7 @@ void NewInvoicePage::onClientComboChange(int index)
     ui->clientDetailsWidget->fill(data);
 }
 
-QStringList NewInvoicePage::buildNames() const
+QStringList NewInvoicePage::buildClientNames() const
 {
     QStringList names;
     for (int i=0; i<clientModel->rowCount(); ++i)
@@ -48,4 +49,10 @@ QStringList NewInvoicePage::buildNames() const
         names.append(clientModel->data(index).toString());
     }
     return names;
+}
+
+void NewInvoicePage::resetComboData(QComboBox *combo, const QStringList &newData)
+{
+    combo->clear();
+    combo->addItems(newData);
 }
