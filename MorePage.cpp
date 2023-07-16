@@ -30,6 +30,9 @@ void MorePage::connectViewsToModels(ClientModel *_clientModel,
     ui->clientsWidget->setModel(_clientModel);
     ui->stylesheetsWidget->setModel(_stylesheetModel);
 
+    ui->clientsWidget->setColumnsResizingMode({QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::Stretch});
+    ui->stylesheetsWidget->setColumnsResizingMode({QHeaderView::Fixed, QHeaderView::Stretch});
+
     clientModel = _clientModel;
     stylesheetModel = _stylesheetModel;
 }

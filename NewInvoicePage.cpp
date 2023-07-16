@@ -13,6 +13,9 @@ NewInvoicePage::NewInvoicePage(QWidget *parent) :
     connect(ui->closeBox, &QDialogButtonBox::rejected, this, &NewInvoicePage::cancel);
     connect(ui->clientCombo, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &NewInvoicePage::onClientComboChange);
+
+    ui->invoiceDetailsTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    ui->invoiceDetailsTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
 }
 
 NewInvoicePage::~NewInvoicePage()

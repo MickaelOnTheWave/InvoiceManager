@@ -9,7 +9,13 @@
 #include "NewInvoicePage.h"
 
 // TODO Next :
-// - Add forms for New Invoice and More
+// - Add Invoice Details UI functions
+// - Update SQL table model
+//  - Add company data details
+//  - Add table for invoice details
+//  - Add table for invoice details -> invoice mapping
+// - Add webview in new invoice
+// - Implement remove button in data handler widget
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)

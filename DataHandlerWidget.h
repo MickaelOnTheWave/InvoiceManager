@@ -1,6 +1,9 @@
 #ifndef DATAHANDLERWIDGET_H
 #define DATAHANDLERWIDGET_H
 
+#include <vector>
+
+#include <QHeaderView>
 #include <QPushButton>
 #include <QStandardItemModel>
 #include <QTableView>
@@ -18,6 +21,7 @@ public:
     explicit DataHandlerWidget(QWidget *parent = nullptr);
     ~DataHandlerWidget();
 
+    void setColumnsResizingMode(const std::vector<QHeaderView::ResizeMode> &modes);
     void setModel(QAbstractItemModel* _model);
 
 signals:

@@ -29,6 +29,15 @@ DataHandlerWidget::~DataHandlerWidget()
     delete ui;
 }
 
+void DataHandlerWidget::setColumnsResizingMode(const std::vector<QHeaderView::ResizeMode> &modes)
+{
+    auto header = ui->dataView->horizontalHeader();
+    for (int i=0; i < modes.size(); ++i)
+    {
+        header->setSectionResizeMode(i, modes[i]);
+    }
+}
+
 void DataHandlerWidget::setModel(QAbstractItemModel *_model)
 {
     model = _model;
@@ -38,7 +47,7 @@ void DataHandlerWidget::setModel(QAbstractItemModel *_model)
 
 void DataHandlerWidget::resizeEvent(QResizeEvent *event)
 {
-    ui->dataView->resizeColumnsToContents();
+    //ui->dataView->resizeColumnsToContents();
 }
 
 void DataHandlerWidget::onAddClicked()
