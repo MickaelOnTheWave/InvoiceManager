@@ -4,6 +4,7 @@
 #include <vector>
 
 #include <QHeaderView>
+#include <QItemDelegate>
 #include <QPushButton>
 #include <QStandardItemModel>
 #include <QTableView>
@@ -26,6 +27,7 @@ public:
 
 signals:
     void addClicked();
+    void editingFinished();
 
 protected:
     void resizeEvent(QResizeEvent* event) override;
@@ -40,4 +42,18 @@ private:
     QAbstractItemModel *model;
 };
 
-#endif // DATAHANDLERWIDGET_H
+class DataViewDelegate : public QItemDelegate
+{
+    Q_OBJECT
+
+public:
+    explicit DataViewDelegate(QObject *parent = nullptr);
+
+    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const override;
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+
+signals:
+    void editingFinished() const;
+};
+
+#endif

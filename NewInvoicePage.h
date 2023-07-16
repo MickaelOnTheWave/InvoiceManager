@@ -32,6 +32,8 @@ private slots:
     void onAddInvoiceDetail();
 
 private:
+    void insertTotalRow();
+    void computeTotalRow();
     void resetInputData(const QString &companyName);
     void resetInvoiceData();
 

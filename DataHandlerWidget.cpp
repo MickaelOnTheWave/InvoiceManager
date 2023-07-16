@@ -22,6 +22,11 @@ DataHandlerWidget::DataHandlerWidget(QWidget *parent) :
     ui->dataView->setColumnWidth(0, 250);
 
     ui->dataView->resizeColumnsToContents();
+
+    auto detectionDelegate = new DataViewDelegate(this);
+    ui->dataView->setItemDelegate(detectionDelegate);
+    connect(detectionDelegate, &DataViewDelegate::editingFinished,
+            this, &DataHandlerWidget::editingFinished);
 }
 
 DataHandlerWidget::~DataHandlerWidget()
@@ -75,3 +80,23 @@ void DataHandlerWidget::onSelectionChanged(const QModelIndex &current, const QMo
     ui->removeButton->setEnabled(current.isValid());
 }
 
+
+DataViewDelegate::DataViewDelegate(QObject *parent)
+    : QItemDelegate(parent)
+{
+}
+
+void DataViewDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
+{
+    QItemDelegate::setModelData(editor, model, index);
+    emit editingFinished();
+}
+
+QWidget *DataViewDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    const int lastRow = index.model()->rowCount() - 1;
+    if (index.row() == lastRow && index.column() == 1)
+        return nullptr;
+
+    return QItemDelegate::createEditor(parent, option, index);
+}

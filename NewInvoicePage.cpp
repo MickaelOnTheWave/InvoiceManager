@@ -22,11 +22,13 @@ NewInvoicePage::NewInvoicePage(QWidget *parent) :
     invoiceDetailsModel->setHeaderData(0, Qt::Horizontal, tr("Service"));
     invoiceDetailsModel->setHeaderData(1, Qt::Horizontal, tr("Value"));
 
-    onAddInvoiceDetail();
+    resetInvoiceData();
+
     ui->invoiceDetailsWidget->setModel(invoiceDetailsModel);
     ui->invoiceDetailsWidget->setColumnsResizingMode({QHeaderView::Stretch, QHeaderView::Fixed});
 
     connect(ui->invoiceDetailsWidget, &DataHandlerWidget::addClicked, this, &NewInvoicePage::onAddInvoiceDetail);
+    connect(ui->invoiceDetailsWidget, &DataHandlerWidget::editingFinished, this, &NewInvoicePage::computeTotalRow);
 }
 
 NewInvoicePage::~NewInvoicePage()
@@ -54,10 +56,29 @@ void NewInvoicePage::onClientComboChange(int index)
 
 void NewInvoicePage::onAddInvoiceDetail()
 {
-    const int newRowIndex = invoiceDetailsModel->rowCount();
+    const int newRowIndex = invoiceDetailsModel->rowCount()-1;
     invoiceDetailsModel->insertRow(newRowIndex);
     invoiceDetailsModel->setData(invoiceDetailsModel->index(newRowIndex, 0), "Service");
     invoiceDetailsModel->setData(invoiceDetailsModel->index(newRowIndex, 1), 0.00);
+
+    computeTotalRow();
+}
+
+void NewInvoicePage::insertTotalRow()
+{
+    invoiceDetailsModel->insertRow(0);
+    invoiceDetailsModel->setData(invoiceDetailsModel->index(0, 0), "Total");
+    invoiceDetailsModel->setData(invoiceDetailsModel->index(0, 1), 0.00);
+}
+
+void NewInvoicePage::computeTotalRow()
+{
+    double total = 0.0;
+    for (int i=0; i<invoiceDetailsModel->rowCount()-1; ++i)
+    {
+        total += invoiceDetailsModel->data(invoiceDetailsModel->index(i, 1)).toDouble();
+    }
+    invoiceDetailsModel->setData(invoiceDetailsModel->index(invoiceDetailsModel->rowCount()-1, 1), total);
 }
 
 void NewInvoicePage::resetInputData(const QString &companyName)
@@ -70,6 +91,8 @@ void NewInvoicePage::resetInputData(const QString &companyName)
 void NewInvoicePage::resetInvoiceData()
 {
     invoiceDetailsModel->removeRows(0, invoiceDetailsModel->rowCount());
+    insertTotalRow();
+    onAddInvoiceDetail();
 }
 
 QStringList NewInvoicePage::buildClientNames() const
