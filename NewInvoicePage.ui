@@ -95,18 +95,7 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
-           <widget class="QTableWidget" name="invoiceDetailsTable">
-            <column>
-             <property name="text">
-              <string>Service Description</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Value</string>
-             </property>
-            </column>
-           </widget>
+           <widget class="DataHandlerWidget" name="invoiceDetailsWidget"/>
           </item>
          </layout>
         </widget>
@@ -217,6 +206,11 @@
    <extends>QWidget</extends>
    <header>CompanyDetailsWidget.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>DataHandlerWidget</class>
+   <extends>QTableView</extends>
+   <header>DataHandlerWidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

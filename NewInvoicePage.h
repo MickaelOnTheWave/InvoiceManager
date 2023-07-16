@@ -21,7 +21,7 @@ public:
 
     void connectModels(ClientModel* _clientModel,
                        StylesheetModel* _stylesheetModel);
-    void refreshData(const QString &companyName);
+    void reset(const QString &companyName);
 
 signals:
     void create();
@@ -29,8 +29,12 @@ signals:
 
 private slots:
     void onClientComboChange(int index);
+    void onAddInvoiceDetail();
 
 private:
+    void resetInputData(const QString &companyName);
+    void resetInvoiceData();
+
     QStringList buildClientNames() const;
 
     void resetComboData(QComboBox* combo, const QStringList& newData);
@@ -38,6 +42,7 @@ private:
     Ui::NewInvoicePage *ui;
     ClientModel* clientModel;
     StylesheetModel* stylesheetModel;
+    QAbstractItemModel* invoiceDetailsModel;
 };
 
 #endif // NEWINVOICEPAGE_H

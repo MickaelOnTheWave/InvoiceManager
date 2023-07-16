@@ -9,7 +9,6 @@
 #include "NewInvoicePage.h"
 
 // TODO Next :
-// - Add Invoice Details UI functions
 // - Update SQL table model
 //  - Add company data details
 //  - Add table for invoice details
@@ -119,7 +118,7 @@ void MainWindow::onFinishDbCreation()
 
 void MainWindow::onGoToCreateNewInvoice()
 {
-    ui->newInvoicePage->refreshData(controller.getCompanyName());
+    ui->newInvoicePage->reset(controller.getCompanyName());
     ui->stackedWidget->setCurrentWidget(ui->newInvoicePage);
 }
 
