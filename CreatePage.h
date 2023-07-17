@@ -3,9 +3,8 @@
 
 #include <QWidget>
 
-#include <QAbstractItemModel>
-
 #include "Company.h"
+#include "StylesheetModel.h"
 
 namespace Ui {
 class CreatePage;
@@ -21,7 +20,7 @@ public:
 
     CompanyData getCompanyData() const;
 
-    void setModel(QAbstractItemModel* model);
+    void setModel(StylesheetModel* model);
 
 signals:
     void confirm();
@@ -34,7 +33,7 @@ private:
     void insertIntoModel(const QString& stylesheetPath);
 
     Ui::CreatePage *ui;
-    QAbstractItemModel* stylesheetModel;
+    StylesheetModel* stylesheetModel;
 };
 
 #endif // CreatePage_H
