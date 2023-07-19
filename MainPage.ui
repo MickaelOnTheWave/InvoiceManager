@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>844</width>
-    <height>544</height>
+    <width>897</width>
+    <height>670</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -159,7 +159,24 @@
     </layout>
    </item>
    <item>
-    <widget class="DbStatusForm" name="dbStatusWidget" native="true"/>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="DbStatusForm" name="dbStatusWidget" native="true"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="backButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Back</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

@@ -17,14 +17,14 @@ public:
     explicit MainPage(QWidget *parent = nullptr);
     ~MainPage();
 
-    void setCompanyName(const QString& value);
+    void setDisplayData(const QString &companyName, const QString& dbFile,
+                        const int dbVersion);
 
     void connectViewsToModels(ClientModel* _clientModel,
                               QAbstractItemModel* _stylesheetModel);
 
 signals:
-    void closeAndSave();
-    void closeAndDiscard();
+    void closeDb();
     void createNewInvoice();
     void goToMore();
 

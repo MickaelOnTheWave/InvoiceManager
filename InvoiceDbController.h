@@ -13,10 +13,12 @@ class InvoiceDbController : public QObject
     Q_OBJECT
 
 public:
+    static const int currentDbVersion = 4;
+
     InvoiceDbController();
 
     bool createDb(const QString& filename);
-    void openDb(const QString& filename);
+    bool openDb(const QString& filename);
     void closeDb();
 
     QString getLastError() const;
@@ -25,18 +27,19 @@ public:
     bool writeStylesheets(const QStringList &stylesheets);
 
     QString getCompanyName() const;
+    QString getDatabaseFile() const;
+    int getDatabaseVersion() const;
 
     QSqlDatabase getDatabase();
 
     static QSqlQuery createWriteCompanyQuery(const CompanyData& data, const bool isClient);
 
 private:
-    void createDbConnection(const QString& filename);
+    bool createDbConnection(const QString& filename);
 
     QString dbFilename;
     QSqlDatabase db; // TODO : remove this. See tip from Qt documentqtion.
     QString lastErrorMessage;
-    static const int currentDbVersion = 3;
 };
 
 #endif // INVOICEDBCONTROLLER_H

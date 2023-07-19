@@ -26,8 +26,7 @@ public:
 private slots:
     void onCreateDb();
     void onOpenDb();
-    void onCloseAndSaveDb();
-    void onCloseAndDiscardDb();
+    void onCloseDb();
 
     void onFinishDbCreation();
 
@@ -38,7 +37,6 @@ private slots:
 
 
 private:
-    void connectDbStatusControls(DbStatusForm* dbStatusForm);
     void createModels();
     void switchToMainWidget();
 

@@ -15,17 +15,7 @@ public:
     explicit DbStatusForm(QWidget *parent = nullptr);
     ~DbStatusForm();
 
-    void setDbFile(const QString& dbFile);
-
-signals:
-    void closeAndSave();
-    void closeAndDiscard();
-
-private slots:
-    void onClosePushed();
-    void onCloseAndSave();
-    void onCloseAndDiscard();
-    void onDontClose();
+    void setData(const QString& dbFile, const int dbVersion);
 
 private:
     Ui::DbStatusForm *ui;

@@ -8,9 +8,7 @@ MainPage::MainPage(QWidget *parent) :
     ui->setupUi(this);
     connect(ui->newInvoiceButton, &QAbstractButton::clicked, this, &MainPage::createNewInvoice);
     connect(ui->moreButton, &QAbstractButton::clicked, this, &MainPage::goToMore);
-
-    connect(ui->dbStatusWidget, &DbStatusForm::closeAndSave, this, &MainPage::closeAndSave);
-    connect(ui->dbStatusWidget, &DbStatusForm::closeAndDiscard, this, &MainPage::closeAndDiscard);
+    connect(ui->backButton, &QAbstractButton::clicked, this, &MainPage::closeDb);
 }
 
 MainPage::~MainPage()
@@ -18,9 +16,11 @@ MainPage::~MainPage()
     delete ui;
 }
 
-void MainPage::setCompanyName(const QString &value)
+void MainPage::setDisplayData(const QString &companyName, const QString& dbFile,
+                              const int dbVersion)
 {
-    ui->companyNameLabel->setText(value);
+    ui->companyNameLabel->setText(companyName);
+    ui->dbStatusWidget->setData(dbFile, dbVersion);
 }
 
 void MainPage::connectViewsToModels(ClientModel *_clientModel, QAbstractItemModel *_stylesheetModel)

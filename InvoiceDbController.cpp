@@ -30,7 +30,7 @@ bool InvoiceDbController::createDb(const QString &filename)
         return false;
     }
 
-    if (!query.exec("CREATE TABLE stylesheet (id INTEGER primary key, file TEXT)"))
+    if (!query.exec("CREATE TABLE stylesheet (id INTEGER primary key, name TEXT, file TEXT)"))
     {
         lastErrorMessage = query.lastError().text();
         return false;
@@ -61,9 +61,9 @@ bool InvoiceDbController::createDb(const QString &filename)
     return true;
 }
 
-void InvoiceDbController::openDb(const QString &filename)
+bool InvoiceDbController::openDb(const QString &filename)
 {
-    createDbConnection(filename);
+    return createDbConnection(filename);
 }
 
 void InvoiceDbController::closeDb()
@@ -117,6 +117,23 @@ QString InvoiceDbController::getCompanyName() const
     return query.lastError().text();
 }
 
+QString InvoiceDbController::getDatabaseFile() const
+{
+    return dbFilename;
+}
+
+int InvoiceDbController::getDatabaseVersion() const
+{
+    QSqlQuery query(db);
+    const bool result = query.exec("SELECT value FROM version");
+    if (result && query.next())
+    {
+        return query.value(0).toInt();
+    }
+
+    return -1;
+}
+
 QSqlQuery InvoiceDbController::createWriteCompanyQuery(const CompanyData &data, const bool isClient)
 {
     QSqlQuery query;
@@ -135,10 +152,10 @@ QSqlDatabase InvoiceDbController::getDatabase()
     return db;
 }
 
-void InvoiceDbController::createDbConnection(const QString &filename)
+bool InvoiceDbController::createDbConnection(const QString &filename)
 {
     dbFilename = filename;
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(filename);
-    db.open();
+    return db.open();
 }

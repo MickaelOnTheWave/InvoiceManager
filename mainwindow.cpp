@@ -27,12 +27,11 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->quitButton, &QPushButton::clicked, this, &QMainWindow::close);
 
     connect(ui->createPage, &CreatePage::confirm, this, &MainWindow::onFinishDbCreation);
-    connect(ui->createPage, &CreatePage::cancel, this, &MainWindow::onCloseAndDiscardDb);
+    connect(ui->createPage, &CreatePage::cancel, this, &MainWindow::onCloseDb);
 
     connect(ui->mainPage, &MainPage::createNewInvoice, this, &MainWindow::onGoToCreateNewInvoice);
     connect(ui->mainPage, &MainPage::goToMore, this, &MainWindow::onGoToMore);
-    connect(ui->mainPage, &MainPage::closeAndSave, this, &MainWindow::onCloseAndSaveDb);
-    connect(ui->mainPage, &MainPage::closeAndDiscard, this, &MainWindow::onCloseAndDiscardDb);
+    connect(ui->mainPage, &MainPage::closeDb, this, &MainWindow::onCloseDb);
 
     connect(ui->newInvoicePage, &NewInvoicePage::create, this, &MainWindow::onCreateNewInvoice);
     connect(ui->newInvoicePage, &NewInvoicePage::cancel, this, &MainWindow::onBackToMainPage);
@@ -77,20 +76,25 @@ void MainWindow::onOpenDb()
     const QString dbFile = QFileDialog::getOpenFileName(this, title, QString(), typeDescription);
     if (!dbFile.isEmpty())
     {
-        controller.openDb(dbFile);
-        createModels();
-        switchToMainWidget();
+        const bool ok = controller.openDb(dbFile);
+        if (ok)
+        {
+            const int dbVersion = controller.getDatabaseVersion();
+            if (dbVersion != controller.currentDbVersion)
+            {
+                const QString message("DB version mismatch. The app might crash while trying to handle it.\n"
+                                      "DB version : %1 - Current version : %2");
+                showError("Warning", message.arg(dbVersion).arg(controller.currentDbVersion));
+            }
+            createModels();
+            switchToMainWidget();
+        }
+        else
+            showError("Error", "Error while trying to open database file");
     }
 }
 
-void MainWindow::onCloseAndSaveDb()
-{
-    //controller.save();
-    controller.closeDb();
-    ui->stackedWidget->setCurrentWidget(ui->startPage);
-}
-
-void MainWindow::onCloseAndDiscardDb()
+void MainWindow::onCloseDb()
 {
     controller.closeDb();
     ui->stackedWidget->setCurrentWidget(ui->startPage);
@@ -137,12 +141,6 @@ void MainWindow::onGoToMore()
     ui->stackedWidget->setCurrentWidget(ui->morePage);
 }
 
-void MainWindow::connectDbStatusControls(DbStatusForm *dbStatusForm)
-{
-    connect(dbStatusForm, &DbStatusForm::closeAndSave, this, &MainWindow::onCloseAndSaveDb);
-    connect(dbStatusForm, &DbStatusForm::closeAndDiscard, this, &MainWindow::onCloseAndDiscardDb);
-}
-
 void MainWindow::createModels()
 {
     stylesheetModel = new StylesheetModel(this, controller.getDatabase());
@@ -155,7 +153,8 @@ void MainWindow::createModels()
 
 void MainWindow::switchToMainWidget()
 {
-    ui->mainPage->setCompanyName(controller.getCompanyName());
+    ui->mainPage->setDisplayData(controller.getCompanyName(), controller.getDatabaseFile(),
+                                 controller.getDatabaseVersion());
     ui->stackedWidget->setCurrentWidget(ui->mainPage);
 }
 

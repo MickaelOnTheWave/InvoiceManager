@@ -6,7 +6,7 @@
 ClientModel::ClientModel(QObject *parent)
     : QSqlQueryModel(parent)
 {
-    setQuery("SELECT name, address, email, phone FROM company ");
+    setQuery("SELECT name, address, email, phone FROM company WHERE isClient = TRUE");
 
     setHeaderData(0, Qt::Horizontal, tr("Name"));
     setHeaderData(1, Qt::Horizontal, tr("Address"));

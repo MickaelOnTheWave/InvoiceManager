@@ -8,11 +8,6 @@ DbStatusForm::DbStatusForm(QWidget *parent) :
     ui(new Ui::DbStatusForm)
 {
     ui->setupUi(this);
-
-    connect(ui->closeButton, &QPushButton::clicked, this, &DbStatusForm::onClosePushed);
-    connect(ui->closeAndSaveButton, &QPushButton::clicked, this, &DbStatusForm::onCloseAndSave);
-    connect(ui->closeAndDiscardButton, &QPushButton::clicked, this, &DbStatusForm::onCloseAndDiscard);
-    connect(ui->dontCloseButton, &QPushButton::clicked, this, &DbStatusForm::onDontClose);
 }
 
 DbStatusForm::~DbStatusForm()
@@ -20,29 +15,8 @@ DbStatusForm::~DbStatusForm()
     delete ui;
 }
 
-void DbStatusForm::setDbFile(const QString &dbFile)
+void DbStatusForm::setData(const QString &dbFile, const int dbVersion)
 {
-    ui->dbLabel->setText(dbFile);
-}
-
-void DbStatusForm::onClosePushed()
-{
-    ui->dbActionsWidget->setCurrentWidget(ui->confirmPage);
-}
-
-void DbStatusForm::onCloseAndSave()
-{
-    ui->dbActionsWidget->setCurrentWidget(ui->openedPage);
-    emit closeAndSave();
-}
-
-void DbStatusForm::onCloseAndDiscard()
-{
-    ui->dbActionsWidget->setCurrentWidget(ui->openedPage);
-    emit closeAndDiscard();
-}
-
-void DbStatusForm::onDontClose()
-{
-    ui->dbActionsWidget->setCurrentWidget(ui->openedPage);
+    ui->dbFileLabel->setText(dbFile);
+    ui->dbVersionLabel->setText(QString::number(dbVersion));
 }
