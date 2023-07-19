@@ -17,6 +17,11 @@ StylesheetDetailsWidget::~StylesheetDetailsWidget()
     delete ui;
 }
 
+QString StylesheetDetailsWidget::getName() const
+{
+    return ui->nameEdit->text();
+}
+
 QString StylesheetDetailsWidget::getPath() const
 {
     return ui->pathEdit->text();

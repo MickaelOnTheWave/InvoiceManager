@@ -110,13 +110,6 @@ void MainWindow::onFinishDbCreation()
         return;
     }
 
-    if (!controller.writeStylesheets(stylesheetModel->getPathList()))
-    {
-        showError("Write stylesheets Table", controller.getLastError());
-        ui->stackedWidget->setCurrentWidget(ui->startPage);
-        return;
-    }
-
     switchToMainWidget();
 }
 

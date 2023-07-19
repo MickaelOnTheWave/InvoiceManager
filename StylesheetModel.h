@@ -12,7 +12,7 @@ public:
 
     QStringList getPathList() const;
 
-    bool insertAtEnd(const QString& data);
+    bool insertAtEnd(const QString& name, const QString &path);
 
 private:
 };

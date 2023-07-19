@@ -36,7 +36,6 @@ void MainPage::connectViewsToModels(ClientModel *_clientModel, QAbstractItemMode
     ui->stylesheetsView->hideColumn(0);
     ui->stylesheetsView->resizeColumnsToContents();
 
-
     ui->clientsView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
     ui->clientsView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
     ui->stylesheetsView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);

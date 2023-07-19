@@ -26,6 +26,7 @@ set(PROJECT_SOURCES
         CompanyDetailsWidget.h CompanyDetailsWidget.cpp CompanyDetailsWidget.ui
         StylesheetDetailsWidget.h StylesheetDetailsWidget.cpp StylesheetDetailsWidget.ui
         NewDataDialog.h NewDataDialog.cpp NewDataDialog.ui
+        GuiUtils.h GuiUtils.cpp
         InvoiceDbController.h InvoiceDbController.cpp
         Company.h Company.cpp
         ClientModel.h ClientModel.cpp

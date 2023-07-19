@@ -15,6 +15,7 @@ public:
     explicit StylesheetDetailsWidget(QWidget *parent = nullptr);
     ~StylesheetDetailsWidget();
 
+    QString getName() const;
     QString getPath() const;
 
 private slots:

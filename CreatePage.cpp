@@ -2,6 +2,7 @@
 #include "ui_CreatePage.h"
 
 #include <QFileDialog>
+#include "GuiUtils.h"
 
 CreatePage::CreatePage(QWidget *parent) :
     QWidget(parent),
@@ -33,16 +34,5 @@ void CreatePage::setModel(StylesheetModel *model)
 
 void CreatePage::onAddStylesheet()
 {
-    const QString title = tr("Select an Invoice Stylesheet");
-    const QString typeDescription = tr("Stylesheet (*.css)");
-    QString filePath = QFileDialog::getOpenFileName(this, title, "", typeDescription);
-    if (!filePath.isEmpty())
-    {
-        insertIntoModel(filePath);
-    }
-}
-
-void CreatePage::insertIntoModel(const QString &stylesheetPath)
-{
-    stylesheetModel->insertAtEnd(stylesheetPath);
+    GuiUtils::OnAddStylesheet(stylesheetModel);
 }

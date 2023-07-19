@@ -5,6 +5,7 @@
 
 #include "Company.h"
 #include "CompanyDetailsWidget.h"
+#include "GuiUtils.h"
 #include "StylesheetDetailsWidget.h"
 #include "NewDataDialog.h"
 
@@ -31,7 +32,7 @@ void MorePage::connectViewsToModels(ClientModel *_clientModel,
     ui->stylesheetsWidget->setModel(_stylesheetModel);
 
     ui->clientsWidget->setColumnsResizingMode({QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::Stretch});
-    ui->stylesheetsWidget->setColumnsResizingMode({QHeaderView::Fixed, QHeaderView::Stretch});
+    ui->stylesheetsWidget->setColumnsResizingMode({QHeaderView::Fixed, QHeaderView::Fixed, QHeaderView::Stretch});
 
     clientModel = _clientModel;
     stylesheetModel = _stylesheetModel;
@@ -40,17 +41,14 @@ void MorePage::connectViewsToModels(ClientModel *_clientModel,
 void MorePage::onAddClient()
 {
     auto contentWidget = new CompanyDetailsWidget();
-    addDataToModel(contentWidget, [this, contentWidget] () {
+    GuiUtils::addDataToModel(contentWidget, [this, contentWidget] () {
         return clientModel->insertAtEnd(contentWidget->getData());
     });
 }
 
 void MorePage::onAddStylesheet()
 {
-    auto contentWidget = new StylesheetDetailsWidget();
-    addDataToModel(contentWidget, [this, contentWidget] () {
-        return stylesheetModel->insertAtEnd(contentWidget->getPath());
-    });
+    GuiUtils::OnAddStylesheet(stylesheetModel);
 }
 
 bool MorePage::insertInStylesheetModel()
@@ -63,16 +61,4 @@ bool MorePage::insertInStylesheetModel()
     stylesheetModel->setData(stylesheetModel->index(rowIndex, 0), "stylesheet.css");
 
     return false;
-}
-
-void MorePage::addDataToModel(QWidget *dataWidget, std::function<bool ()> insertDataFunc)
-{
-    NewDataDialog dialog(dataWidget, this);
-    const int result = dialog.exec();
-    if (result == QDialog::Accepted)
-    {
-        const bool ok = insertDataFunc();
-        if (!ok)
-            QMessageBox::warning(&dialog, "Error", "Could not insert data into model");
-    }
 }

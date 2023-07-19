@@ -30,8 +30,6 @@ private slots:
     void onAddStylesheet();
 
 private:
-    void insertIntoModel(const QString& stylesheetPath);
-
     Ui::CreatePage *ui;
     StylesheetModel* stylesheetModel;
 };

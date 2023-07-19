@@ -6,7 +6,10 @@ StylesheetModel::StylesheetModel(QObject *parent, QSqlDatabase db)
     setTable("stylesheet");
     setEditStrategy(QSqlTableModel::OnManualSubmit);
     select();
-    //stylesheetModel->setHeaderData(0, Qt::Horizontal, "Stylesheet path");
+
+    setHeaderData(0, Qt::Horizontal, tr("Id"));
+    setHeaderData(1, Qt::Horizontal, tr("Name"));
+    setHeaderData(2, Qt::Horizontal, tr("File"));
 }
 
 QStringList StylesheetModel::getPathList() const
@@ -23,13 +26,15 @@ QStringList StylesheetModel::getPathList() const
     return paths;
 }
 
-bool StylesheetModel::insertAtEnd(const QString &data)
+bool StylesheetModel::insertAtEnd(const QString &name,
+                                  const QString &path)
 {
     const int rowIndex = rowCount();
     const bool ok = insertRow(rowIndex);
     if (!ok)
         return false;
 
-    setData(index(rowIndex, 1), data);
+    setData(index(rowIndex, 1), name);
+    setData(index(rowIndex, 2), path);
     return submitAll();
 }

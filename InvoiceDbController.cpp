@@ -87,24 +87,6 @@ bool InvoiceDbController::writeUserCompany(const CompanyData &company)
     return result;
 }
 
-bool InvoiceDbController::writeStylesheets(const QStringList& stylesheets)
-{
-    bool result = true;
-    for (const auto& stylesheet : stylesheets)
-    {
-        QSqlQuery query;
-        query.prepare("INSERT INTO stylesheet (file) VALUES (:file)");
-        query.bindValue(":file", stylesheet);
-        result = query.exec();
-        if (!result)
-        {
-            lastErrorMessage = query.lastError().text();
-            break;
-        }
-    }
-    return result;
-}
-
 QString InvoiceDbController::getCompanyName() const
 {
     QSqlQuery query(db);
