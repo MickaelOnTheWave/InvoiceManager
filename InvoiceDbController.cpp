@@ -49,6 +49,22 @@ bool InvoiceDbController::createDb(const QString &filename)
         return false;
     }
 
+    if (!query.exec("CREATE TABLE version (value INTEGER)"))
+    {
+
+        lastErrorMessage = query.lastError().text();
+        return false;
+    }
+
+    query.prepare("INSERT INTO version (value) VALUES (:currentVersion)");
+    query.bindValue(":currentVersion", 2);
+    if (!query.exec())
+    {
+
+        lastErrorMessage = query.lastError().text();
+        return false;
+    }
+
     return true;
 }
 

@@ -146,7 +146,7 @@ void MainWindow::connectDbStatusControls(DbStatusForm *dbStatusForm)
 void MainWindow::createModels()
 {
     stylesheetModel = new StylesheetModel(this, controller.getDatabase());
-    clientModel = new ClientModel(this, controller.getDatabase());
+    clientModel = new ClientModel(this);
 
     ui->mainPage->connectViewsToModels(clientModel, stylesheetModel);
     ui->morePage->connectViewsToModels(clientModel, stylesheetModel);
