@@ -10,7 +10,7 @@ class StylesheetModel : public QSqlTableModel
 public:
     explicit StylesheetModel(QObject *parent = nullptr, QSqlDatabase db = QSqlDatabase());
 
-    QStringList getPathList() const;
+    QStringList getNameList() const;
 
     bool insertAtEnd(const QString& name, const QString &path);
 

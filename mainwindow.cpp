@@ -9,12 +9,13 @@
 #include "NewInvoicePage.h"
 
 // TODO Next :
+// - Implement remove button in data handler widget
 // - Update SQL table model
-//  - Add company data details
 //  - Add table for invoice details
 //  - Add table for invoice details -> invoice mapping
 // - Add webview in new invoice
-// - Implement remove button in data handler widget
+// - Improve DB warning with "Dismiss" or "Back"
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -64,7 +65,7 @@ void MainWindow::onCreateDb()
     }
 
         createModels();
-
+        ui->createPage->reset();
         ui->stackedWidget->setCurrentWidget(ui->createPage);
         ui->createPage->setModel(stylesheetModel);
 }
@@ -155,4 +156,3 @@ void MainWindow::showError(const QString &title, const QString &details)
 {
     QMessageBox::warning(this, title, details);
 }
-

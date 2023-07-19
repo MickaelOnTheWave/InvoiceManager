@@ -19,6 +19,7 @@ public:
 
     CompanyData getData() const;
     void fill(const CompanyData& data);
+    void reset();
 
 private:
     QString buildAddress() const;

@@ -18,6 +18,8 @@ public:
     explicit CreatePage(QWidget *parent = nullptr);
     ~CreatePage();
 
+    void reset();
+
     CompanyData getCompanyData() const;
 
     void setModel(StylesheetModel* model);

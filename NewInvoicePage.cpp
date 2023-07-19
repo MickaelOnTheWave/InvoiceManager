@@ -85,7 +85,7 @@ void NewInvoicePage::resetInputData(const QString &companyName)
 {
     ui->companyNameLabel->setText(companyName);
     resetComboData(ui->clientCombo, buildClientNames());
-    resetComboData(ui->stylesheetCombo, stylesheetModel->getPathList());
+    resetComboData(ui->stylesheetCombo, stylesheetModel->getNameList());
 }
 
 void NewInvoicePage::resetInvoiceData()

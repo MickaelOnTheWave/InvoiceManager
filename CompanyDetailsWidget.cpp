@@ -35,6 +35,17 @@ void CompanyDetailsWidget::fill(const CompanyData &data)
     ui->addressLineEdit3->setText(getExplodedValue(explodedAddress, 2));
 }
 
+void CompanyDetailsWidget::reset()
+{
+    ui->nameEdit->setText("");
+    ui->emailEdit->setText("");
+    ui->phoneEdit->setText("");
+
+    ui->addressLineEdit1->setText("");
+    ui->addressLineEdit2->setText("");
+    ui->addressLineEdit3->setText("");
+}
+
 QString CompanyDetailsWidget::buildAddress() const
 {
     QString address = ui->addressLineEdit1->text();

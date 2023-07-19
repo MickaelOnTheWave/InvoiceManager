@@ -12,18 +12,12 @@ StylesheetModel::StylesheetModel(QObject *parent, QSqlDatabase db)
     setHeaderData(2, Qt::Horizontal, tr("File"));
 }
 
-QStringList StylesheetModel::getPathList() const
+QStringList StylesheetModel::getNameList() const
 {
-    // BUG : On creation, we have empty data. Check that.
-    QStringList paths;
-
+    QStringList names;
     for (int i=0; i<rowCount(); ++i)
-    {
-        const QString path = data(index(i, 1)).toString();
-        paths.append(path);
-    }
-
-    return paths;
+        names.append(data(index(i, 1)).toString());
+    return names;
 }
 
 bool StylesheetModel::insertAtEnd(const QString &name,

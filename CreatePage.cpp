@@ -21,6 +21,11 @@ CreatePage::~CreatePage()
     delete ui;
 }
 
+void CreatePage::reset()
+{
+    ui->addressWidget->reset();
+}
+
 CompanyData CreatePage::getCompanyData() const
 {
     return ui->addressWidget->getData();
@@ -30,6 +35,7 @@ void CreatePage::setModel(StylesheetModel *model)
 {
     stylesheetModel = model;
     ui->stylesheedsDataWidget->setModel(stylesheetModel);
+    ui->stylesheedsDataWidget->setColumnsResizingMode({QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::Stretch});
 }
 
 void CreatePage::onAddStylesheet()
