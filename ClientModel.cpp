@@ -1,11 +1,12 @@
 #include "ClientModel.h"
 
 #include <QSqlQuery>
+#include "InvoiceDbController.h"
 
 ClientModel::ClientModel(QObject *parent)
     : QSqlQueryModel(parent)
 {
-    setQuery("SELECT name, address, email FROM company ");
+    setQuery("SELECT name, address, email, phone FROM company ");
 
     setHeaderData(0, Qt::Horizontal, tr("Name"));
     setHeaderData(1, Qt::Horizontal, tr("Address"));
@@ -18,6 +19,7 @@ CompanyData ClientModel::getDataAtRow(const int i) const
     companyData.name = data(index(i, 0)).toString();
     companyData.address = data(index(i, 1)).toString();
     companyData.email = data(index(i, 2)).toString();
+    companyData.phoneNumber = data(index(i, 3)).toString();
     return companyData;
 }
 
@@ -25,11 +27,7 @@ bool ClientModel::insertAtEnd(const CompanyData &data)
 {
     const int rowIndex = rowCount();
 
-    QSqlQuery query;
-    query.prepare("INSERT INTO company (name, address, email) VALUES (:name, :address, :email)");
-    query.bindValue(":name", data.name);
-    query.bindValue(":address", data.address);
-    query.bindValue(":email", data.email);
+    QSqlQuery query = InvoiceDbController::createWriteCompanyQuery(data, true);
     const bool result = query.exec();
     if (result)
     {

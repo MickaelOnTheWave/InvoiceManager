@@ -28,12 +28,15 @@ public:
 
     QSqlDatabase getDatabase();
 
+    static QSqlQuery createWriteCompanyQuery(const CompanyData& data, const bool isClient);
+
 private:
     void createDbConnection(const QString& filename);
 
     QString dbFilename;
     QSqlDatabase db; // TODO : remove this. See tip from Qt documentqtion.
     QString lastErrorMessage;
+    static const int currentDbVersion = 3;
 };
 
 #endif // INVOICEDBCONTROLLER_H

@@ -24,13 +24,7 @@ bool InvoiceDbController::createDb(const QString &filename)
     createDbConnection(filename);
 
     QSqlQuery query;
-    if (!query.exec("CREATE TABLE client (id INTEGER primary key, name TEXT, address TEXT)"))
-    {
-        lastErrorMessage = query.lastError().text();
-        return false;
-    }
-
-    if (!query.exec("CREATE TABLE company (id INTEGER primary key, name TEXT, address TEXT, email TEXT)"))
+    if (!query.exec("CREATE TABLE company (id INTEGER primary key, name TEXT, address TEXT, email TEXT, phone TEXT, isClient BOOLEAN)"))
     {
         lastErrorMessage = query.lastError().text();
         return false;
@@ -51,13 +45,12 @@ bool InvoiceDbController::createDb(const QString &filename)
 
     if (!query.exec("CREATE TABLE version (value INTEGER)"))
     {
-
         lastErrorMessage = query.lastError().text();
         return false;
     }
 
     query.prepare("INSERT INTO version (value) VALUES (:currentVersion)");
-    query.bindValue(":currentVersion", 2);
+    query.bindValue(":currentVersion", currentDbVersion);
     if (!query.exec())
     {
 
@@ -85,11 +78,7 @@ QString InvoiceDbController::getLastError() const
 
 bool InvoiceDbController::writeUserCompany(const CompanyData &company)
 {
-    QSqlQuery query;
-    query.prepare("INSERT INTO company (name, address, email) VALUES (:name, :address, :email)");
-    query.bindValue(":name", company.name);
-    query.bindValue(":address", company.address);
-    query.bindValue(":email", company.email);
+    QSqlQuery query = createWriteCompanyQuery(company, false);
     const bool result = query.exec();
     if (!result)
     {
@@ -126,6 +115,19 @@ QString InvoiceDbController::getCompanyName() const
     }
 
     return query.lastError().text();
+}
+
+QSqlQuery InvoiceDbController::createWriteCompanyQuery(const CompanyData &data, const bool isClient)
+{
+    QSqlQuery query;
+    query.prepare("INSERT INTO company (name, address, email, phone, isClient) "
+                  "VALUES (:name, :address, :email, :phone, :isClient)");
+    query.bindValue(":name", data.name);
+    query.bindValue(":address", data.address);
+    query.bindValue(":email", data.email);
+    query.bindValue(":phone", data.phoneNumber);
+    query.bindValue(":isClient", isClient);
+    return query;
 }
 
 QSqlDatabase InvoiceDbController::getDatabase()
