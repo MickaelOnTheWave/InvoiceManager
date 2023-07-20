@@ -14,8 +14,6 @@
 //  - Add table for invoice details
 //  - Add table for invoice details -> invoice mapping
 // - Add webview in new invoice
-// - Improve DB warning with "Dismiss" or "Back"
-
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -80,15 +78,11 @@ void MainWindow::onOpenDb()
         const bool ok = controller.openDb(dbFile);
         if (ok)
         {
-            const int dbVersion = controller.getDatabaseVersion();
-            if (dbVersion != controller.currentDbVersion)
+            if (isDbOpeningConfirmed())
             {
-                const QString message("DB version mismatch. The app might crash while trying to handle it.\n"
-                                      "DB version : %1 - Current version : %2");
-                showError("Warning", message.arg(dbVersion).arg(controller.currentDbVersion));
+                createModels();
+                switchToMainWidget();
             }
-            createModels();
-            switchToMainWidget();
         }
         else
             showError("Error", "Error while trying to open database file");
@@ -155,4 +149,23 @@ void MainWindow::switchToMainWidget()
 void MainWindow::showError(const QString &title, const QString &details)
 {
     QMessageBox::warning(this, title, details);
+}
+
+bool MainWindow::isDbOpeningConfirmed()
+{
+    bool openDb = true;
+    const int dbVersion = controller.getDatabaseVersion();
+    if (dbVersion != controller.currentDbVersion)
+    {
+        const QString message("DB version mismatch. The app might crash while trying to handle it.\n"
+                              "DB version : %1 - Current version : %2\n"
+                              "Are you sure you want to open this file ?");
+        QMessageBox::StandardButtons buttons = {QMessageBox::Yes, QMessageBox::No};
+        auto button = QMessageBox::warning(this, "Warning",
+                                           message.arg(dbVersion).arg(controller.currentDbVersion),
+                                           buttons,
+                                           QMessageBox::No);
+        openDb = (button == QMessageBox::Yes);
+    }
+    return openDb;
 }

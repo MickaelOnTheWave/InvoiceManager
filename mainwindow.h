@@ -42,6 +42,8 @@ private:
 
     void showError(const QString& title, const QString& details);
 
+    bool isDbOpeningConfirmed();
+
     Ui::MainWindow *ui;
 
     InvoiceDbController controller;
