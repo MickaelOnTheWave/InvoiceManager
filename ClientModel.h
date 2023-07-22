@@ -12,6 +12,7 @@ class ClientModel : public QSqlQueryModel
 public:
     explicit ClientModel(QObject *parent = nullptr);
 
+    int getId(const int i) const;
     CompanyData getDataAtRow(const int i) const;
 
     bool insertAtEnd(const CompanyData& data);

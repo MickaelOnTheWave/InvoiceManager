@@ -11,7 +11,7 @@ NewInvoicePage::NewInvoicePage(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect(ui->closeBox, &QDialogButtonBox::accepted, this, &NewInvoicePage::create);
+    connect(ui->closeBox, &QDialogButtonBox::accepted, this, &NewInvoicePage::onCreateInvoice);
     connect(ui->closeBox, &QDialogButtonBox::rejected, this, &NewInvoicePage::cancel);
     connect(ui->clientCombo, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &NewInvoicePage::onClientComboChange);
@@ -29,6 +29,14 @@ NewInvoicePage::NewInvoicePage(QWidget *parent) :
 
     connect(ui->invoiceDetailsWidget, &DataHandlerWidget::addClicked, this, &NewInvoicePage::onAddInvoiceDetail);
     connect(ui->invoiceDetailsWidget, &DataHandlerWidget::editingFinished, this, &NewInvoicePage::computeTotalRow);
+
+    connect(ui->todayButton, &QAbstractButton::clicked, this, &NewInvoicePage::onTodayClicked);
+    connect(ui->lastDayOfMonthButton, &QAbstractButton::clicked, this, &NewInvoicePage::onLastDayOfMonthClicked);
+    connect(ui->customButton, &QAbstractButton::clicked, this, &NewInvoicePage::onCustomDateClicked);
+    connect(ui->dateEdit, &QDateEdit::dateChanged, this, &NewInvoicePage::onCustomDateUpdated);
+
+    ui->lastDayOfMonthButton->setChecked(true);
+    onLastDayOfMonthClicked();
 }
 
 NewInvoicePage::~NewInvoicePage()
@@ -62,6 +70,44 @@ void NewInvoicePage::onAddInvoiceDetail()
     invoiceDetailsModel->setData(invoiceDetailsModel->index(newRowIndex, 1), 0.00);
 
     computeTotalRow();
+}
+
+void NewInvoicePage::onCreateInvoice()
+{
+    const int clientId = clientModel->getId(ui->clientCombo->currentIndex());
+/*    const int stylesheetId = stylesheetModel->getId(ui->stylesheetCombo->currentIndex());
+    const std::vector<int> invoiceElementsIds = writeInvoiceElements();
+
+    writeInvoice(clientId, stylesheetId, invoiceElementsIds, date);*/
+
+
+    emit create();
+}
+
+void NewInvoicePage::onTodayClicked()
+{
+    ui->dateEdit->setEnabled(false);
+    updateDateEdit(QDate::currentDate());
+}
+
+void NewInvoicePage::onLastDayOfMonthClicked()
+{
+    ui->dateEdit->setEnabled(false);
+
+    const auto today = QDate::currentDate();
+    const QDate selectedDate(today.year(), today.month(), today.daysInMonth());
+    updateDateEdit(selectedDate);
+}
+
+void NewInvoicePage::onCustomDateClicked()
+{
+    ui->dateEdit->setEnabled(true);
+    updateDateEdit(ui->dateEdit->date());
+}
+
+void NewInvoicePage::onCustomDateUpdated(const QDate &newDate)
+{
+    ui->dateLabel->setText(newDate.toString());
 }
 
 void NewInvoicePage::insertTotalRow()
@@ -110,4 +156,10 @@ void NewInvoicePage::resetComboData(QComboBox *combo, const QStringList &newData
 {
     combo->clear();
     combo->addItems(newData);
+}
+
+void NewInvoicePage::updateDateEdit(const QDate &date)
+{
+    ui->dateEdit->setDate(date);
+    ui->dateLabel->setText(date.toString());
 }

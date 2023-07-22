@@ -30,6 +30,12 @@ signals:
 private slots:
     void onClientComboChange(int index);
     void onAddInvoiceDetail();
+    void onCreateInvoice();
+
+    void onTodayClicked();
+    void onLastDayOfMonthClicked();
+    void onCustomDateClicked();
+    void onCustomDateUpdated(const QDate& newDate);
 
 private:
     void insertTotalRow();
@@ -40,6 +46,7 @@ private:
     QStringList buildClientNames() const;
 
     void resetComboData(QComboBox* combo, const QStringList& newData);
+    void updateDateEdit(const QDate& date);
 
     Ui::NewInvoicePage *ui;
     ClientModel* clientModel;

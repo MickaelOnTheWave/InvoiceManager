@@ -6,20 +6,26 @@
 ClientModel::ClientModel(QObject *parent)
     : QSqlQueryModel(parent)
 {
-    setQuery("SELECT name, address, email, phone FROM company WHERE isClient = TRUE");
+    setQuery("SELECT * FROM company WHERE isClient = TRUE");
 
-    setHeaderData(0, Qt::Horizontal, tr("Name"));
-    setHeaderData(1, Qt::Horizontal, tr("Address"));
-    setHeaderData(2, Qt::Horizontal, tr("Email"));
+    setHeaderData(0, Qt::Horizontal, tr("Id"));
+    setHeaderData(1, Qt::Horizontal, tr("Name"));
+    setHeaderData(2, Qt::Horizontal, tr("Address"));
+    setHeaderData(3, Qt::Horizontal, tr("Email"));
+}
+
+int ClientModel::getId(const int i) const
+{
+    return data(index(i, 0)).toInt();
 }
 
 CompanyData ClientModel::getDataAtRow(const int i) const
 {
     CompanyData companyData;
-    companyData.name = data(index(i, 0)).toString();
-    companyData.address = data(index(i, 1)).toString();
-    companyData.email = data(index(i, 2)).toString();
-    companyData.phoneNumber = data(index(i, 3)).toString();
+    companyData.name = data(index(i, 1)).toString();
+    companyData.address = data(index(i, 2)).toString();
+    companyData.email = data(index(i, 3)).toString();
+    companyData.phoneNumber = data(index(i, 4)).toString();
     return companyData;
 }
 
@@ -37,15 +43,6 @@ bool ClientModel::insertAtEnd(const CompanyData &data)
         emit dataChanged(index(rowIndex, 0), index(rowIndex, 2));
     }
     return result;
-/*
-    const bool ok = insertRow(rowIndex);
-    if (!ok)
-        return false;
-
-    setData(index(rowIndex, 0), data.name);
-    setData(index(rowIndex, 1), data.address);
-    setData(index(rowIndex, 2), data.email);
-    return true;*/
 }
 
 void ClientModel::refreshModel()

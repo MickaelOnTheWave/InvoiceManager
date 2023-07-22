@@ -37,7 +37,19 @@ bool InvoiceDbController::createDb(const QString &filename)
     }
 
     if (!query.exec("CREATE TABLE invoice (id INTEGER primary key, companyId INTEGER, clientId INTEGER, "
-               "stylesheetId INTEGER, value DOUBLE, date TEXT)"))
+               "stylesheetId INTEGER, date TEXT)"))
+    {
+        lastErrorMessage = query.lastError().text();
+        return false;
+    }
+
+    if (!query.exec("CREATE TABLE invoiceelement (id INTEGER primary key, description TEXT, value DOUBLE)"))
+    {
+        lastErrorMessage = query.lastError().text();
+        return false;
+    }
+
+    if (!query.exec("CREATE TABLE invoicedetailmap (id INTEGER primary key, idInvoice INTEGER, idElement INTEGER)"))
     {
         lastErrorMessage = query.lastError().text();
         return false;
