@@ -1,5 +1,6 @@
 #include "InvoiceDbController.h"
 
+#include <QDate>
 #include <QFile>
 #include <QtSql/QSqlQuery>
 #include <qsqlerror.h>
@@ -99,16 +100,66 @@ bool InvoiceDbController::writeUserCompany(const CompanyData &company)
     return result;
 }
 
-QString InvoiceDbController::getCompanyName() const
+std::vector<int> InvoiceDbController::writeInvoiceDetails(const std::vector<InvoiceDetail> &details)
+{
+    std::vector<int> insertedIds;
+    // Fail safe behaviour : insert elements one by one.
+    // Once we have an answer from StackOverflow we can do the batch insert.
+
+    for (const auto& detail : details)
+    {
+        QSqlQuery query;
+        query.prepare("INSERT INTO invoiceelement (description, value) VALUES (:description, :value)");
+        query.bindValue(":description", detail.description);
+        query.bindValue(":value", detail.value);
+        if (query.exec())
+            insertedIds.push_back(query.lastInsertId().toInt());
+    }
+
+
+
+/*    QSqlQuery query(db);
+    const bool result = query.exec(createInvoiceDetailsWriteQuery(details));
+
+    std::vector<int> insertedIds;
+    if (result)
+    {
+        while (query.next())
+            insertedIds.push_back(query.value(0).toInt());
+    }*/
+    return insertedIds;
+}
+
+bool InvoiceDbController::writeInvoice(const int clientId, const int stylesheetId, const std::vector<int> &detailsIds, const QDate &date)
+{
+    const int invoiceId = writeToInvoiceTable(clientId, stylesheetId, date);
+    if (invoiceId > -1)
+        return writeToInvoiceMapTable(invoiceId, detailsIds);
+    return false;
+}
+
+QString InvoiceDbController::getUserCompanyName() const
 {
     QSqlQuery query(db);
-    const bool result = query.exec("SELECT name FROM company ORDER BY id DESC LIMIT 1");
+    const bool result = query.exec(createUserCompanyRequest("name"));
     if (result && query.next())
     {
         return query.value(0).toString();
     }
 
     return query.lastError().text();
+}
+
+int InvoiceDbController::getUserCompanyId() const
+{
+    QSqlQuery query(db);
+    const bool result = query.exec(createUserCompanyRequest("id"));
+    if (result && query.next())
+    {
+        return query.value(0).toInt();
+    }
+
+    return -1;
 }
 
 QString InvoiceDbController::getDatabaseFile() const
@@ -152,4 +203,56 @@ bool InvoiceDbController::createDbConnection(const QString &filename)
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(filename);
     return db.open();
+}
+
+QString InvoiceDbController::createUserCompanyRequest(const QString &field)
+{
+    return QString("SELECT %1 FROM company WHERE isClient = FALSE ORDER BY id DESC LIMIT 1").arg(field);
+}
+
+QString InvoiceDbController::createInvoiceDetailsWriteQuery(const std::vector<InvoiceDetail> &details) const
+{
+    QString queryContent = "INSERT INTO invoiceelement (description, value) VALUES";
+    bool insertedFirstEntry = false;
+    for (const auto& detail : details)
+    {
+        if (insertedFirstEntry)
+            queryContent += ",";
+        else
+            insertedFirstEntry = true;
+
+        queryContent += QString(" ('%1', '%2')").arg(detail.description).arg(detail.value);
+    }
+    return queryContent;
+}
+
+int InvoiceDbController::writeToInvoiceTable(const int clientId, const int stylesheetId, const QDate &date)
+{
+    const QString dateString = date.toString("d MMM yyyy");
+    QSqlQuery query;
+    query.prepare("INSERT INTO invoice (companyId, clientId, stylesheetId, date)"
+                  "VALUES (:companyId, :clientId, :stylesheetId, :date)");
+    query.bindValue(":companyId", getUserCompanyId());
+    query.bindValue(":clientId", clientId);
+    query.bindValue(":stylesheetId", stylesheetId);
+    query.bindValue(":date", dateString);
+    if (query.exec())
+    {
+        return query.lastInsertId().toInt();
+    }
+    return -1;
+}
+
+bool InvoiceDbController::writeToInvoiceMapTable(const int invoiceId, const std::vector<int> &detailsIds)
+{
+    for (const int detailId: detailsIds)
+    {
+        QSqlQuery query;
+        query.prepare("INSERT INTO invoicedetailmap (idInvoice, idElement) VALUES (:invoice, :detail)");
+        query.bindValue(":invoice", invoiceId);
+        query.bindValue(":detail", detailId);
+        if (!query.exec())
+            return false;
+    }
+    return true;
 }

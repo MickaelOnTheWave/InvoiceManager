@@ -12,6 +12,11 @@ StylesheetModel::StylesheetModel(QObject *parent, QSqlDatabase db)
     setHeaderData(2, Qt::Horizontal, tr("File"));
 }
 
+int StylesheetModel::getId(const int i) const
+{
+    return data(index(i, 0)).toInt();
+}
+
 QStringList StylesheetModel::getNameList() const
 {
     QStringList names;

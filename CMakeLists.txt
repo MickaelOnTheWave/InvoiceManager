@@ -29,6 +29,7 @@ set(PROJECT_SOURCES
         GuiUtils.h GuiUtils.cpp
         InvoiceDbController.h InvoiceDbController.cpp
         Company.h Company.cpp
+        InvoiceDetail.h InvoiceDetail.cpp
         ClientModel.h ClientModel.cpp
         StylesheetModel.h StylesheetModel.cpp
 )

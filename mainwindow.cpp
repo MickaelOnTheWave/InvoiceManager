@@ -10,9 +10,6 @@
 
 // TODO Next :
 // - Implement remove button in data handler widget
-// - Update SQL table model
-//  - Add table for invoice details
-//  - Add table for invoice details -> invoice mapping
 // - Add webview in new invoice
 
 MainWindow::MainWindow(QWidget *parent)
@@ -110,7 +107,7 @@ void MainWindow::onFinishDbCreation()
 
 void MainWindow::onGoToCreateNewInvoice()
 {
-    ui->newInvoicePage->reset(controller.getCompanyName());
+    ui->newInvoicePage->reset(controller.getUserCompanyName());
     ui->stackedWidget->setCurrentWidget(ui->newInvoicePage);
 }
 
@@ -134,14 +131,16 @@ void MainWindow::createModels()
     stylesheetModel = new StylesheetModel(this, controller.getDatabase());
     clientModel = new ClientModel(this);
 
+    // TODO : either change function name or organization.
+    // Not coherent to have models and at the same time handle controller in name.
     ui->mainPage->connectViewsToModels(clientModel, stylesheetModel);
     ui->morePage->connectViewsToModels(clientModel, stylesheetModel);
-    ui->newInvoicePage->connectModels(clientModel, stylesheetModel);
+    ui->newInvoicePage->initialize(clientModel, stylesheetModel, &controller);
 }
 
 void MainWindow::switchToMainWidget()
 {
-    ui->mainPage->setDisplayData(controller.getCompanyName(), controller.getDatabaseFile(),
+    ui->mainPage->setDisplayData(controller.getUserCompanyName(), controller.getDatabaseFile(),
                                  controller.getDatabaseVersion());
     ui->stackedWidget->setCurrentWidget(ui->mainPage);
 }

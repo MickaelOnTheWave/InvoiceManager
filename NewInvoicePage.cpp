@@ -44,10 +44,12 @@ NewInvoicePage::~NewInvoicePage()
     delete ui;
 }
 
-void NewInvoicePage::connectModels(ClientModel *_clientModel, StylesheetModel *_stylesheetModel)
+void NewInvoicePage::initialize(ClientModel *_clientModel, StylesheetModel *_stylesheetModel,
+                                InvoiceDbController *_controller)
 {
     clientModel = _clientModel;
     stylesheetModel = _stylesheetModel;
+    controller = _controller;
 }
 
 void NewInvoicePage::reset(const QString& companyName)
@@ -75,12 +77,10 @@ void NewInvoicePage::onAddInvoiceDetail()
 void NewInvoicePage::onCreateInvoice()
 {
     const int clientId = clientModel->getId(ui->clientCombo->currentIndex());
-/*    const int stylesheetId = stylesheetModel->getId(ui->stylesheetCombo->currentIndex());
+    const int stylesheetId = stylesheetModel->getId(ui->stylesheetCombo->currentIndex());
     const std::vector<int> invoiceElementsIds = writeInvoiceElements();
 
-    writeInvoice(clientId, stylesheetId, invoiceElementsIds, date);*/
-
-
+    controller->writeInvoice(clientId, stylesheetId, invoiceElementsIds, ui->dateEdit->date());
     emit create();
 }
 
@@ -162,4 +162,23 @@ void NewInvoicePage::updateDateEdit(const QDate &date)
 {
     ui->dateEdit->setDate(date);
     ui->dateLabel->setText(date.toString());
+}
+
+std::vector<InvoiceDetail> NewInvoicePage::createDetailsCollection() const
+{
+    std::vector<InvoiceDetail> details;
+    const int detailCount = invoiceDetailsModel->rowCount() - 1;
+    for (int i=0; i<detailCount; ++i)
+    {
+        const QString description = invoiceDetailsModel->data(invoiceDetailsModel->index(i, 0)).toString();
+        const double value = invoiceDetailsModel->data(invoiceDetailsModel->index(i, 1)).toDouble();
+        details.emplace_back(description, value);
+    }
+    return details;
+}
+
+std::vector<int> NewInvoicePage::writeInvoiceElements()
+{
+    const std::vector<InvoiceDetail> invoiceDetails = createDetailsCollection();
+    return controller->writeInvoiceDetails(invoiceDetails);
 }

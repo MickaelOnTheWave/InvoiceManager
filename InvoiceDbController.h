@@ -7,6 +7,7 @@
 #include <QString>
 
 #include "Company.h"
+#include "InvoiceDetail.h"
 
 class InvoiceDbController : public QObject
 {
@@ -24,8 +25,14 @@ public:
     QString getLastError() const;
 
     bool writeUserCompany(const CompanyData& company);
+    std::vector<int> writeInvoiceDetails(const std::vector<InvoiceDetail>& details);
 
-    QString getCompanyName() const;
+    bool writeInvoice(const int clientId, const int stylesheetId,
+                      const std::vector<int>& detailsIds, const QDate& date);
+
+    QString getUserCompanyName() const;
+    int getUserCompanyId() const;
+
     QString getDatabaseFile() const;
     int getDatabaseVersion() const;
 
@@ -35,6 +42,12 @@ public:
 
 private:
     bool createDbConnection(const QString& filename);
+
+    static QString createUserCompanyRequest(const QString& field);
+    QString createInvoiceDetailsWriteQuery(const std::vector<InvoiceDetail>& details) const;
+
+    int writeToInvoiceTable(const int clientId, const int stylesheetId, const QDate& date);
+    bool writeToInvoiceMapTable(const int invoiceId, const std::vector<int>& detailsIds);
 
     QString dbFilename;
     QSqlDatabase db; // TODO : remove this. See tip from Qt documentqtion.

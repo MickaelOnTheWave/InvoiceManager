@@ -4,7 +4,9 @@
 #include <QWidget>
 
 #include <QComboBox>
+
 #include "ClientModel.h"
+#include "InvoiceDbController.h"
 #include "StylesheetModel.h"
 
 namespace Ui {
@@ -19,8 +21,9 @@ public:
     explicit NewInvoicePage(QWidget *parent = nullptr);
     ~NewInvoicePage();
 
-    void connectModels(ClientModel* _clientModel,
-                       StylesheetModel* _stylesheetModel);
+    void initialize(ClientModel* _clientModel,
+                    StylesheetModel* _stylesheetModel,
+                    InvoiceDbController* _controller);
     void reset(const QString &companyName);
 
 signals:
@@ -48,10 +51,20 @@ private:
     void resetComboData(QComboBox* combo, const QStringList& newData);
     void updateDateEdit(const QDate& date);
 
+
+    std::vector<InvoiceDetail> createDetailsCollection() const;
+
+    /**
+     * @brief writeInvoiceElements
+     * @return list of element ids that have been written
+     */
+    std::vector<int> writeInvoiceElements();
+
     Ui::NewInvoicePage *ui;
     ClientModel* clientModel;
     StylesheetModel* stylesheetModel;
     QAbstractItemModel* invoiceDetailsModel;
+    InvoiceDbController* controller;
 };
 
 #endif // NEWINVOICEPAGE_H
