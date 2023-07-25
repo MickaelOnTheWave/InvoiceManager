@@ -13,10 +13,7 @@ DataHandlerWidget::DataHandlerWidget(QWidget *parent) :
     connect(ui->addButton, &QPushButton::clicked, this, &DataHandlerWidget::onAddClicked);
     connect(ui->removeButton, &QPushButton::clicked, this, &DataHandlerWidget::onRemoveClicked);
 
-    // TODO : Finish this and solve warning
-    //connect(ui->dataView->selectionModel(), &QItemSelectionModel::currentChanged,
-    //        this, &DataHandlerWidget::onSelectionChanged);
-
+    ui->dataView->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->dataView->horizontalHeader()->show();
     ui->dataView->verticalHeader()->hide();
     ui->dataView->setColumnWidth(0, 250);
@@ -48,6 +45,9 @@ void DataHandlerWidget::setModel(QAbstractItemModel *_model)
     model = _model;
     ui->dataView->setModel(model);
     ui->dataView->resizeColumnsToContents();
+
+    connect(ui->dataView->selectionModel(), &QItemSelectionModel::currentChanged,
+            this, &DataHandlerWidget::onSelectionChanged);
 }
 
 void DataHandlerWidget::resizeEvent(QResizeEvent *event)

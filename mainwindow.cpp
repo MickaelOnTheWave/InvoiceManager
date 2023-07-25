@@ -11,6 +11,8 @@
 // TODO Next :
 // - Implement remove button in data handler widget
 // - Add webview in new invoice
+// - Fix visualization issues when data just inserted (not updated)
+// - Implement visualization of invoices in main page
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
