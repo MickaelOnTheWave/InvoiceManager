@@ -36,6 +36,8 @@ void MorePage::connectViewsToModels(ClientModel *_clientModel,
 
     clientModel = _clientModel;
     stylesheetModel = _stylesheetModel;
+
+    ui->clientsWidget->hideColumns({0, 2, 5});
 }
 
 void MorePage::onAddClient()

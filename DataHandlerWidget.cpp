@@ -31,6 +31,12 @@ DataHandlerWidget::~DataHandlerWidget()
     delete ui;
 }
 
+void DataHandlerWidget::hideColumns(const std::vector<int> &columns)
+{
+    for (const int col : columns)
+        ui->dataView->hideColumn(col);
+}
+
 void DataHandlerWidget::setColumnsResizingMode(const std::vector<QHeaderView::ResizeMode> &modes)
 {
     auto header = ui->dataView->horizontalHeader();

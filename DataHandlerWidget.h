@@ -22,6 +22,7 @@ public:
     explicit DataHandlerWidget(QWidget *parent = nullptr);
     ~DataHandlerWidget();
 
+    void hideColumns(const std::vector<int>& columns);
     void setColumnsResizingMode(const std::vector<QHeaderView::ResizeMode> &modes);
     void setModel(QAbstractItemModel* _model);
 

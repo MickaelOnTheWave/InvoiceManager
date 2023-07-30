@@ -31,7 +31,9 @@ void MainPage::connectViewsToModels(ClientModel *_clientModel, QAbstractItemMode
     ui->clientsView->setModel(clientModel);
     ui->stylesheetsView->setModel(stylesheetModel);
 
-    ui->clientsView->resizeColumnsToContents();
+    ui->clientsView->hideColumn(0);
+    ui->clientsView->hideColumn(2);
+    ui->clientsView->hideColumn(5);
 
     ui->stylesheetsView->hideColumn(0);
 

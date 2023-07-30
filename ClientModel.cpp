@@ -51,4 +51,5 @@ void ClientModel::refreshModel()
     setHeaderData(1, Qt::Horizontal, tr("Name"));
     setHeaderData(2, Qt::Horizontal, tr("Address"));
     setHeaderData(3, Qt::Horizontal, tr("Email"));
+    setHeaderData(4, Qt::Horizontal, tr("Phone number"));
 }
