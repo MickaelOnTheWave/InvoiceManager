@@ -11,7 +11,6 @@
 // TODO Next :
 // - Implement remove button in data handler widget
 // - Add webview in new invoice
-// - Add new invoice from last one
 // - Add versioning to clients / company
 // - Add invoice details visualization by clicking on main page
 // - Add error management in New invoice page, specially for already existing id case
