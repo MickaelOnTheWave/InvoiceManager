@@ -4,6 +4,7 @@
 #include <QWidget>
 
 #include "ClientModel.h"
+#include "InvoiceModel.h"
 
 namespace Ui {
 class MainPage;
@@ -21,7 +22,8 @@ public:
                         const int dbVersion);
 
     void connectViewsToModels(ClientModel* _clientModel,
-                              QAbstractItemModel* _stylesheetModel);
+                              QAbstractItemModel* _stylesheetModel,
+                              InvoiceModel* _invoiceModel);
 
 signals:
     void closeDb();
@@ -32,6 +34,7 @@ private:
     Ui::MainPage *ui;
     ClientModel* clientModel;
     QAbstractItemModel* stylesheetModel;
+    InvoiceModel* invoiceModel;
 };
 
 #endif // MainPage_H

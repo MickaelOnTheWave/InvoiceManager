@@ -23,13 +23,16 @@ void MainPage::setDisplayData(const QString &companyName, const QString& dbFile,
     ui->dbStatusWidget->setData(dbFile, dbVersion);
 }
 
-void MainPage::connectViewsToModels(ClientModel *_clientModel, QAbstractItemModel *_stylesheetModel)
+void MainPage::connectViewsToModels(ClientModel *_clientModel, QAbstractItemModel *_stylesheetModel,
+                                    InvoiceModel* _invoiceModel)
 {
     clientModel = _clientModel;
     stylesheetModel = _stylesheetModel;
+    invoiceModel = _invoiceModel;
 
     ui->clientsView->setModel(clientModel);
     ui->stylesheetsView->setModel(stylesheetModel);
+    ui->invoiceContentView->setModel(invoiceModel);
 
     ui->clientsView->hideColumn(0);
     ui->clientsView->hideColumn(2);
@@ -42,4 +45,7 @@ void MainPage::connectViewsToModels(ClientModel *_clientModel, QAbstractItemMode
     ui->stylesheetsView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
     ui->stylesheetsView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
     ui->stylesheetsView->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
+
+    ui->invoiceContentView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    ui->invoiceContentView->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
 }

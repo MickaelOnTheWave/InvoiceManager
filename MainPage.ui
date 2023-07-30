@@ -83,7 +83,7 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QTableWidget" name="invoiceContentWidget"/>
+         <widget class="QTableView" name="invoiceContentView"/>
         </item>
        </layout>
       </widget>

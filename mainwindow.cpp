@@ -114,6 +114,7 @@ void MainWindow::onGoToCreateNewInvoice()
 
 void MainWindow::onCreateNewInvoice()
 {
+    invoiceModel->refresh();
     ui->stackedWidget->setCurrentWidget(ui->mainPage);
 }
 
@@ -131,10 +132,11 @@ void MainWindow::createModels()
 {
     stylesheetModel = new StylesheetModel(this, controller.getDatabase());
     clientModel = new ClientModel(this);
+    invoiceModel = new InvoiceModel(this);
 
     // TODO : either change function name or organization.
     // Not coherent to have models and at the same time handle controller in name.
-    ui->mainPage->connectViewsToModels(clientModel, stylesheetModel);
+    ui->mainPage->connectViewsToModels(clientModel, stylesheetModel, invoiceModel);
     ui->morePage->connectViewsToModels(clientModel, stylesheetModel);
     ui->newInvoicePage->initialize(clientModel, stylesheetModel, &controller);
 }

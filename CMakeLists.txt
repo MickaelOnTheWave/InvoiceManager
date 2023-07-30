@@ -32,6 +32,7 @@ set(PROJECT_SOURCES
         InvoiceDetail.h InvoiceDetail.cpp
         ClientModel.h ClientModel.cpp
         StylesheetModel.h StylesheetModel.cpp
+        InvoiceModel.h InvoiceModel.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

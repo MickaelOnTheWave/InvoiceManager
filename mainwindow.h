@@ -4,6 +4,7 @@
 #include <QMainWindow>
 
 #include "ClientModel.h"
+#include "InvoiceModel.h"
 #include "StylesheetModel.h"
 
 #include "InvoiceDbController.h"
@@ -49,5 +50,6 @@ private:
     InvoiceDbController controller;
     ClientModel* clientModel;
     StylesheetModel* stylesheetModel;
+    InvoiceModel* invoiceModel;
 };
 #endif // MAINWINDOW_H
