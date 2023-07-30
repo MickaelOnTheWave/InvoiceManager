@@ -7,6 +7,7 @@
 
 #include "ClientModel.h"
 #include "InvoiceDbController.h"
+#include <QtWebKit>
 #include "StylesheetModel.h"
 
 namespace Ui {
@@ -40,6 +41,7 @@ private slots:
     void onLastDayOfMonthClicked();
     void onCustomDateClicked();
     void onCustomDateUpdated(const QDate& newDate);
+    void onGeneratePreviewClicked();
 
 private:
     void insertTotalRow();
@@ -65,6 +67,11 @@ private:
 
     static int getClientIndex(const int id);
     static int getStylesheetIndex(const int id);
+
+    QString getCssFile() const;
+    QString readTemplateContent() const;
+    QString fillTemplate(const QString& templateModel);
+    static QString readFileContent(const QString& filename);
 
     Ui::NewInvoicePage *ui;
     ClientModel* clientModel;

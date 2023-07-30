@@ -159,6 +159,23 @@ int InvoiceDbController::getUserCompanyId() const
     return -1;
 }
 
+CompanyData InvoiceDbController::getUserCompanyData() const
+{
+    CompanyData data;
+
+    QString queryStr = "SELECT name, email, phone, address FROM company WHERE isClient = FALSE ORDER BY id DESC LIMIT 1";
+    QSqlQuery query(db);
+    const bool result = query.exec(queryStr);
+    if (result && query.next())
+    {
+        data.name = query.value(0).toString();
+        data.email = query.value(1).toString();
+        data.phoneNumber = query.value(2).toString();
+        data.address = query.value(3).toString();
+    }
+    return data;
+}
+
 int InvoiceDbController::getLastUsedInvoiceId() const
 {
     QSqlQuery query;
@@ -216,6 +233,17 @@ int InvoiceDbController::getDatabaseVersion() const
     }
 
     return -1;
+}
+
+QString InvoiceDbController::getStylesheetFilename(const int id) const
+{
+    QSqlQuery query;
+    query.prepare("SELECT file FROM stylesheet WHERE id = :id");
+    query.bindValue(":id", id);
+    const bool ok = query.exec();
+    if (ok && query.next())
+        return query.value(0).toString();
+    return QString();
 }
 
 QSqlQuery InvoiceDbController::createWriteCompanyQuery(const CompanyData &data, const bool isClient)

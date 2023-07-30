@@ -33,6 +33,7 @@ public:
 
     QString getUserCompanyName() const;
     int getUserCompanyId() const;
+    CompanyData getUserCompanyData() const;
 
     int getLastUsedInvoiceId() const;
 
@@ -40,6 +41,8 @@ public:
 
     QString getDatabaseFile() const;
     int getDatabaseVersion() const;
+
+    QString getStylesheetFilename(const int id) const;
 
     QSqlDatabase getDatabase();
 

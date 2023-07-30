@@ -34,6 +34,7 @@ NewInvoicePage::NewInvoicePage(QWidget *parent) :
     connect(ui->lastDayOfMonthButton, &QAbstractButton::clicked, this, &NewInvoicePage::onLastDayOfMonthClicked);
     connect(ui->customButton, &QAbstractButton::clicked, this, &NewInvoicePage::onCustomDateClicked);
     connect(ui->dateEdit, &QDateEdit::dateChanged, this, &NewInvoicePage::onCustomDateUpdated);
+    connect(ui->generateButton, &QAbstractButton::clicked, this, &NewInvoicePage::onGeneratePreviewClicked);
 
     ui->lastDayOfMonthButton->setChecked(true);
     onLastDayOfMonthClicked();
@@ -59,6 +60,8 @@ void NewInvoicePage::reset()
 
     const int nextId = controller->getLastUsedInvoiceId() + 1;
     ui->invoiceIdBox->setValue(nextId);
+
+    onGeneratePreviewClicked();
 }
 
 void NewInvoicePage::resetFromLast()
@@ -76,6 +79,8 @@ void NewInvoicePage::resetFromLast()
     for (const auto detail : data.details)
         addInvoiceDetail(detail.description, detail.value);
     computeTotalRow();
+
+    onGeneratePreviewClicked();
 }
 
 void NewInvoicePage::onClientComboChange(int index)
@@ -126,6 +131,17 @@ void NewInvoicePage::onCustomDateClicked()
 void NewInvoicePage::onCustomDateUpdated(const QDate &newDate)
 {
     ui->dateLabel->setText(newDate.toString());
+}
+
+void NewInvoicePage::onGeneratePreviewClicked()
+{
+    const QUrl cssUrl = QUrl::fromLocalFile(getCssFile());
+    const QString templateContent = readTemplateContent();
+    const QString previewContent = fillTemplate(templateContent);
+
+    ui->invoicePreview->settings()->setUserStyleSheetUrl(cssUrl);
+    ui->invoicePreview->setHtml(previewContent);
+    ui->invoicePreview->show();
 }
 
 void NewInvoicePage::insertTotalRow()
@@ -219,4 +235,43 @@ int NewInvoicePage::getStylesheetIndex(const int id)
 {
     // TODO : do a real computation, but this is less important (data is easily consistent)
     return id - 1;
+}
+
+QString NewInvoicePage::getCssFile() const
+{
+    const int stylesheetId = ui->stylesheetCombo->currentIndex() + 1;
+    return controller->getStylesheetFilename(stylesheetId);
+}
+
+QString NewInvoicePage::readTemplateContent() const
+{
+    const QString templateFile = "/home/mickael/Prog/InvoiceManage/builds/Debug/template.html";
+    return readFileContent(templateFile);
+}
+
+QString NewInvoicePage::fillTemplate(const QString &templateModel)
+{
+    QString filledTemplate = templateModel;
+
+/*    const QString stylesheetTag = "<link rel=\"stylesheet\"/>";
+    const QString cssTaggedContent = "<link rel=\"stylesheet\" href=\"%1\">";
+
+    //bool is = filledTemplate.contains(stylesheetTag);
+    filledTemplate.replace(stylesheetTag, cssTaggedContent.arg(cssContent));
+*/
+    // Debug code only
+    QFile f("/home/mickael/Prog/InvoiceManage/builds/Debug/outputTemplate.html");
+    f.open(QFile::ReadWrite | QFile::Text);
+    f.write(filledTemplate.toUtf8());
+
+    return filledTemplate;
+}
+
+QString NewInvoicePage::readFileContent(const QString &filename)
+{
+    QFile f(filename);
+    if (!f.open(QFile::ReadOnly | QFile::Text))
+        return QString();
+    QTextStream in(&f);
+    return in.readAll();
 }
