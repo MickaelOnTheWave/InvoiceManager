@@ -3,15 +3,13 @@
 #include <QSqlQuery>
 #include "InvoiceDbController.h"
 
+#include <QSqlField>
+#include <QSqlRecord>
+
 ClientModel::ClientModel(QObject *parent)
     : QSqlQueryModel(parent)
 {
-    setQuery("SELECT * FROM company WHERE isClient = TRUE");
-
-    setHeaderData(0, Qt::Horizontal, tr("Id"));
-    setHeaderData(1, Qt::Horizontal, tr("Name"));
-    setHeaderData(2, Qt::Horizontal, tr("Address"));
-    setHeaderData(3, Qt::Horizontal, tr("Email"));
+    refreshModel();
 }
 
 int ClientModel::getId(const int i) const
@@ -34,18 +32,23 @@ bool ClientModel::insertAtEnd(const CompanyData &data)
     const int rowIndex = rowCount();
 
     QSqlQuery query = InvoiceDbController::createWriteCompanyQuery(data, true);
+
     const bool result = query.exec();
-    if (result)
-    {
-        // TODO : either implement setData or find a way to force a refresh.
-        // At the moment, this is not working.
-        refreshModel();
-        emit dataChanged(index(rowIndex, 0), index(rowIndex, 2));
-    }
+    if (!result)
+        return false;
+
+    beginInsertRows(QModelIndex(), rowIndex, rowIndex);
+    endInsertRows();
+
+    refreshModel();
     return result;
 }
 
 void ClientModel::refreshModel()
 {
-    setQuery(query());
+    setQuery("SELECT * FROM company WHERE isClient = TRUE");
+    setHeaderData(0, Qt::Horizontal, tr("Id"));
+    setHeaderData(1, Qt::Horizontal, tr("Name"));
+    setHeaderData(2, Qt::Horizontal, tr("Address"));
+    setHeaderData(3, Qt::Horizontal, tr("Email"));
 }
