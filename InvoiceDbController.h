@@ -7,6 +7,7 @@
 #include <QString>
 
 #include "Company.h"
+#include "InvoiceData.h"
 #include "InvoiceDetail.h"
 
 class InvoiceDbController : public QObject
@@ -34,6 +35,8 @@ public:
     int getUserCompanyId() const;
 
     int getLastUsedInvoiceId() const;
+
+    InvoiceData getLastInvoiceData() const;
 
     QString getDatabaseFile() const;
     int getDatabaseVersion() const;

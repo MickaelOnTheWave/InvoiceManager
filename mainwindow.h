@@ -32,6 +32,7 @@ private slots:
     void onFinishDbCreation();
 
     void onGoToCreateNewInvoice();
+    void onGoToCreateNewInvoiceFromLast();
     void onGoToMore();
     void onCreateNewInvoice();
     void onBackToMainPage();

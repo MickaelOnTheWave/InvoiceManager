@@ -168,6 +168,39 @@ int InvoiceDbController::getLastUsedInvoiceId() const
     return -1;
 }
 
+InvoiceData InvoiceDbController::getLastInvoiceData() const
+{
+    InvoiceData data;
+    QSqlQuery query;
+    const bool ok = query.exec("SELECT id, clientId, stylesheetId FROM invoice ORDER BY id DESC LIMIT 1");
+    if (ok && query.next())
+    {
+
+        data.clientId = query.value(1).toInt();
+        data.stylesheetId = query.value(2).toInt();
+
+        const int invoiceId = query.value(0).toInt();
+        const QString queryStr = "SELECT idElement FROM invoicedetailmap WHERE idInvoice = %1";
+        const bool ok = query.exec(queryStr.arg(invoiceId));
+        if (ok)
+        {
+            while (query.next())
+            {
+                const int elementId = query.value(0).toInt();
+                const QString queryStr = "SELECT description, value FROM invoiceelement WHERE id = %1";
+                const bool ok = query.exec(queryStr.arg(elementId));
+                if (ok && query.next())
+                {
+                    const QString service = query.value(0).toString();
+                    const double value = query.value(1).toDouble();
+                    data.details.emplace_back(service, value);
+                }
+            }
+        }
+    }
+    return data;
+}
+
 QString InvoiceDbController::getDatabaseFile() const
 {
     return dbFilename;

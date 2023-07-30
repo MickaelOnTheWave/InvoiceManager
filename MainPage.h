@@ -28,6 +28,7 @@ public:
 signals:
     void closeDb();
     void createNewInvoice();
+    void createNewInvoiceFromLast();
     void goToMore();
 
 private:

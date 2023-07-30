@@ -24,7 +24,8 @@ public:
     void initialize(ClientModel* _clientModel,
                     StylesheetModel* _stylesheetModel,
                     InvoiceDbController* _controller);
-    void reset(const QString &companyName);
+    void reset();
+    void resetFromLast();
 
 signals:
     void create();
@@ -59,6 +60,11 @@ private:
      * @return list of element ids that have been written
      */
     std::vector<int> writeInvoiceElements();
+
+    void addInvoiceDetail(const QString& name, const double value);
+
+    static int getClientIndex(const int id);
+    static int getStylesheetIndex(const int id);
 
     Ui::NewInvoicePage *ui;
     ClientModel* clientModel;

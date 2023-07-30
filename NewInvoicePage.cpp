@@ -52,13 +52,30 @@ void NewInvoicePage::initialize(ClientModel *_clientModel, StylesheetModel *_sty
     controller = _controller;
 }
 
-void NewInvoicePage::reset(const QString& companyName)
+void NewInvoicePage::reset()
 {
-    resetInputData(companyName);
+    resetInputData(controller->getUserCompanyName());
     resetInvoiceData();
 
     const int nextId = controller->getLastUsedInvoiceId() + 1;
     ui->invoiceIdBox->setValue(nextId);
+}
+
+void NewInvoicePage::resetFromLast()
+{
+    resetInputData(controller->getUserCompanyName());
+    invoiceDetailsModel->removeRows(0, invoiceDetailsModel->rowCount());
+    insertTotalRow();
+
+    const int nextId = controller->getLastUsedInvoiceId() + 1;
+    ui->invoiceIdBox->setValue(nextId);
+
+    const InvoiceData data = controller->getLastInvoiceData();
+    ui->clientCombo->setCurrentIndex(getClientIndex(data.clientId));
+    ui->stylesheetCombo->setCurrentIndex(getStylesheetIndex(data.stylesheetId));
+    for (const auto detail : data.details)
+        addInvoiceDetail(detail.description, detail.value);
+    computeTotalRow();
 }
 
 void NewInvoicePage::onClientComboChange(int index)
@@ -69,11 +86,7 @@ void NewInvoicePage::onClientComboChange(int index)
 
 void NewInvoicePage::onAddInvoiceDetail()
 {
-    const int newRowIndex = invoiceDetailsModel->rowCount()-1;
-    invoiceDetailsModel->insertRow(newRowIndex);
-    invoiceDetailsModel->setData(invoiceDetailsModel->index(newRowIndex, 0), "Service");
-    invoiceDetailsModel->setData(invoiceDetailsModel->index(newRowIndex, 1), 0.00);
-
+    addInvoiceDetail("Service", 0.00);
     computeTotalRow();
 }
 
@@ -186,4 +199,24 @@ std::vector<int> NewInvoicePage::writeInvoiceElements()
 {
     const std::vector<InvoiceDetail> invoiceDetails = createDetailsCollection();
     return controller->writeInvoiceDetails(invoiceDetails);
+}
+
+void NewInvoicePage::addInvoiceDetail(const QString &name, const double value)
+{
+    const int newRowIndex = invoiceDetailsModel->rowCount()-1;
+    invoiceDetailsModel->insertRow(newRowIndex);
+    invoiceDetailsModel->setData(invoiceDetailsModel->index(newRowIndex, 0), name);
+    invoiceDetailsModel->setData(invoiceDetailsModel->index(newRowIndex, 1), value);
+}
+
+int NewInvoicePage::getClientIndex(const int id)
+{
+    // TODO : do a real computation
+    return id - 2;
+}
+
+int NewInvoicePage::getStylesheetIndex(const int id)
+{
+    // TODO : do a real computation, but this is less important (data is easily consistent)
+    return id - 1;
 }

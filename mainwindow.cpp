@@ -31,6 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->createPage, &CreatePage::cancel, this, &MainWindow::onCloseDb);
 
     connect(ui->mainPage, &MainPage::createNewInvoice, this, &MainWindow::onGoToCreateNewInvoice);
+    connect(ui->mainPage, &MainPage::createNewInvoiceFromLast, this, &MainWindow::onGoToCreateNewInvoiceFromLast);
     connect(ui->mainPage, &MainPage::goToMore, this, &MainWindow::onGoToMore);
     connect(ui->mainPage, &MainPage::closeDb, this, &MainWindow::onCloseDb);
 
@@ -112,7 +113,13 @@ void MainWindow::onFinishDbCreation()
 
 void MainWindow::onGoToCreateNewInvoice()
 {
-    ui->newInvoicePage->reset(controller.getUserCompanyName());
+    ui->newInvoicePage->reset();
+    ui->stackedWidget->setCurrentWidget(ui->newInvoicePage);
+}
+
+void MainWindow::onGoToCreateNewInvoiceFromLast()
+{
+    ui->newInvoicePage->resetFromLast();
     ui->stackedWidget->setCurrentWidget(ui->newInvoicePage);
 }
 

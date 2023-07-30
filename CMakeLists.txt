@@ -30,6 +30,7 @@ set(PROJECT_SOURCES
         InvoiceDbController.h InvoiceDbController.cpp
         Company.h Company.cpp
         InvoiceDetail.h InvoiceDetail.cpp
+        InvoiceData.h InvoiceData.cpp
         ClientModel.h ClientModel.cpp
         StylesheetModel.h StylesheetModel.cpp
         InvoiceModel.h InvoiceModel.cpp

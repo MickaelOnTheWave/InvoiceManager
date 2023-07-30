@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>897</width>
-    <height>670</height>
+    <width>825</width>
+    <height>695</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_4">
+  <layout class="QVBoxLayout" name="verticalLayout_5">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
@@ -130,11 +130,22 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="newInvoiceButton">
-       <property name="text">
-        <string>New Invoice</string>
-       </property>
-      </widget>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QPushButton" name="newInvoiceFromEmptyButton">
+         <property name="text">
+          <string>New Invoice (Empty)</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="newInvoiceFromLastButton">
+         <property name="text">
+          <string>New Invoice (From Last)</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
       <widget class="QPushButton" name="moreButton">
