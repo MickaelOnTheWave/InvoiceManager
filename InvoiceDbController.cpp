@@ -130,10 +130,10 @@ std::vector<int> InvoiceDbController::writeInvoiceDetails(const std::vector<Invo
     return insertedIds;
 }
 
-bool InvoiceDbController::writeInvoice(const int clientId, const int stylesheetId, const std::vector<int> &detailsIds, const QDate &date)
+bool InvoiceDbController::writeInvoice(const int invoiceId, const int clientId, const int stylesheetId, const std::vector<int> &detailsIds, const QDate &date)
 {
-    const int invoiceId = writeToInvoiceTable(clientId, stylesheetId, date);
-    if (invoiceId > -1)
+    const bool ok = writeToInvoiceTable(invoiceId, clientId, stylesheetId, date);
+    if (ok)
         return writeToInvoiceMapTable(invoiceId, detailsIds);
     return false;
 }
@@ -155,10 +155,16 @@ int InvoiceDbController::getUserCompanyId() const
     QSqlQuery query(db);
     const bool result = query.exec(createUserCompanyRequest("id"));
     if (result && query.next())
-    {
         return query.value(0).toInt();
-    }
+    return -1;
+}
 
+int InvoiceDbController::getLastUsedInvoiceId() const
+{
+    QSqlQuery query;
+    const bool ok = query.exec("SELECT id FROM invoice ORDER BY id DESC LIMIT 1");
+    if (ok && query.next())
+        return query.value(0).toInt();
     return -1;
 }
 
@@ -226,12 +232,14 @@ QString InvoiceDbController::createInvoiceDetailsWriteQuery(const std::vector<In
     return queryContent;
 }
 
-int InvoiceDbController::writeToInvoiceTable(const int clientId, const int stylesheetId, const QDate &date)
+int InvoiceDbController::writeToInvoiceTable(const int invoiceId, const int clientId, const int stylesheetId,
+                                             const QDate &date)
 {
     const QString dateString = date.toString("d MMM yyyy");
     QSqlQuery query;
-    query.prepare("INSERT INTO invoice (companyId, clientId, stylesheetId, date)"
-                  "VALUES (:companyId, :clientId, :stylesheetId, :date)");
+    query.prepare("INSERT INTO invoice (id, companyId, clientId, stylesheetId, date)"
+                  "VALUES (:id, :companyId, :clientId, :stylesheetId, :date)");
+    query.bindValue(":id", invoiceId);
     query.bindValue(":companyId", getUserCompanyId());
     query.bindValue(":clientId", clientId);
     query.bindValue(":stylesheetId", stylesheetId);

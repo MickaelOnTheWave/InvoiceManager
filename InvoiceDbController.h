@@ -27,11 +27,13 @@ public:
     bool writeUserCompany(const CompanyData& company);
     std::vector<int> writeInvoiceDetails(const std::vector<InvoiceDetail>& details);
 
-    bool writeInvoice(const int clientId, const int stylesheetId,
+    bool writeInvoice(const int invoiceId, const int clientId, const int stylesheetId,
                       const std::vector<int>& detailsIds, const QDate& date);
 
     QString getUserCompanyName() const;
     int getUserCompanyId() const;
+
+    int getLastUsedInvoiceId() const;
 
     QString getDatabaseFile() const;
     int getDatabaseVersion() const;
@@ -46,7 +48,7 @@ private:
     static QString createUserCompanyRequest(const QString& field);
     QString createInvoiceDetailsWriteQuery(const std::vector<InvoiceDetail>& details) const;
 
-    int writeToInvoiceTable(const int clientId, const int stylesheetId, const QDate& date);
+    int writeToInvoiceTable(const int invoiceId, const int clientId, const int stylesheetId, const QDate& date);
     bool writeToInvoiceMapTable(const int invoiceId, const std::vector<int>& detailsIds);
 
     QString dbFilename;

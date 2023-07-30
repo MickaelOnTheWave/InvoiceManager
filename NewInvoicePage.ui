@@ -188,7 +188,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="spinBox"/>
+             <widget class="QSpinBox" name="invoiceIdBox"/>
             </item>
            </layout>
           </item>

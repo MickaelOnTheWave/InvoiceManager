@@ -11,10 +11,11 @@
 // TODO Next :
 // - Implement remove button in data handler widget
 // - Add webview in new invoice
-// - Add auto invoice Id (new invoice)
 // - Add new invoice from last one
 // - Add versioning to clients / company
 // - Add invoice details visualization by clicking on main page
+// - Add error management in New invoice page, specially for already existing id case
+//  - Add error field in page with error displayed in case of error
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
