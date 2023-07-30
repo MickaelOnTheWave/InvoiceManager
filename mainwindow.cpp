@@ -11,7 +11,10 @@
 // TODO Next :
 // - Implement remove button in data handler widget
 // - Add webview in new invoice
-// - Implement visualization of invoices in main page
+// - Add auto invoice Id (new invoice)
+// - Add new invoice from last one
+// - Add versioning to clients / company
+// - Add invoice details visualization by clicking on main page
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
