@@ -15,6 +15,13 @@
 // - Add error management in New invoice page, specially for already existing id case
 //  - Add error field in page with error displayed in case of error
 // - Add id data to comboboxes in NewInvoice and use it instead of flaky index/id
+// - Finish adding all templated data in preview
+// - Add about dialog with copyright / version info
+// - Add Settings dialog
+// - Add open last db option
+// - Add 4th line in address
+// - Add UI with template file in UI / DB
+// - Add notes in UI / preview generation
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)

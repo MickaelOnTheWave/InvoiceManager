@@ -253,6 +253,10 @@ QString NewInvoicePage::fillTemplate(const QString &templateModel)
 {
     QString filledTemplate = templateModel;
 
+    filledTemplate.replace("{0}", QString::number(ui->invoiceIdBox->value()));
+    filledTemplate.replace("{1}", ui->dateEdit->date().toString());
+    //filledTemplate.replace("{3}", );
+
 /*    const QString stylesheetTag = "<link rel=\"stylesheet\"/>";
     const QString cssTaggedContent = "<link rel=\"stylesheet\" href=\"%1\">";
 
