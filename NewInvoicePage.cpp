@@ -74,8 +74,8 @@ void NewInvoicePage::resetFromLast()
     ui->invoiceIdBox->setValue(nextId);
 
     const InvoiceData data = controller->getLastInvoiceData();
-    ui->clientCombo->setCurrentIndex(getClientIndex(data.clientId));
-    ui->stylesheetCombo->setCurrentIndex(getStylesheetIndex(data.stylesheetId));
+    ui->clientCombo->setCurrentIndex(getComboIndex(ui->clientCombo, data.clientId));
+    ui->stylesheetCombo->setCurrentIndex(getComboIndex(ui->stylesheetCombo, data.stylesheetId));
     for (const auto detail : data.details)
         addInvoiceDetail(detail.description, detail.value);
     computeTotalRow();
@@ -164,8 +164,8 @@ void NewInvoicePage::computeTotalRow()
 void NewInvoicePage::resetInputData(const QString &companyName)
 {
     ui->companyNameLabel->setText(companyName);
-    resetComboData(ui->clientCombo, buildClientNames());
-    resetComboData(ui->stylesheetCombo, stylesheetModel->getNameList());
+    resetComboData(ui->clientCombo, clientModel);
+    resetComboData(ui->stylesheetCombo, stylesheetModel);
 }
 
 void NewInvoicePage::resetInvoiceData()
@@ -175,21 +175,15 @@ void NewInvoicePage::resetInvoiceData()
     onAddInvoiceDetail();
 }
 
-QStringList NewInvoicePage::buildClientNames() const
+void NewInvoicePage::resetComboData(QComboBox *combobox, QAbstractItemModel *model)
 {
-    QStringList names;
-    for (int i=0; i<clientModel->rowCount(); ++i)
+    combobox->clear();
+    for (int i=0; i<model->rowCount(); ++i)
     {
-        const QModelIndex index = clientModel->index(i, 1);
-        names.append(clientModel->data(index).toString());
+        const QVariant id = model->data(model->index(i, 0));
+        const QString name = model->data(model->index(i, 1)).toString();
+        combobox->addItem(name, id);
     }
-    return names;
-}
-
-void NewInvoicePage::resetComboData(QComboBox *combo, const QStringList &newData)
-{
-    combo->clear();
-    combo->addItems(newData);
 }
 
 void NewInvoicePage::updateDateEdit(const QDate &date)
@@ -225,16 +219,15 @@ void NewInvoicePage::addInvoiceDetail(const QString &name, const double value)
     invoiceDetailsModel->setData(invoiceDetailsModel->index(newRowIndex, 1), value);
 }
 
-int NewInvoicePage::getClientIndex(const int id)
+int NewInvoicePage::getComboIndex(QComboBox *combobox, const int id) const
 {
-    // TODO : do a real computation
-    return id - 2;
-}
-
-int NewInvoicePage::getStylesheetIndex(const int id)
-{
-    // TODO : do a real computation, but this is less important (data is easily consistent)
-    return id - 1;
+    for (int index=0; index<combobox->count(); ++index)
+    {
+        const int currentId = combobox->itemData(index).toInt();
+        if (currentId == id)
+            return index;
+    }
+    return -1;
 }
 
 QString NewInvoicePage::getCssFile() const

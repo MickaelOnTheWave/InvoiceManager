@@ -11,7 +11,6 @@ public:
     explicit StylesheetModel(QObject *parent = nullptr, QSqlDatabase db = QSqlDatabase());
 
     int getId(const int i) const;
-    QStringList getNameList() const;
 
     bool insertAtEnd(const QString& name, const QString &path);
 

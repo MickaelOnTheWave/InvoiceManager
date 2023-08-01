@@ -17,14 +17,6 @@ int StylesheetModel::getId(const int i) const
     return data(index(i, 0)).toInt();
 }
 
-QStringList StylesheetModel::getNameList() const
-{
-    QStringList names;
-    for (int i=0; i<rowCount(); ++i)
-        names.append(data(index(i, 1)).toString());
-    return names;
-}
-
 bool StylesheetModel::insertAtEnd(const QString &name,
                                   const QString &path)
 {

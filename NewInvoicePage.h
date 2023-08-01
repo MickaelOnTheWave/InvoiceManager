@@ -49,11 +49,8 @@ private:
     void resetInputData(const QString &companyName);
     void resetInvoiceData();
 
-    QStringList buildClientNames() const;
-
-    void resetComboData(QComboBox* combo, const QStringList& newData);
+    void resetComboData(QComboBox* combobox, QAbstractItemModel* model);
     void updateDateEdit(const QDate& date);
-
 
     std::vector<InvoiceDetail> createDetailsCollection() const;
 
@@ -65,8 +62,7 @@ private:
 
     void addInvoiceDetail(const QString& name, const double value);
 
-    static int getClientIndex(const int id);
-    static int getStylesheetIndex(const int id);
+    int getComboIndex(QComboBox* combobox, const int id) const;
 
     QString getCssFile() const;
     QString readTemplateContent() const;
