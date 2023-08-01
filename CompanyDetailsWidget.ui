@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>300</width>
-    <height>234</height>
+    <width>293</width>
+    <height>272</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -59,6 +59,9 @@
    </item>
    <item row="5" column="1">
     <widget class="QLineEdit" name="addressLineEdit3"/>
+   </item>
+   <item row="6" column="1">
+    <widget class="QLineEdit" name="addressLineEdit4"/>
    </item>
   </layout>
  </widget>

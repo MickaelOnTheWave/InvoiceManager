@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="libreoffice.css">
+    <title>CONSULTING INVOICE</title>
+  </head>
+  <body>
+    <h1>Consulting Invoice</h1>
+    <div class="CompanyInfo">
+		<p class='companyName'>{USER-COMPANY-NAME}</p>
+		<p>{USER-COMPANY-ADDRESS}</p>
+		<p class='email'>{USER-COMPANY-EMAIL}</p>
+	</div>
+    <div class="date">{DATE}</div>
+    <div class="invoiceId">{ID}</div>
+	<div class="separator"></div>
+	<div class="ClientInfo">
+		<p class='companyName'>{CLIENT-NAME}</p>
+		<p>{CLIENT-ADDRESS}</p>
+	</div>
+	<div class="invoiceDetails">
+		<table id="items">
+		  <tr>
+			<th>Description</th>
+			<th>Price (€)</th>
+		  </tr>
+		  <tr>{INVOICE-DETAILS}</tr>
+		</table>
+		<table id="total">
+		  <tr>
+			<td>Total</td>
+			<td>{INVOICE-TOTAL}</td>
+		  </tr>
+		</table>
+	</div>
+	<div class="endNotes">
+		<p>Notes :</p>
+		<table>
+			<tr><td></td></tr>
+			<tr><td></td></tr>
+		</table>
+		<p>Thank You !</p>
+	</div>
+  </body>
+</html>

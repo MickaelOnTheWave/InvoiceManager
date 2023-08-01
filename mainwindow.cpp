@@ -10,7 +10,6 @@
 
 // TODO Important :
 // - Finish adding all templated data in preview
-// - Add 4th line in address
 // - Add UI with template file in UI / DB
 // - Add open last db option
 // - Add error management in New invoice page, specially for already existing id case

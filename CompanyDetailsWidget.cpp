@@ -33,6 +33,7 @@ void CompanyDetailsWidget::fill(const CompanyData &data)
     ui->addressLineEdit1->setText(getExplodedValue(explodedAddress, 0));
     ui->addressLineEdit2->setText(getExplodedValue(explodedAddress, 1));
     ui->addressLineEdit3->setText(getExplodedValue(explodedAddress, 2));
+    ui->addressLineEdit4->setText(getExplodedValue(explodedAddress, 3));
 }
 
 void CompanyDetailsWidget::reset()
@@ -44,6 +45,7 @@ void CompanyDetailsWidget::reset()
     ui->addressLineEdit1->setText("");
     ui->addressLineEdit2->setText("");
     ui->addressLineEdit3->setText("");
+    ui->addressLineEdit4->setText("");
 }
 
 QString CompanyDetailsWidget::buildAddress() const
@@ -51,6 +53,7 @@ QString CompanyDetailsWidget::buildAddress() const
     QString address = ui->addressLineEdit1->text();
     addAddressLine(address, ui->addressLineEdit2->text());
     addAddressLine(address, ui->addressLineEdit3->text());
+    addAddressLine(address, ui->addressLineEdit4->text());
     return address;
 }
 

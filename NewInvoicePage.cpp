@@ -238,7 +238,7 @@ QString NewInvoicePage::getCssFile() const
 
 QString NewInvoicePage::readTemplateContent() const
 {
-    const QString templateFile = "/home/mickael/Prog/InvoiceManage/builds/Debug/template.html";
+    const QString templateFile = "/home/mickael/Prog/InvoiceManager/template.html";
     return readFileContent(templateFile);
 }
 
@@ -246,16 +246,19 @@ QString NewInvoicePage::fillTemplate(const QString &templateModel)
 {
     QString filledTemplate = templateModel;
 
-    filledTemplate.replace("{0}", QString::number(ui->invoiceIdBox->value()));
-    filledTemplate.replace("{1}", ui->dateEdit->date().toString());
-    //filledTemplate.replace("{3}", );
+    filledTemplate.replace("{ID}", QString::number(ui->invoiceIdBox->value()));
+    filledTemplate.replace("{DATE}", ui->dateEdit->date().toString());
 
-/*    const QString stylesheetTag = "<link rel=\"stylesheet\"/>";
-    const QString cssTaggedContent = "<link rel=\"stylesheet\" href=\"%1\">";
+    const auto userData = controller->getUserCompanyData();
+    filledTemplate.replace("{USER-COMPANY-NAME}", userData.name);
+    filledTemplate.replace("{USER-COMPANY-ADDRESS}", buildReplaceAddress(userData.address));
+    filledTemplate.replace("{USER-COMPANY-EMAIL}", userData.email);
 
-    //bool is = filledTemplate.contains(stylesheetTag);
-    filledTemplate.replace(stylesheetTag, cssTaggedContent.arg(cssContent));
-*/
+    const auto clientData = ui->clientDetailsWidget->getData();
+    filledTemplate.replace("{CLIENT-NAME}", clientData.name);
+    filledTemplate.replace("{CLIENT-ADDRESS}", buildReplaceAddress(clientData.address));
+
+
     // Debug code only
     QFile f("/home/mickael/Prog/InvoiceManage/builds/Debug/outputTemplate.html");
     f.open(QFile::ReadWrite | QFile::Text);
@@ -271,4 +274,17 @@ QString NewInvoicePage::readFileContent(const QString &filename)
         return QString();
     QTextStream in(&f);
     return in.readAll();
+}
+
+QString NewInvoicePage::buildReplaceAddress(const QString &recordedAddress)
+{
+    QString replacedAddress;
+    const QStringList explodedAddress = recordedAddress.split("\n");
+    for (int i=0; i < explodedAddress.size(); ++i)
+    {
+        const QString currentPart = explodedAddress[i];
+        if (!currentPart.isEmpty())
+            replacedAddress += QString("<p>%1</p>").arg(currentPart);
+    }
+    return replacedAddress;
 }

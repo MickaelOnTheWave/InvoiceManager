@@ -69,6 +69,8 @@ private:
     QString fillTemplate(const QString& templateModel);
     static QString readFileContent(const QString& filename);
 
+    static QString buildReplaceAddress(const QString& recordedAddress);
+
     Ui::NewInvoicePage *ui;
     ClientModel* clientModel;
     StylesheetModel* stylesheetModel;
