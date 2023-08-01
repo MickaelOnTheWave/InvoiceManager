@@ -251,12 +251,15 @@ QString NewInvoicePage::fillTemplate(const QString &templateModel)
 
     const auto userData = controller->getUserCompanyData();
     filledTemplate.replace("{USER-COMPANY-NAME}", userData.name);
-    filledTemplate.replace("{USER-COMPANY-ADDRESS}", buildReplaceAddress(userData.address));
+    filledTemplate.replace("<p>{USER-COMPANY-ADDRESS}</p>", buildReplaceAddress(userData.address));
     filledTemplate.replace("{USER-COMPANY-EMAIL}", userData.email);
 
     const auto clientData = ui->clientDetailsWidget->getData();
     filledTemplate.replace("{CLIENT-NAME}", clientData.name);
-    filledTemplate.replace("{CLIENT-ADDRESS}", buildReplaceAddress(clientData.address));
+    filledTemplate.replace("<p>{CLIENT-ADDRESS}</p>", buildReplaceAddress(clientData.address));
+
+    filledTemplate.replace("<tr>{INVOICE-DETAILS}</tr>", buildReplaceDetails());
+    filledTemplate.replace("{INVOICE-TOTAL}", buildInvoiceTotal());
 
 
     // Debug code only
@@ -265,6 +268,29 @@ QString NewInvoicePage::fillTemplate(const QString &templateModel)
     f.write(filledTemplate.toUtf8());
 
     return filledTemplate;
+}
+
+QString NewInvoicePage::buildReplaceDetails() const
+{
+    QString replacedStr;
+    const int dataRows = invoiceDetailsModel->rowCount()-1;
+    for (int i=0; i<dataRows; ++i)
+    {
+        const QString serviceName = invoiceDetailsModel->data(invoiceDetailsModel->index(i, 0)).toString();
+        const double serviceValue = invoiceDetailsModel->data(invoiceDetailsModel->index(i, 1)).toDouble();
+
+        const QString nameCell = QString("\t\t\t<td>%1</td>").arg(serviceName);
+        const QString valueCell = QString("\t\t\t<td>%1</td>").arg(serviceValue);
+        replacedStr += QString("<tr>\n%1\n%2\n\t\t</tr>\n").arg(nameCell, valueCell);
+    }
+    return replacedStr;
+}
+
+QString NewInvoicePage::buildInvoiceTotal() const
+{
+    const int totalRowI = invoiceDetailsModel->rowCount()-1;
+    const double totalValue = invoiceDetailsModel->data(invoiceDetailsModel->index(totalRowI, 1)).toDouble();
+    return QString::number(totalValue);
 }
 
 QString NewInvoicePage::readFileContent(const QString &filename)

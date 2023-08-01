@@ -67,6 +67,10 @@ private:
     QString getCssFile() const;
     QString readTemplateContent() const;
     QString fillTemplate(const QString& templateModel);
+
+    QString buildReplaceDetails() const;
+    QString buildInvoiceTotal() const;
+
     static QString readFileContent(const QString& filename);
 
     static QString buildReplaceAddress(const QString& recordedAddress);

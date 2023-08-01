@@ -9,13 +9,17 @@
 #include "NewInvoicePage.h"
 
 // TODO Important :
-// - Finish adding all templated data in preview
-// - Add UI with template file in UI / DB
 // - Add open last db option
+// - Add invoice details visualization by clicking on main page
+// - Fix formatting errors
+//  - Add two decimals to prices
+//  - Fix date format
+//  - Fix Invoice N with wrong charset
+// - Add notes in UI / DB
+// - Add invoice title to UI / database data
+// - Add UI with template file in UI / DB
 // - Add error management in New invoice page, specially for already existing id case
 //  - Add error field in page with error displayed in case of error
-// - Add notes in UI / preview generation
-// - Add invoice details visualization by clicking on main page
 
 // TODO Not that important :
 // - Implement remove button in data handler widget
