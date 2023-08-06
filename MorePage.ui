@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>783</width>
-    <height>793</height>
+    <width>816</width>
+    <height>768</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -59,6 +59,18 @@
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item alignment="Qt::AlignTop">
        <widget class="DataHandlerWidget" name="clientsWidget" native="true"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="title">
+      <string>Templates</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_4">
+      <item>
+       <widget class="DataHandlerWidget" name="templatesWidget" native="true"/>
       </item>
      </layout>
     </widget>

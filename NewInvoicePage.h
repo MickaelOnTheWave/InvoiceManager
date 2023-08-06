@@ -8,7 +8,7 @@
 #include "ClientModel.h"
 #include "InvoiceDbController.h"
 #include <QtWebKit>
-#include "StylesheetModel.h"
+#include "FileResourceModel.h"
 
 namespace Ui {
 class NewInvoicePage;
@@ -23,7 +23,8 @@ public:
     ~NewInvoicePage();
 
     void initialize(ClientModel* _clientModel,
-                    StylesheetModel* _stylesheetModel,
+                    FileResourceModel* _templateModel,
+                    FileResourceModel* _stylesheetModel,
                     InvoiceDbController* _controller);
     void reset();
     void resetFromLast();
@@ -77,7 +78,8 @@ private:
 
     Ui::NewInvoicePage *ui;
     ClientModel* clientModel;
-    StylesheetModel* stylesheetModel;
+    FileResourceModel* templateModel;
+    FileResourceModel* stylesheetModel;
     QAbstractItemModel* invoiceDetailsModel;
     InvoiceDbController* controller;
 };

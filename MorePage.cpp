@@ -6,7 +6,7 @@
 #include "Company.h"
 #include "CompanyDetailsWidget.h"
 #include "GuiUtils.h"
-#include "StylesheetDetailsWidget.h"
+#include "FileResourceAddWidget.h"
 #include "NewDataDialog.h"
 
 MorePage::MorePage(QWidget *parent) :
@@ -16,6 +16,7 @@ MorePage::MorePage(QWidget *parent) :
     ui->setupUi(this);
 
     connect(ui->clientsWidget, &DataHandlerWidget::addClicked, this, &MorePage::onAddClient);
+    connect(ui->templatesWidget, &DataHandlerWidget::addClicked, this, &MorePage::onAddTemplate);
     connect(ui->stylesheetsWidget, &DataHandlerWidget::addClicked, this, &MorePage::onAddStylesheet);
     connect(ui->backButton, &QAbstractButton::clicked, this, &MorePage::back);
 }
@@ -26,15 +27,19 @@ MorePage::~MorePage()
 }
 
 void MorePage::connectViewsToModels(ClientModel *_clientModel,
-                                    StylesheetModel *_stylesheetModel)
+                                    FileResourceModel *_templateModel,
+                                    FileResourceModel *_stylesheetModel)
 {
     ui->clientsWidget->setModel(_clientModel);
+    ui->templatesWidget->setModel(_templateModel);
     ui->stylesheetsWidget->setModel(_stylesheetModel);
 
     ui->clientsWidget->setColumnsResizingMode({QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::Stretch});
+    ui->templatesWidget->setColumnsResizingMode({QHeaderView::Fixed, QHeaderView::Fixed, QHeaderView::Stretch});
     ui->stylesheetsWidget->setColumnsResizingMode({QHeaderView::Fixed, QHeaderView::Fixed, QHeaderView::Stretch});
 
     clientModel = _clientModel;
+    templateModel = _templateModel;
     stylesheetModel = _stylesheetModel;
 
     ui->clientsWidget->hideColumns({0, 2, 5});
@@ -43,24 +48,17 @@ void MorePage::connectViewsToModels(ClientModel *_clientModel,
 void MorePage::onAddClient()
 {
     auto contentWidget = new CompanyDetailsWidget();
-    GuiUtils::addDataToModel(contentWidget, [this, contentWidget] () {
+    GuiUtils::addDataToModel(contentWidget, tr("New Client"), [this, contentWidget] () {
         return clientModel->insertAtEnd(contentWidget->getData());
     });
+}
+
+void MorePage::onAddTemplate()
+{
+    GuiUtils::OnAddTemplate(templateModel);
 }
 
 void MorePage::onAddStylesheet()
 {
     GuiUtils::OnAddStylesheet(stylesheetModel);
-}
-
-bool MorePage::insertInStylesheetModel()
-{
-    const int rowIndex = stylesheetModel->rowCount();
-    const bool ok = stylesheetModel->insertRow(rowIndex);
-    if (!ok)
-        return false;
-
-    stylesheetModel->setData(stylesheetModel->index(rowIndex, 0), "stylesheet.css");
-
-    return false;
 }

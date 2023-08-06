@@ -15,7 +15,7 @@ class InvoiceDbController : public QObject
     Q_OBJECT
 
 public:
-    static const int currentDbVersion = 5;
+    static const int currentDbVersion = 6;
 
     InvoiceDbController();
 

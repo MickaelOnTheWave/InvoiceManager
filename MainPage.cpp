@@ -24,14 +24,16 @@ void MainPage::setDisplayData(const QString &companyName, const QString& dbFile,
     ui->dbStatusWidget->setData(dbFile, dbVersion);
 }
 
-void MainPage::connectViewsToModels(ClientModel *_clientModel, QAbstractItemModel *_stylesheetModel,
-                                    InvoiceModel* _invoiceModel)
+void MainPage::connectViewsToModels(ClientModel *_clientModel, QAbstractItemModel *_templateModel,
+                                    QAbstractItemModel *_stylesheetModel, InvoiceModel* _invoiceModel)
 {
     clientModel = _clientModel;
+    templateModel = _templateModel;
     stylesheetModel = _stylesheetModel;
     invoiceModel = _invoiceModel;
 
     ui->clientsView->setModel(clientModel);
+    ui->templatesView->setModel(templateModel);
     ui->stylesheetsView->setModel(stylesheetModel);
     ui->invoiceContentView->setModel(invoiceModel);
 
@@ -39,14 +41,21 @@ void MainPage::connectViewsToModels(ClientModel *_clientModel, QAbstractItemMode
     ui->clientsView->hideColumn(2);
     ui->clientsView->hideColumn(5);
 
-    ui->stylesheetsView->hideColumn(0);
+    initializeFileResourceView(ui->templatesView);
+    initializeFileResourceView(ui->stylesheetsView);
 
     ui->clientsView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
     ui->clientsView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
-    ui->stylesheetsView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
-    ui->stylesheetsView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
-    ui->stylesheetsView->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
 
     ui->invoiceContentView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
     ui->invoiceContentView->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
 }
+
+void MainPage::initializeFileResourceView(QTableView *viewControl)
+{
+    viewControl->hideColumn(0);
+    viewControl->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    viewControl->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+    viewControl->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
+}
+

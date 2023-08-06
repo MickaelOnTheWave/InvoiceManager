@@ -45,10 +45,11 @@ NewInvoicePage::~NewInvoicePage()
     delete ui;
 }
 
-void NewInvoicePage::initialize(ClientModel *_clientModel, StylesheetModel *_stylesheetModel,
-                                InvoiceDbController *_controller)
+void NewInvoicePage::initialize(ClientModel *_clientModel, FileResourceModel *_templateModel,
+                                FileResourceModel *_stylesheetModel, InvoiceDbController *_controller)
 {
     clientModel = _clientModel;
+    templateModel = _templateModel;
     stylesheetModel = _stylesheetModel;
     controller = _controller;
 }

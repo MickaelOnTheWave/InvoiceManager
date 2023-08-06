@@ -6,7 +6,7 @@
 #include <QAbstractItemModel>
 
 #include "ClientModel.h"
-#include "StylesheetModel.h"
+#include "FileResourceModel.h"
 
 namespace Ui {
 class MorePage;
@@ -20,24 +20,24 @@ public:
     explicit MorePage(QWidget *parent = nullptr);
     ~MorePage();
 
-    void connectViewsToModels(ClientModel* _clientModel,
-                              StylesheetModel* _stylesheetModel);
+    void connectViewsToModels(ClientModel* _clientModel, FileResourceModel *_templateModel,
+                              FileResourceModel* _stylesheetModel);
 
 signals:
     void back();
 
 private slots:
     void onAddClient();
+    void onAddTemplate();
     void onAddStylesheet();
 
 private:
-    bool insertInStylesheetModel();
-
     void addDataToModel(QWidget* dataWidget, std::function<bool()> insertDataFunc);
 
     Ui::MorePage *ui;
     ClientModel* clientModel;
-    StylesheetModel* stylesheetModel;
+    FileResourceModel* templateModel;
+    FileResourceModel* stylesheetModel;
 };
 
 #endif // MOREPAGE_H

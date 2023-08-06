@@ -4,7 +4,7 @@
 #include <QWidget>
 
 #include "Company.h"
-#include "StylesheetModel.h"
+#include "FileResourceModel.h"
 
 namespace Ui {
 class CreatePage;
@@ -22,7 +22,8 @@ public:
 
     CompanyData getCompanyData() const;
 
-    void setModel(StylesheetModel* model);
+    void setModel(FileResourceModel* _templateModel,
+                  FileResourceModel* _stylesheetModel);
 
 signals:
     void confirm();
@@ -30,10 +31,12 @@ signals:
 
 private slots:
     void onAddStylesheet();
+    void onAddTemplate();
 
 private:
     Ui::CreatePage *ui;
-    StylesheetModel* stylesheetModel;
+    FileResourceModel* templateModel;
+    FileResourceModel* stylesheetModel;
 };
 
 #endif // CreatePage_H

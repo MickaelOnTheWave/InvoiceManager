@@ -24,7 +24,7 @@ set(PROJECT_SOURCES
         DbStatusForm.h DbStatusForm.cpp DbStatusForm.ui
         DataHandlerWidget.h DataHandlerWidget.cpp DataHandlerWidget.ui
         CompanyDetailsWidget.h CompanyDetailsWidget.cpp CompanyDetailsWidget.ui
-        StylesheetDetailsWidget.h StylesheetDetailsWidget.cpp StylesheetDetailsWidget.ui
+        FileResourceAddWidget.h FileResourceAddWidget.cpp FileResourceAddWidget.ui
         NewDataDialog.h NewDataDialog.cpp NewDataDialog.ui
         GuiUtils.h GuiUtils.cpp
         InvoiceDbController.h InvoiceDbController.cpp
@@ -32,7 +32,7 @@ set(PROJECT_SOURCES
         InvoiceDetail.h InvoiceDetail.cpp
         InvoiceData.h InvoiceData.cpp
         ClientModel.h ClientModel.cpp
-        StylesheetModel.h StylesheetModel.cpp
+        FileResourceModel.h FileResourceModel.cpp
         InvoiceModel.h InvoiceModel.cpp
 )
 

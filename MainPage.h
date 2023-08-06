@@ -1,6 +1,7 @@
 #ifndef MainPage_H
 #define MainPage_H
 
+#include <QTableView>
 #include <QWidget>
 
 #include "ClientModel.h"
@@ -22,6 +23,7 @@ public:
                         const int dbVersion);
 
     void connectViewsToModels(ClientModel* _clientModel,
+                              QAbstractItemModel* _templateModel,
                               QAbstractItemModel* _stylesheetModel,
                               InvoiceModel* _invoiceModel);
 
@@ -32,8 +34,11 @@ signals:
     void goToMore();
 
 private:
+    void initializeFileResourceView(QTableView* viewControl);
+
     Ui::MainPage *ui;
     ClientModel* clientModel;
+    QAbstractItemModel* templateModel;
     QAbstractItemModel* stylesheetModel;
     InvoiceModel* invoiceModel;
 };

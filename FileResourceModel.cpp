@@ -1,9 +1,9 @@
-#include "StylesheetModel.h"
+#include "FileResourceModel.h"
 
-StylesheetModel::StylesheetModel(QObject *parent, QSqlDatabase db)
+FileResourceModel::FileResourceModel(const QString &tableName, QObject *parent, QSqlDatabase db)
     : QSqlTableModel(parent, db)
 {
-    setTable("stylesheet");
+    setTable(tableName);
     setEditStrategy(QSqlTableModel::OnManualSubmit);
     select();
 
@@ -12,12 +12,12 @@ StylesheetModel::StylesheetModel(QObject *parent, QSqlDatabase db)
     setHeaderData(2, Qt::Horizontal, tr("File"));
 }
 
-int StylesheetModel::getId(const int i) const
+int FileResourceModel::getId(const int i) const
 {
     return data(index(i, 0)).toInt();
 }
 
-bool StylesheetModel::insertAtEnd(const QString &name,
+bool FileResourceModel::insertAtEnd(const QString &name,
                                   const QString &path)
 {
     const int rowIndex = rowCount();

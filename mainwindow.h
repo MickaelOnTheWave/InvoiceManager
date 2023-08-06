@@ -5,7 +5,7 @@
 
 #include "ClientModel.h"
 #include "InvoiceModel.h"
-#include "StylesheetModel.h"
+#include "FileResourceModel.h"
 
 #include "InvoiceDbController.h"
 #include "DbStatusForm.h"
@@ -50,7 +50,8 @@ private:
 
     InvoiceDbController controller;
     ClientModel* clientModel;
-    StylesheetModel* stylesheetModel;
+    FileResourceModel* templateModel;
+    FileResourceModel* stylesheetModel;
     InvoiceModel* invoiceModel;
 };
 #endif // MAINWINDOW_H

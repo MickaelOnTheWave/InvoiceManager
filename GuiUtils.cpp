@@ -2,20 +2,23 @@
 
 #include <QMessageBox>
 #include "NewDataDialog.h"
-#include "StylesheetDetailsWidget.h"
+#include "FileResourceAddWidget.h"
 
-void GuiUtils::OnAddStylesheet(StylesheetModel *model)
+void GuiUtils::OnAddTemplate(FileResourceModel *model)
 {
-    auto contentWidget = new StylesheetDetailsWidget();
-    addDataToModel(contentWidget, [model, contentWidget] () {
-        return model->insertAtEnd(contentWidget->getName(),
-                                  contentWidget->getPath());
-    });
+    OnAddFileResource(model, "Template (*.html)", "Select a template");
 }
 
-void GuiUtils::addDataToModel(QWidget *dataWidget, std::function<bool ()> insertDataFunc)
+void GuiUtils::OnAddStylesheet(FileResourceModel *model)
+{
+    OnAddFileResource(model, "Stylesheet (*.css)", "Select a Stylesheet");
+}
+
+void GuiUtils::addDataToModel(QWidget *dataWidget, const QString& dialogTitle,
+                              std::function<bool ()> insertDataFunc)
 {
     NewDataDialog dialog(dataWidget);
+    dialog.setWindowTitle(dialogTitle);
     const int result = dialog.exec();
     if (result == QDialog::Accepted)
     {
@@ -23,4 +26,13 @@ void GuiUtils::addDataToModel(QWidget *dataWidget, std::function<bool ()> insert
         if (!ok)
             QMessageBox::warning(&dialog, "Error", "Could not insert data into model");
     }
+}
+
+void GuiUtils::OnAddFileResource(FileResourceModel *model, const QString& fileFilter, const QString& dialogTitle)
+{
+    auto contentWidget = new FileResourceAddWidget(fileFilter);
+    addDataToModel(contentWidget, dialogTitle, [model, contentWidget] () {
+        return model->insertAtEnd(contentWidget->getName(),
+                                  contentWidget->getPath());
+    });
 }

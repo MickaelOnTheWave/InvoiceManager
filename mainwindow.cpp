@@ -81,7 +81,7 @@ void MainWindow::onCreateDb()
         createModels();
         ui->createPage->reset();
         ui->stackedWidget->setCurrentWidget(ui->createPage);
-        ui->createPage->setModel(stylesheetModel);
+        ui->createPage->setModel(templateModel, stylesheetModel);
 }
 
 void MainWindow::onOpenDb()
@@ -154,15 +154,16 @@ void MainWindow::onGoToMore()
 
 void MainWindow::createModels()
 {
-    stylesheetModel = new StylesheetModel(this, controller.getDatabase());
+    templateModel = new FileResourceModel("template", this, controller.getDatabase());
+    stylesheetModel = new FileResourceModel("stylesheet", this, controller.getDatabase());
     clientModel = new ClientModel(this);
     invoiceModel = new InvoiceModel(this);
 
     // TODO : either change function name or organization.
     // Not coherent to have models and at the same time handle controller in name.
-    ui->mainPage->connectViewsToModels(clientModel, stylesheetModel, invoiceModel);
-    ui->morePage->connectViewsToModels(clientModel, stylesheetModel);
-    ui->newInvoicePage->initialize(clientModel, stylesheetModel, &controller);
+    ui->mainPage->connectViewsToModels(clientModel, templateModel, stylesheetModel, invoiceModel);
+    ui->morePage->connectViewsToModels(clientModel, templateModel, stylesheetModel);
+    ui->newInvoicePage->initialize(clientModel, templateModel, stylesheetModel, &controller);
 }
 
 void MainWindow::switchToMainWidget()
