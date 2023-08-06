@@ -11,6 +11,7 @@ public:
     InvoiceData();
 
     int clientId = -1;
+    int templateId = -1;
     int stylesheetId = -1;
     std::vector<InvoiceDetail> details;
 };

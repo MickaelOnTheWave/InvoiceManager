@@ -15,7 +15,7 @@ class InvoiceDbController : public QObject
     Q_OBJECT
 
 public:
-    static const int currentDbVersion = 6;
+    static const int currentDbVersion = 7;
 
     InvoiceDbController();
 
@@ -28,7 +28,7 @@ public:
     bool writeUserCompany(const CompanyData& company);
     std::vector<int> writeInvoiceDetails(const std::vector<InvoiceDetail>& details);
 
-    bool writeInvoice(const int invoiceId, const int clientId, const int stylesheetId,
+    bool writeInvoice(const int invoiceId, const int clientId, const int templateId, const int stylesheetId,
                       const std::vector<int>& detailsIds, const QDate& date);
 
     QString getUserCompanyName() const;
@@ -42,6 +42,7 @@ public:
     QString getDatabaseFile() const;
     int getDatabaseVersion() const;
 
+    QString getTemplateFilename(const int id) const;
     QString getStylesheetFilename(const int id) const;
 
     QSqlDatabase getDatabase();
@@ -54,11 +55,13 @@ private:
     static QString createUserCompanyRequest(const QString& field);
     QString createInvoiceDetailsWriteQuery(const std::vector<InvoiceDetail>& details) const;
 
-    int writeToInvoiceTable(const int invoiceId, const int clientId, const int stylesheetId, const QDate& date);
+    int writeToInvoiceTable(const int invoiceId, const int clientId, const int templateId, const int stylesheetId, const QDate& date);
     bool writeToInvoiceMapTable(const int invoiceId, const std::vector<int>& detailsIds);
 
+    QString getFilenameFromId(const QString& table, const int id) const;
+
     QString dbFilename;
-    QSqlDatabase db; // TODO : remove this. See tip from Qt documentqtion.
+    QSqlDatabase db; // TODO : remove this. See tip from Qt documentation.
     QString lastErrorMessage;
 };
 

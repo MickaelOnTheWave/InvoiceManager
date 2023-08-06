@@ -15,9 +15,6 @@
 //  - Add two decimals to prices
 //  - Fix date format
 //  - Fix Invoice N with wrong charset
-// - Add notes in UI / DB
-// - Add invoice title to UI / database data
-// - Add UI with template file in UI / DB
 // - Add error management in New invoice page, specially for already existing id case
 //  - Add error field in page with error displayed in case of error
 

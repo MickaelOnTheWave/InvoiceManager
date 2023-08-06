@@ -76,6 +76,7 @@ void NewInvoicePage::resetFromLast()
 
     const InvoiceData data = controller->getLastInvoiceData();
     ui->clientCombo->setCurrentIndex(getComboIndex(ui->clientCombo, data.clientId));
+    ui->templateCombo->setCurrentIndex(getComboIndex(ui->templateCombo, data.templateId));
     ui->stylesheetCombo->setCurrentIndex(getComboIndex(ui->stylesheetCombo, data.stylesheetId));
     for (const auto detail : data.details)
         addInvoiceDetail(detail.description, detail.value);
@@ -100,16 +101,18 @@ void NewInvoicePage::onCreateInvoice()
 {
     const int invoiceId = ui->invoiceIdBox->value();
     const int clientId = clientModel->getId(ui->clientCombo->currentIndex());
+    const int templateId = templateModel->getId(ui->templateCombo->currentIndex());
     const int stylesheetId = stylesheetModel->getId(ui->stylesheetCombo->currentIndex());
     const std::vector<int> invoiceElementsIds = writeInvoiceElements();
 
-    const bool ok = controller->writeInvoice(invoiceId, clientId, stylesheetId, invoiceElementsIds, ui->dateEdit->date());
+    const bool ok = controller->writeInvoice(invoiceId, clientId, templateId, stylesheetId,
+                                             invoiceElementsIds, ui->dateEdit->date());
     if (ok)
         emit create();
 }
 
 void NewInvoicePage::onTodayClicked()
-{
+{const int stylesheetId = stylesheetModel->getId(ui->stylesheetCombo->currentIndex());
     ui->dateEdit->setEnabled(false);
     updateDateEdit(QDate::currentDate());
 }
@@ -166,6 +169,7 @@ void NewInvoicePage::resetInputData(const QString &companyName)
 {
     ui->companyNameLabel->setText(companyName);
     resetComboData(ui->clientCombo, clientModel);
+    resetComboData(ui->templateCombo, templateModel);
     resetComboData(ui->stylesheetCombo, stylesheetModel);
 }
 
@@ -239,8 +243,10 @@ QString NewInvoicePage::getCssFile() const
 
 QString NewInvoicePage::readTemplateContent() const
 {
+    const int id = ui->templateCombo->currentIndex() + 1;
+    const QString filename = controller->getTemplateFilename(id);
     const QString templateFile = "/home/mickael/Prog/InvoiceManager/template.html";
-    return readFileContent(templateFile);
+    return readFileContent(filename);
 }
 
 QString NewInvoicePage::fillTemplate(const QString &templateModel)
@@ -261,6 +267,9 @@ QString NewInvoicePage::fillTemplate(const QString &templateModel)
 
     filledTemplate.replace("<tr>{INVOICE-DETAILS}</tr>", buildReplaceDetails());
     filledTemplate.replace("{INVOICE-TOTAL}", buildInvoiceTotal());
+
+    filledTemplate.replace("{CURRENCY}", ui->currencyEdit->text());
+    filledTemplate.replace("{NOTES}", ui->notesEdit->toPlainText());
 
 
     // Debug code only

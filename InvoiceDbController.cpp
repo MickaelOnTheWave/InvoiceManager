@@ -44,7 +44,7 @@ bool InvoiceDbController::createDb(const QString &filename)
     }
 
     if (!query.exec("CREATE TABLE invoice (id INTEGER primary key, companyId INTEGER, clientId INTEGER, "
-               "stylesheetId INTEGER, date TEXT, notes TEXT, currency TEXT)"))
+               "templateId INTEGER, stylesheetId INTEGER, date TEXT, notes TEXT, currency TEXT)"))
     {
         lastErrorMessage = query.lastError().text();
         return false;
@@ -136,9 +136,10 @@ std::vector<int> InvoiceDbController::writeInvoiceDetails(const std::vector<Invo
     return insertedIds;
 }
 
-bool InvoiceDbController::writeInvoice(const int invoiceId, const int clientId, const int stylesheetId, const std::vector<int> &detailsIds, const QDate &date)
+bool InvoiceDbController::writeInvoice(const int invoiceId, const int clientId, const int templateId,
+                                       const int stylesheetId, const std::vector<int> &detailsIds, const QDate &date)
 {
-    const bool ok = writeToInvoiceTable(invoiceId, clientId, stylesheetId, date);
+    const bool ok = writeToInvoiceTable(invoiceId, clientId, templateId, stylesheetId, date);
     if (ok)
         return writeToInvoiceMapTable(invoiceId, detailsIds);
     return false;
@@ -195,12 +196,13 @@ InvoiceData InvoiceDbController::getLastInvoiceData() const
 {
     InvoiceData data;
     QSqlQuery query;
-    const bool ok = query.exec("SELECT id, clientId, stylesheetId FROM invoice ORDER BY id DESC LIMIT 1");
+    const bool ok = query.exec("SELECT id, clientId, templateId, stylesheetId FROM invoice ORDER BY id DESC LIMIT 1");
     if (ok && query.next())
     {
 
         data.clientId = query.value(1).toInt();
-        data.stylesheetId = query.value(2).toInt();
+        data.templateId = query.value(2).toInt();
+        data.stylesheetId = query.value(3).toInt();
 
         const int invoiceId = query.value(0).toInt();
         const QString queryStr = "SELECT idElement FROM invoicedetailmap WHERE idInvoice = %1";
@@ -241,15 +243,14 @@ int InvoiceDbController::getDatabaseVersion() const
     return -1;
 }
 
+QString InvoiceDbController::getTemplateFilename(const int id) const
+{
+    return getFilenameFromId("template", id);
+}
+
 QString InvoiceDbController::getStylesheetFilename(const int id) const
 {
-    QSqlQuery query;
-    query.prepare("SELECT file FROM stylesheet WHERE id = :id");
-    query.bindValue(":id", id);
-    const bool ok = query.exec();
-    if (ok && query.next())
-        return query.value(0).toString();
-    return QString();
+    return getFilenameFromId("stylesheet", id);
 }
 
 QSqlQuery InvoiceDbController::createWriteCompanyQuery(const CompanyData &data, const bool isClient)
@@ -299,16 +300,17 @@ QString InvoiceDbController::createInvoiceDetailsWriteQuery(const std::vector<In
     return queryContent;
 }
 
-int InvoiceDbController::writeToInvoiceTable(const int invoiceId, const int clientId, const int stylesheetId,
-                                             const QDate &date)
+int InvoiceDbController::writeToInvoiceTable(const int invoiceId, const int clientId, const int templateId,
+                                             const int stylesheetId, const QDate &date)
 {
     const QString dateString = date.toString("d MMM yyyy");
     QSqlQuery query;
-    query.prepare("INSERT INTO invoice (id, companyId, clientId, stylesheetId, date)"
-                  "VALUES (:id, :companyId, :clientId, :stylesheetId, :date)");
+    query.prepare("INSERT INTO invoice (id, companyId, clientId, templateId, stylesheetId, date)"
+                  "VALUES (:id, :companyId, :clientId, :templateId, :stylesheetId, :date)");
     query.bindValue(":id", invoiceId);
     query.bindValue(":companyId", getUserCompanyId());
     query.bindValue(":clientId", clientId);
+    query.bindValue(":templateId", templateId);
     query.bindValue(":stylesheetId", stylesheetId);
     query.bindValue(":date", dateString);
     if (query.exec())
@@ -330,4 +332,15 @@ bool InvoiceDbController::writeToInvoiceMapTable(const int invoiceId, const std:
             return false;
     }
     return true;
+}
+
+QString InvoiceDbController::getFilenameFromId(const QString &table, const int id) const
+{
+    QSqlQuery query;
+    query.prepare(QString("SELECT file FROM %1 WHERE id = :id").arg(table));
+    query.bindValue(":id", id);
+    const bool ok = query.exec();
+    if (ok && query.next())
+        return query.value(0).toString();
+    return QString();
 }
