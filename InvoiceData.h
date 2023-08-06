@@ -14,6 +14,8 @@ public:
     int templateId = -1;
     int stylesheetId = -1;
     std::vector<InvoiceDetail> details;
+    QString notes = "";
+    QString currency;
 };
 
 #endif // INVOICEDATA_H

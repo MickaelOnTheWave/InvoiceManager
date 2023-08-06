@@ -59,6 +59,9 @@ void NewInvoicePage::reset()
     resetInputData(controller->getUserCompanyName());
     resetInvoiceData();
 
+    ui->notesEdit->setText("");
+    ui->currencyEdit->setText("€");
+
     const int nextId = controller->getLastUsedInvoiceId() + 1;
     ui->invoiceIdBox->setValue(nextId);
 
@@ -78,6 +81,10 @@ void NewInvoicePage::resetFromLast()
     ui->clientCombo->setCurrentIndex(getComboIndex(ui->clientCombo, data.clientId));
     ui->templateCombo->setCurrentIndex(getComboIndex(ui->templateCombo, data.templateId));
     ui->stylesheetCombo->setCurrentIndex(getComboIndex(ui->stylesheetCombo, data.stylesheetId));
+
+    ui->notesEdit->setText(data.notes);
+    ui->currencyEdit->setText(data.currency);
+
     for (const auto detail : data.details)
         addInvoiceDetail(detail.description, detail.value);
     computeTotalRow();
@@ -106,13 +113,14 @@ void NewInvoicePage::onCreateInvoice()
     const std::vector<int> invoiceElementsIds = writeInvoiceElements();
 
     const bool ok = controller->writeInvoice(invoiceId, clientId, templateId, stylesheetId,
-                                             invoiceElementsIds, ui->dateEdit->date());
+                                             invoiceElementsIds, ui->dateEdit->date(),
+                                             ui->notesEdit->toPlainText(), ui->currencyEdit->text());
     if (ok)
         emit create();
 }
 
 void NewInvoicePage::onTodayClicked()
-{const int stylesheetId = stylesheetModel->getId(ui->stylesheetCombo->currentIndex());
+{
     ui->dateEdit->setEnabled(false);
     updateDateEdit(QDate::currentDate());
 }

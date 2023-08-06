@@ -137,9 +137,10 @@ std::vector<int> InvoiceDbController::writeInvoiceDetails(const std::vector<Invo
 }
 
 bool InvoiceDbController::writeInvoice(const int invoiceId, const int clientId, const int templateId,
-                                       const int stylesheetId, const std::vector<int> &detailsIds, const QDate &date)
+                                       const int stylesheetId, const std::vector<int> &detailsIds,
+                                       const QDate &date, const QString& notes, const QString& currency)
 {
-    const bool ok = writeToInvoiceTable(invoiceId, clientId, templateId, stylesheetId, date);
+    const bool ok = writeToInvoiceTable(invoiceId, clientId, templateId, stylesheetId, date, notes, currency);
     if (ok)
         return writeToInvoiceMapTable(invoiceId, detailsIds);
     return false;
@@ -196,13 +197,15 @@ InvoiceData InvoiceDbController::getLastInvoiceData() const
 {
     InvoiceData data;
     QSqlQuery query;
-    const bool ok = query.exec("SELECT id, clientId, templateId, stylesheetId FROM invoice ORDER BY id DESC LIMIT 1");
+    const bool ok = query.exec("SELECT id, clientId, templateId, stylesheetId, notes, currency FROM invoice ORDER BY id DESC LIMIT 1");
     if (ok && query.next())
     {
 
         data.clientId = query.value(1).toInt();
         data.templateId = query.value(2).toInt();
         data.stylesheetId = query.value(3).toInt();
+        data.notes = query.value(4).toString();
+        data.currency = query.value(5).toString();
 
         const int invoiceId = query.value(0).toInt();
         const QString queryStr = "SELECT idElement FROM invoicedetailmap WHERE idInvoice = %1";
@@ -301,18 +304,21 @@ QString InvoiceDbController::createInvoiceDetailsWriteQuery(const std::vector<In
 }
 
 int InvoiceDbController::writeToInvoiceTable(const int invoiceId, const int clientId, const int templateId,
-                                             const int stylesheetId, const QDate &date)
+                                             const int stylesheetId, const QDate &date, const QString& notes,
+                                             const QString& currency)
 {
     const QString dateString = date.toString("d MMM yyyy");
     QSqlQuery query;
-    query.prepare("INSERT INTO invoice (id, companyId, clientId, templateId, stylesheetId, date)"
-                  "VALUES (:id, :companyId, :clientId, :templateId, :stylesheetId, :date)");
+    query.prepare("INSERT INTO invoice (id, companyId, clientId, templateId, stylesheetId, date, notes, currency)"
+                  "VALUES (:id, :companyId, :clientId, :templateId, :stylesheetId, :date, :notes, :currency)");
     query.bindValue(":id", invoiceId);
     query.bindValue(":companyId", getUserCompanyId());
     query.bindValue(":clientId", clientId);
     query.bindValue(":templateId", templateId);
     query.bindValue(":stylesheetId", stylesheetId);
     query.bindValue(":date", dateString);
+    query.bindValue(":notes", notes);
+    query.bindValue(":currency", currency);
     if (query.exec())
     {
         return query.lastInsertId().toInt();
