@@ -281,7 +281,6 @@ QString NewInvoicePage::fillTemplate(const QString &templateModel)
     filledTemplate.replace("{CURRENCY}", ui->currencyEdit->text());
     filledTemplate.replace("{NOTES}", ui->notesEdit->text());
 
-
     // Debug code only
     QFile f("/home/mickael/Prog/InvoiceManage/builds/Debug/outputTemplate.html");
     f.open(QFile::ReadWrite | QFile::Text);
@@ -312,7 +311,7 @@ QString NewInvoicePage::buildInvoiceTotal() const
 {
     const int totalRowI = invoiceDetailsModel->rowCount()-1;
     const double totalValue = invoiceDetailsModel->data(invoiceDetailsModel->index(totalRowI, 1)).toDouble();
-    return QString::number(totalValue);
+    return QString::asprintf("%.2f", totalValue);
 }
 
 QString NewInvoicePage::readFileContent(const QString &filename)
