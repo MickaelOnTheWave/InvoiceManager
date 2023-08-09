@@ -1,6 +1,8 @@
 #include "MainPage.h"
 #include "ui_MainPage.h"
 
+#include "InvoiceViewDialog.h"
+
 MainPage::MainPage(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MainPage)
@@ -60,7 +62,10 @@ void MainPage::connectViewsToModels(ClientModel *_clientModel, QAbstractItemMode
 
 void MainPage::onOpenInvoice(const QModelIndex &index)
 {
-    invoiceModel->data(index);
+    const int invoiceId = invoiceModel->data(invoiceModel->index(index.row(), 0)).toInt();
+    auto dialog = new InvoiceViewDialog (invoiceId, this);
+    dialog->setData();
+    dialog->show();
 }
 
 void MainPage::initializeFileResourceView(QTableView *viewControl)
