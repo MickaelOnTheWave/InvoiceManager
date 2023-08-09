@@ -33,8 +33,12 @@ signals:
     void createNewInvoiceFromLast();
     void goToMore();
 
+private slots:
+    void onOpenInvoice(const QModelIndex& index);
+
 private:
     void initializeFileResourceView(QTableView* viewControl);
+    void setViewDefaults(QTableView* view);
 
     Ui::MainPage *ui;
     ClientModel* clientModel;

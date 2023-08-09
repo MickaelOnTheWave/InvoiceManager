@@ -10,6 +10,13 @@ MainPage::MainPage(QWidget *parent) :
     connect(ui->newInvoiceFromLastButton, &QAbstractButton::clicked, this, &MainPage::createNewInvoiceFromLast);
     connect(ui->moreButton, &QAbstractButton::clicked, this, &MainPage::goToMore);
     connect(ui->backButton, &QAbstractButton::clicked, this, &MainPage::closeDb);
+
+    connect(ui->invoiceContentView, &QTableView::doubleClicked, this, &MainPage::onOpenInvoice);
+
+    setViewDefaults(ui->invoiceContentView);
+    setViewDefaults(ui->clientsView);
+    setViewDefaults(ui->templatesView);
+    setViewDefaults(ui->stylesheetsView);
 }
 
 MainPage::~MainPage()
@@ -51,11 +58,22 @@ void MainPage::connectViewsToModels(ClientModel *_clientModel, QAbstractItemMode
     ui->invoiceContentView->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
 }
 
+void MainPage::onOpenInvoice(const QModelIndex &index)
+{
+    invoiceModel->data(index);
+}
+
 void MainPage::initializeFileResourceView(QTableView *viewControl)
 {
     viewControl->hideColumn(0);
     viewControl->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
     viewControl->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
     viewControl->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
+}
+
+void MainPage::setViewDefaults(QTableView *view)
+{
+    view->verticalHeader()->hide();
+    view->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 

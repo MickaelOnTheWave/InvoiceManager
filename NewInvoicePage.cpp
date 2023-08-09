@@ -254,7 +254,6 @@ QString NewInvoicePage::readTemplateContent() const
 {
     const int id = ui->templateCombo->currentIndex() + 1;
     const QString filename = controller->getTemplateFilename(id);
-    const QString templateFile = "/home/mickael/Prog/InvoiceManager/template.html";
     return readFileContent(filename);
 }
 
