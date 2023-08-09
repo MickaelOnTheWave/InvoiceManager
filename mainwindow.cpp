@@ -12,7 +12,6 @@
 // - Add open last db option
 // - Add invoice details visualization by clicking on main page
 // - Fix formatting errors
-//  - Add two decimals to prices
 //  - Fix date format
 //  - Fix Invoice N with wrong charset
 // - Add error management in New invoice page, specially for already existing id case

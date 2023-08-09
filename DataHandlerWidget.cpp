@@ -46,6 +46,16 @@ void DataHandlerWidget::setColumnsResizingMode(const std::vector<QHeaderView::Re
     }
 }
 
+void DataHandlerWidget::setColumnsSizes(const std::vector<int> &sizes)
+{
+    for (int i=0; i < sizes.size(); ++i)
+    {
+        const int colSize = sizes[i];
+        if (colSize > -1)
+            ui->dataView->setColumnWidth(i, colSize);
+    }
+}
+
 void DataHandlerWidget::setModel(QAbstractItemModel *_model)
 {
     model = _model;

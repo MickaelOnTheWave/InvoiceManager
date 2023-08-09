@@ -24,6 +24,11 @@ public:
 
     void hideColumns(const std::vector<int>& columns);
     void setColumnsResizingMode(const std::vector<QHeaderView::ResizeMode> &modes);
+
+    /**
+     * @brief Set column sizes for the fixed columns. Use -1 to not set a specific column size.
+     */
+    void setColumnsSizes(const std::vector<int> &sizes);
     void setModel(QAbstractItemModel* _model);
 
 signals:

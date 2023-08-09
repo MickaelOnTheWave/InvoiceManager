@@ -26,6 +26,7 @@ NewInvoicePage::NewInvoicePage(QWidget *parent) :
 
     ui->invoiceDetailsWidget->setModel(invoiceDetailsModel);
     ui->invoiceDetailsWidget->setColumnsResizingMode({QHeaderView::Stretch, QHeaderView::Fixed});
+    ui->invoiceDetailsWidget->setColumnsSizes({-1, 80});
 
     connect(ui->invoiceDetailsWidget, &DataHandlerWidget::addClicked, this, &NewInvoicePage::onAddInvoiceDetail);
     connect(ui->invoiceDetailsWidget, &DataHandlerWidget::editingFinished, this, &NewInvoicePage::computeTotalRow);
@@ -114,7 +115,7 @@ void NewInvoicePage::onCreateInvoice()
 
     const bool ok = controller->writeInvoice(invoiceId, clientId, templateId, stylesheetId,
                                              invoiceElementsIds, ui->dateEdit->date(),
-                                             ui->notesEdit->toPlainText(), ui->currencyEdit->text());
+                                             ui->notesEdit->text(), ui->currencyEdit->text());
     if (ok)
         emit create();
 }
@@ -277,7 +278,7 @@ QString NewInvoicePage::fillTemplate(const QString &templateModel)
     filledTemplate.replace("{INVOICE-TOTAL}", buildInvoiceTotal());
 
     filledTemplate.replace("{CURRENCY}", ui->currencyEdit->text());
-    filledTemplate.replace("{NOTES}", ui->notesEdit->toPlainText());
+    filledTemplate.replace("{NOTES}", ui->notesEdit->text());
 
 
     // Debug code only
@@ -296,9 +297,11 @@ QString NewInvoicePage::buildReplaceDetails() const
     {
         const QString serviceName = invoiceDetailsModel->data(invoiceDetailsModel->index(i, 0)).toString();
         const double serviceValue = invoiceDetailsModel->data(invoiceDetailsModel->index(i, 1)).toDouble();
+        QString valueStr = QString::asprintf("%.2f", serviceValue);
+
 
         const QString nameCell = QString("\t\t\t<td>%1</td>").arg(serviceName);
-        const QString valueCell = QString("\t\t\t<td>%1</td>").arg(serviceValue);
+        const QString valueCell = QString("\t\t\t<td>%1</td>").arg(valueStr);
         replacedStr += QString("<tr>\n%1\n%2\n\t\t</tr>\n").arg(nameCell, valueCell);
     }
     return replacedStr;
