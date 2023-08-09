@@ -263,7 +263,9 @@ QString NewInvoicePage::fillTemplate(const QString &templateModel)
     QString filledTemplate = templateModel;
 
     filledTemplate.replace("{ID}", QString::number(ui->invoiceIdBox->value()));
-    filledTemplate.replace("{DATE}", ui->dateEdit->date().toString());
+
+    const QString dateStr = QLocale(QLocale::English).toString(ui->dateEdit->date(), "d MMM yyyy");
+    filledTemplate.replace("{DATE}", dateStr);
 
     const auto userData = controller->getUserCompanyData();
     filledTemplate.replace("{USER-COMPANY-NAME}", userData.name);
