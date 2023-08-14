@@ -3,7 +3,7 @@
 
 #include <QSqlQueryModel>
 
-#include "Company.h"
+#include "CompanyData.h"
 
 class ClientModel : public QSqlQueryModel
 {

@@ -3,7 +3,7 @@
 
 #include <QMessageBox>
 
-#include "Company.h"
+#include "CompanyData.h"
 #include "CompanyDetailsWidget.h"
 #include "GuiUtils.h"
 #include "FileResourceAddWidget.h"

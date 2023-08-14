@@ -1,4 +1,4 @@
-#include "Company.h"
+#include "CompanyData.h"
 
 CompanyData::CompanyData()
 {

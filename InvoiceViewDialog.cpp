@@ -12,5 +12,10 @@ InvoiceViewDialog::InvoiceViewDialog(const int _invoiceId, QWidget *parent) :
 
 InvoiceViewDialog::~InvoiceViewDialog()
 {
-    delete ui;
+   delete ui;
+}
+
+void InvoiceViewDialog::setData()
+{
+
 }

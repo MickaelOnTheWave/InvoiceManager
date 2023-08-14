@@ -29,7 +29,7 @@ set(PROJECT_SOURCES
         InvoiceViewDialog.h InvoiceViewDialog.cpp InvoiceViewDialog.ui
         GuiUtils.h GuiUtils.cpp
         InvoiceDbController.h InvoiceDbController.cpp
-        Company.h Company.cpp
+        CompanyData.h CompanyData.cpp
         InvoiceDetail.h InvoiceDetail.cpp
         InvoiceData.h InvoiceData.cpp
         ClientModel.h ClientModel.cpp

@@ -6,7 +6,7 @@
 #include <QObject>
 #include <QString>
 
-#include "Company.h"
+#include "CompanyData.h"
 #include "InvoiceData.h"
 #include "InvoiceDetail.h"
 

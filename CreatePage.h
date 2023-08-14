@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-#include "Company.h"
+#include "CompanyData.h"
 #include "FileResourceModel.h"
 
 namespace Ui {
