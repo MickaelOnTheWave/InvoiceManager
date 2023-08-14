@@ -51,7 +51,7 @@ void NewInvoicePage::setController(InvoiceDbController* _controller)
    controller = _controller;
 }
 
-void NewInvoicePage::initialize(ClientModel *_clientModel, FileResourceModel *_templateModel,
+void NewInvoicePage::connectViewsToModels(ClientModel *_clientModel, FileResourceModel *_templateModel,
                                 FileResourceModel *_stylesheetModel)
 {
     clientModel = _clientModel;

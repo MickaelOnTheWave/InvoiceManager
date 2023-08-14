@@ -24,7 +24,7 @@ public:
 
     void setController(InvoiceDbController* _controller);
 
-    void initialize(ClientModel* _clientModel,
+    void connectViewsToModels(ClientModel* _clientModel,
                     FileResourceModel* _templateModel,
                     FileResourceModel* _stylesheetModel);
     void reset();

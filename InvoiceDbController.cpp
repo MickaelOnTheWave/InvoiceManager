@@ -193,6 +193,7 @@ int InvoiceDbController::getLastUsedInvoiceId() const
     return -1;
 }
 
+// TODO : Remove duplication between here and getInvoiceTemplateData()
 InvoiceData InvoiceDbController::getLastInvoiceData() const
 {
     InvoiceData data;
@@ -208,23 +209,7 @@ InvoiceData InvoiceDbController::getLastInvoiceData() const
         data.currency = query.value(5).toString();
 
         const int invoiceId = query.value(0).toInt();
-        const QString queryStr = "SELECT idElement FROM invoicedetailmap WHERE idInvoice = %1";
-        const bool ok = query.exec(queryStr.arg(invoiceId));
-        if (ok)
-        {
-            while (query.next())
-            {
-                const int elementId = query.value(0).toInt();
-                const QString queryStr = "SELECT description, value FROM invoiceelement WHERE id = %1";
-                const bool ok = query.exec(queryStr.arg(elementId));
-                if (ok && query.next())
-                {
-                    const QString service = query.value(0).toString();
-                    const double value = query.value(1).toDouble();
-                    data.details.emplace_back(service, value);
-                }
-            }
-        }
+        data.details = createInvoiceDetails(invoiceId);
     }
     return data;
 }
@@ -243,17 +228,18 @@ InvoiceTemplateData InvoiceDbController::getInvoiceTemplateData(const int invoic
       const int clientId = query.value(1).toInt();
       const int templateId = query.value(2).toInt();
       const int stylesheetId = query.value(3).toInt();
-      const QDate date = query.value(4).toDate();
+      const QString dateStr = query.value(4).toString();
       const QString notes = query.value(5).toString();
       const QString currency = query.value(6).toString();
 
-      data.date = date;
+      data.date = QDate::fromString(dateStr, dateFormatStr);
       data.notes = notes;
       data.currency = currency;
       data.templatePath = getTemplateFilename(templateId);
       data.stylesheetPath = getStylesheetFilename(stylesheetId);
       data.userCompany = getCompanyData(companyId);
       data.clientCompany = getCompanyData(clientId);
+      data.details = createInvoiceDetails(invoiceId);
    }
 
    return data;
@@ -337,7 +323,7 @@ int InvoiceDbController::writeToInvoiceTable(const int invoiceId, const int clie
                                              const int stylesheetId, const QDate &date, const QString& notes,
                                              const QString& currency)
 {
-    const QString dateString = date.toString("d MMM yyyy");
+    const QString dateString = date.toString(dateFormatStr);
     QSqlQuery query;
     query.prepare("INSERT INTO invoice (id, companyId, clientId, templateId, stylesheetId, date, notes, currency)"
                   "VALUES (:id, :companyId, :clientId, :templateId, :stylesheetId, :date, :notes, :currency)");
@@ -395,4 +381,30 @@ CompanyData InvoiceDbController::getCompanyData(const int id) const
        data.phoneNumber = query.value(3).toString();
    }
    return data;
+}
+
+std::vector<InvoiceDetail> InvoiceDbController::createInvoiceDetails(const int id) const
+{
+   std::vector<InvoiceDetail> details;
+
+   const QString queryStr = "SELECT idElement FROM invoicedetailmap WHERE idInvoice = %1";
+   QSqlQuery query;
+   const bool ok = query.exec(queryStr.arg(id));
+   if (ok)
+   {
+       while (query.next())
+       {
+           const int elementId = query.value(0).toInt();
+           const QString queryStr = "SELECT description, value FROM invoiceelement WHERE id = %1";
+           const bool ok = query.exec(queryStr.arg(elementId));
+           if (ok && query.next())
+           {
+               const QString service = query.value(0).toString();
+               const double value = query.value(1).toDouble();
+               details.emplace_back(service, value);
+           }
+       }
+   }
+
+   return details;
 }

@@ -64,9 +64,12 @@ private:
 
     CompanyData getCompanyData(const int id) const;
 
+    std::vector<InvoiceDetail> createInvoiceDetails(const int id) const;
+
     QString dbFilename;
     QSqlDatabase db; // TODO : remove this. See tip from Qt documentation.
     QString lastErrorMessage;
+    const QString dateFormatStr = "d MMM yyyy";
 };
 
 #endif // INVOICEDBCONTROLLER_H

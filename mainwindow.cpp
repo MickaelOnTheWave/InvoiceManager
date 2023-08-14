@@ -10,7 +10,6 @@
 
 // TODO Important :
 // - Add open last db option
-// - Add invoice details visualization by clicking on main page
 // - Add error management in New invoice page, specially for already existing id case
 //  - Add error field in page with error displayed in case of error
 
@@ -155,11 +154,9 @@ void MainWindow::createModels()
     ui->mainPage->setController(&controller);
     ui->newInvoicePage->setController(&controller);
 
-    // TODO : either change function name or organization.
-    // Not coherent to have models and at the same time handle controller in name.
     ui->mainPage->connectViewsToModels(clientModel, templateModel, stylesheetModel, invoiceModel);
     ui->morePage->connectViewsToModels(clientModel, templateModel, stylesheetModel);
-    ui->newInvoicePage->initialize(clientModel, templateModel, stylesheetModel);
+    ui->newInvoicePage->connectViewsToModels(clientModel, templateModel, stylesheetModel);
 }
 
 void MainWindow::switchToMainWidget()
