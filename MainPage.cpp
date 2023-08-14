@@ -64,7 +64,7 @@ void MainPage::onOpenInvoice(const QModelIndex &index)
 {
     const int invoiceId = invoiceModel->data(invoiceModel->index(index.row(), 0)).toInt();
     auto dialog = new InvoiceViewDialog (invoiceId, this);
-    dialog->setData();
+    //dialog->setData();
     dialog->show();
 }
 

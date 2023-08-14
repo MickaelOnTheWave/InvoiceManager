@@ -1,10 +1,11 @@
 #ifndef INVOICEDATA_H
 #define INVOICEDATA_H
 
+#include <vector>
+#include <QDate>
+
 #include "CompanyData.h"
 #include "InvoiceDetail.h"
-
-#include <vector>
 
 class InvoiceBaseData
 {
@@ -29,8 +30,11 @@ class InvoiceTemplateData : public InvoiceBaseData
 public:
    QString templatePath;
    QString stylesheetPath;
+
    CompanyData userCompany;
    CompanyData clientCompany;
+   QDate date;
+   int id;
 };
 
 #endif // INVOICEDATA_H

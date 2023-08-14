@@ -3,6 +3,8 @@
 
 #include <QDialog>
 
+#include "InvoiceData.h"
+
 namespace Ui {
 class InvoiceViewDialog;
 }
@@ -15,7 +17,7 @@ public:
     explicit InvoiceViewDialog(const int _invoiceId, QWidget *parent = nullptr);
     ~InvoiceViewDialog();
 
-    void setData();
+    void setData(const InvoiceTemplateData& data);
 
 private:
     Ui::InvoiceViewDialog *ui;

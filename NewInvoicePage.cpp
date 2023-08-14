@@ -148,13 +148,7 @@ void NewInvoicePage::onCustomDateUpdated(const QDate &newDate)
 
 void NewInvoicePage::onGeneratePreviewClicked()
 {
-    const QUrl cssUrl = QUrl::fromLocalFile(getCssFile());
-    const QString templateContent = readTemplateContent();
-    const QString previewContent = fillTemplate(templateContent);
-
-    ui->invoicePreview->settings()->setUserStyleSheetUrl(cssUrl);
-    ui->invoicePreview->setHtml(previewContent);
-    ui->invoicePreview->show();
+   ui->previewWidget->show(createInvoiceTemplateData());
 }
 
 void NewInvoicePage::insertTotalRow()
@@ -244,94 +238,29 @@ int NewInvoicePage::getComboIndex(QComboBox *combobox, const int id) const
     return -1;
 }
 
+QString NewInvoicePage::getTemplateFile() const
+{
+    const int id = ui->templateCombo->currentIndex() + 1;
+    return controller->getTemplateFilename(id);
+}
+
 QString NewInvoicePage::getCssFile() const
 {
     const int stylesheetId = ui->stylesheetCombo->currentIndex() + 1;
     return controller->getStylesheetFilename(stylesheetId);
 }
 
-QString NewInvoicePage::readTemplateContent() const
+InvoiceTemplateData NewInvoicePage::createInvoiceTemplateData() const
 {
-    const int id = ui->templateCombo->currentIndex() + 1;
-    const QString filename = controller->getTemplateFilename(id);
-    return readFileContent(filename);
-}
-
-QString NewInvoicePage::fillTemplate(const QString &templateModel)
-{
-    QString filledTemplate = templateModel;
-
-    filledTemplate.replace("{ID}", QString::number(ui->invoiceIdBox->value()));
-
-    const QString dateStr = QLocale(QLocale::English).toString(ui->dateEdit->date(), "d MMM yyyy");
-    filledTemplate.replace("{DATE}", dateStr);
-
-    const auto userData = controller->getUserCompanyData();
-    filledTemplate.replace("{USER-COMPANY-NAME}", userData.name);
-    filledTemplate.replace("<p>{USER-COMPANY-ADDRESS}</p>", buildReplaceAddress(userData.address));
-    filledTemplate.replace("{USER-COMPANY-EMAIL}", userData.email);
-
-    const auto clientData = ui->clientDetailsWidget->getData();
-    filledTemplate.replace("{CLIENT-NAME}", clientData.name);
-    filledTemplate.replace("<p>{CLIENT-ADDRESS}</p>", buildReplaceAddress(clientData.address));
-
-    filledTemplate.replace("<tr>{INVOICE-DETAILS}</tr>", buildReplaceDetails());
-    filledTemplate.replace("{INVOICE-TOTAL}", buildInvoiceTotal());
-
-    filledTemplate.replace("{CURRENCY}", ui->currencyEdit->text());
-    filledTemplate.replace("{NOTES}", ui->notesEdit->text());
-
-    // Debug code only
-    QFile f("/home/mickael/Prog/InvoiceManage/builds/Debug/outputTemplate.html");
-    f.open(QFile::ReadWrite | QFile::Text);
-    f.write(filledTemplate.toUtf8());
-
-    return filledTemplate;
-}
-
-QString NewInvoicePage::buildReplaceDetails() const
-{
-    QString replacedStr;
-    const int dataRows = invoiceDetailsModel->rowCount()-1;
-    for (int i=0; i<dataRows; ++i)
-    {
-        const QString serviceName = invoiceDetailsModel->data(invoiceDetailsModel->index(i, 0)).toString();
-        const double serviceValue = invoiceDetailsModel->data(invoiceDetailsModel->index(i, 1)).toDouble();
-        QString valueStr = QString::asprintf("%.2f", serviceValue);
-
-
-        const QString nameCell = QString("\t\t\t<td>%1</td>").arg(serviceName);
-        const QString valueCell = QString("\t\t\t<td>%1</td>").arg(valueStr);
-        replacedStr += QString("<tr>\n%1\n%2\n\t\t</tr>\n").arg(nameCell, valueCell);
-    }
-    return replacedStr;
-}
-
-QString NewInvoicePage::buildInvoiceTotal() const
-{
-    const int totalRowI = invoiceDetailsModel->rowCount()-1;
-    const double totalValue = invoiceDetailsModel->data(invoiceDetailsModel->index(totalRowI, 1)).toDouble();
-    return QString::asprintf("%.2f", totalValue);
-}
-
-QString NewInvoicePage::readFileContent(const QString &filename)
-{
-    QFile f(filename);
-    if (!f.open(QFile::ReadOnly | QFile::Text))
-        return QString();
-    QTextStream in(&f);
-    return in.readAll();
-}
-
-QString NewInvoicePage::buildReplaceAddress(const QString &recordedAddress)
-{
-    QString replacedAddress;
-    const QStringList explodedAddress = recordedAddress.split("\n");
-    for (int i=0; i < explodedAddress.size(); ++i)
-    {
-        const QString currentPart = explodedAddress[i];
-        if (!currentPart.isEmpty())
-            replacedAddress += QString("<p>%1</p>").arg(currentPart);
-    }
-    return replacedAddress;
+   InvoiceTemplateData data;
+   data.templatePath = getTemplateFile();
+   data.stylesheetPath = getCssFile();
+   data.id = ui->invoiceIdBox->value();
+   data.date = ui->dateEdit->date();
+   data.userCompany = controller->getUserCompanyData();
+   data.clientCompany = ui->clientDetailsWidget->getData();
+   data.details = createDetailsCollection();
+   data.currency = ui->currencyEdit->text();
+   data.notes = ui->notesEdit->text();
+   return data;
 }

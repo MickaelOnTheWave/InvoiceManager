@@ -312,13 +312,7 @@
         </layout>
        </item>
        <item>
-        <widget class="QWebView" name="invoicePreview">
-         <property name="url">
-          <url>
-           <string>about:blank</string>
-          </url>
-         </property>
-        </widget>
+        <widget class="InvoiceViewWidget" name="previewWidget" native="true"/>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_10">
@@ -389,11 +383,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QWebView</class>
-   <extends>QWidget</extends>
-   <header location="global">QtWebKitWidgets/QWebView</header>
-  </customwidget>
-  <customwidget>
    <class>DataHandlerWidget</class>
    <extends>QWidget</extends>
    <header>DataHandlerWidget.h</header>
@@ -403,6 +392,12 @@
    <class>CompanyDetailsWidget</class>
    <extends>QWidget</extends>
    <header>CompanyDetailsWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>InvoiceViewWidget</class>
+   <extends>QWidget</extends>
+   <header>InvoiceViewWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

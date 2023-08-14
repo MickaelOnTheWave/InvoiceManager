@@ -65,16 +65,10 @@ private:
 
     int getComboIndex(QComboBox* combobox, const int id) const;
 
+    QString getTemplateFile() const;
     QString getCssFile() const;
-    QString readTemplateContent() const;
-    QString fillTemplate(const QString& templateModel);
 
-    QString buildReplaceDetails() const;
-    QString buildInvoiceTotal() const;
-
-    static QString readFileContent(const QString& filename);
-
-    static QString buildReplaceAddress(const QString& recordedAddress);
+    InvoiceTemplateData createInvoiceTemplateData() const;
 
     Ui::NewInvoicePage *ui;
     ClientModel* clientModel;

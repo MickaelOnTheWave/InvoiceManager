@@ -15,7 +15,8 @@ InvoiceViewDialog::~InvoiceViewDialog()
    delete ui;
 }
 
-void InvoiceViewDialog::setData()
+void InvoiceViewDialog::setData(const InvoiceTemplateData& data)
 {
 
 }
+

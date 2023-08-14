@@ -25,6 +25,7 @@ set(PROJECT_SOURCES
         DataHandlerWidget.h DataHandlerWidget.cpp DataHandlerWidget.ui
         CompanyDetailsWidget.h CompanyDetailsWidget.cpp CompanyDetailsWidget.ui
         FileResourceAddWidget.h FileResourceAddWidget.cpp FileResourceAddWidget.ui
+        InvoiceViewWidget.h InvoiceViewWidget.cpp InvoiceViewWidget.ui
         NewDataDialog.h NewDataDialog.cpp NewDataDialog.ui
         InvoiceViewDialog.h InvoiceViewDialog.cpp InvoiceViewDialog.ui
         GuiUtils.h GuiUtils.cpp
