@@ -5,7 +5,9 @@
 #include <QWidget>
 
 #include "ClientModel.h"
+#include "InvoiceDbController.h"
 #include "InvoiceModel.h"
+#include "InvoiceData.h"
 
 namespace Ui {
 class MainPage;
@@ -21,6 +23,8 @@ public:
 
     void setDisplayData(const QString &companyName, const QString& dbFile,
                         const int dbVersion);
+
+    void setController(InvoiceDbController* _controller);
 
     void connectViewsToModels(ClientModel* _clientModel,
                               QAbstractItemModel* _templateModel,
@@ -40,11 +44,14 @@ private:
     void initializeFileResourceView(QTableView* viewControl);
     void setViewDefaults(QTableView* view);
 
+    InvoiceTemplateData createInvoiceTemplateData(const QModelIndex& index);
+
     Ui::MainPage *ui;
     ClientModel* clientModel;
     QAbstractItemModel* templateModel;
     QAbstractItemModel* stylesheetModel;
     InvoiceModel* invoiceModel;
+    InvoiceDbController* controller = nullptr;
 };
 
 #endif // MainPage_H

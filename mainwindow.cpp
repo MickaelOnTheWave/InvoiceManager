@@ -152,11 +152,14 @@ void MainWindow::createModels()
     clientModel = new ClientModel(this);
     invoiceModel = new InvoiceModel(this);
 
+    ui->mainPage->setController(&controller);
+    ui->newInvoicePage->setController(&controller);
+
     // TODO : either change function name or organization.
     // Not coherent to have models and at the same time handle controller in name.
     ui->mainPage->connectViewsToModels(clientModel, templateModel, stylesheetModel, invoiceModel);
     ui->morePage->connectViewsToModels(clientModel, templateModel, stylesheetModel);
-    ui->newInvoicePage->initialize(clientModel, templateModel, stylesheetModel, &controller);
+    ui->newInvoicePage->initialize(clientModel, templateModel, stylesheetModel);
 }
 
 void MainWindow::switchToMainWidget()

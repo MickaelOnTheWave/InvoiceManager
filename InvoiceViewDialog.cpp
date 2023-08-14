@@ -1,10 +1,9 @@
 #include "InvoiceViewDialog.h"
 #include "ui_InvoiceViewDialog.h"
 
-InvoiceViewDialog::InvoiceViewDialog(const int _invoiceId, QWidget *parent) :
+InvoiceViewDialog::InvoiceViewDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::InvoiceViewDialog),
-    invoiceId(_invoiceId)
+    ui(new Ui::InvoiceViewDialog)
 {
     ui->setupUi(this);
     connect(ui->closeButton, &QAbstractButton::clicked, this, &QDialog::close);
@@ -17,6 +16,6 @@ InvoiceViewDialog::~InvoiceViewDialog()
 
 void InvoiceViewDialog::setData(const InvoiceTemplateData& data)
 {
-
+   ui->viewWidget->show(data);
 }
 

@@ -38,6 +38,7 @@ public:
     int getLastUsedInvoiceId() const;
 
     InvoiceData getLastInvoiceData() const;
+    InvoiceTemplateData getInvoiceTemplateData(const int invoiceId) const;
 
     QString getDatabaseFile() const;
     int getDatabaseVersion() const;
@@ -60,6 +61,8 @@ private:
     bool writeToInvoiceMapTable(const int invoiceId, const std::vector<int>& detailsIds);
 
     QString getFilenameFromId(const QString& table, const int id) const;
+
+    CompanyData getCompanyData(const int id) const;
 
     QString dbFilename;
     QSqlDatabase db; // TODO : remove this. See tip from Qt documentation.

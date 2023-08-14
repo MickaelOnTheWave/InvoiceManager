@@ -39,7 +39,7 @@ bool InvoiceDbController::createDb(const QString &filename)
 
     if (!query.exec("CREATE TABLE stylesheet (id INTEGER primary key, name TEXT, file TEXT)"))
     {
-        lastErrorMessage = query.lastError().text();
+       lastErrorMessage = query.lastError().text();
         return false;
     }
 
@@ -229,6 +229,36 @@ InvoiceData InvoiceDbController::getLastInvoiceData() const
     return data;
 }
 
+InvoiceTemplateData InvoiceDbController::getInvoiceTemplateData(const int invoiceId) const
+{
+   InvoiceTemplateData data;
+   data.id = invoiceId;
+
+   const QString queryStr = "SELECT companyId, clientId, templateId, stylesheetId, date, notes, currency "
+                            "FROM invoice WHERE id = %1";
+   QSqlQuery query(queryStr.arg(invoiceId));
+   if (query.first())
+   {
+      const int companyId = query.value(0).toInt();
+      const int clientId = query.value(1).toInt();
+      const int templateId = query.value(2).toInt();
+      const int stylesheetId = query.value(3).toInt();
+      const QDate date = query.value(4).toDate();
+      const QString notes = query.value(5).toString();
+      const QString currency = query.value(6).toString();
+
+      data.date = date;
+      data.notes = notes;
+      data.currency = currency;
+      data.templatePath = getTemplateFilename(templateId);
+      data.stylesheetPath = getStylesheetFilename(stylesheetId);
+      data.userCompany = getCompanyData(companyId);
+      data.clientCompany = getCompanyData(clientId);
+   }
+
+   return data;
+}
+
 QString InvoiceDbController::getDatabaseFile() const
 {
     return dbFilename;
@@ -349,4 +379,20 @@ QString InvoiceDbController::getFilenameFromId(const QString &table, const int i
     if (ok && query.next())
         return query.value(0).toString();
     return QString();
+}
+
+CompanyData InvoiceDbController::getCompanyData(const int id) const
+{
+   CompanyData data;
+
+   QString queryStr = "SELECT name, address, email, phone FROM company WHERE id = %1";
+   QSqlQuery query(queryStr.arg(id));
+   if (query.first())
+   {
+       data.name = query.value(0).toString();
+       data.address = query.value(1).toString();
+       data.email = query.value(2).toString();
+       data.phoneNumber = query.value(3).toString();
+   }
+   return data;
 }

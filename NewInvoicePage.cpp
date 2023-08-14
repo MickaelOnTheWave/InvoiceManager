@@ -43,16 +43,20 @@ NewInvoicePage::NewInvoicePage(QWidget *parent) :
 
 NewInvoicePage::~NewInvoicePage()
 {
-    delete ui;
+   delete ui;
+}
+
+void NewInvoicePage::setController(InvoiceDbController* _controller)
+{
+   controller = _controller;
 }
 
 void NewInvoicePage::initialize(ClientModel *_clientModel, FileResourceModel *_templateModel,
-                                FileResourceModel *_stylesheetModel, InvoiceDbController *_controller)
+                                FileResourceModel *_stylesheetModel)
 {
     clientModel = _clientModel;
     templateModel = _templateModel;
     stylesheetModel = _stylesheetModel;
-    controller = _controller;
 }
 
 void NewInvoicePage::reset()

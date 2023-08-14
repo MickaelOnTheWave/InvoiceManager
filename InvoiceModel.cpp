@@ -11,7 +11,8 @@ void InvoiceModel::refresh()
     const int myCompanyId = 1;
     const QString sumQuery = "SELECT SUM(value) as Amount FROM invoiceelement WHERE id IN "
                              "(SELECT idElement FROM invoicedetailmap WHERE idInvoice = invoice.id )";
-    const QString queryStr = "SELECT company.name AS 'Client',"
+    const QString queryStr = "SELECT invoice.id,"
+                             "company.name AS 'Client',"
                              "(%1) AS 'Amount',"
                              "stylesheet.name AS 'Stylesheet',"
                              "invoice.date as 'Date' "

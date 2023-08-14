@@ -22,10 +22,11 @@ public:
     explicit NewInvoicePage(QWidget *parent = nullptr);
     ~NewInvoicePage();
 
+    void setController(InvoiceDbController* _controller);
+
     void initialize(ClientModel* _clientModel,
                     FileResourceModel* _templateModel,
-                    FileResourceModel* _stylesheetModel,
-                    InvoiceDbController* _controller);
+                    FileResourceModel* _stylesheetModel);
     void reset();
     void resetFromLast();
 

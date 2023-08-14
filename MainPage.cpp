@@ -33,6 +33,11 @@ void MainPage::setDisplayData(const QString &companyName, const QString& dbFile,
     ui->dbStatusWidget->setData(dbFile, dbVersion);
 }
 
+void MainPage::setController(InvoiceDbController* _controller)
+{
+   controller = _controller;
+}
+
 void MainPage::connectViewsToModels(ClientModel *_clientModel, QAbstractItemModel *_templateModel,
                                     QAbstractItemModel *_stylesheetModel, InvoiceModel* _invoiceModel)
 {
@@ -49,6 +54,7 @@ void MainPage::connectViewsToModels(ClientModel *_clientModel, QAbstractItemMode
     ui->clientsView->hideColumn(0);
     ui->clientsView->hideColumn(2);
     ui->clientsView->hideColumn(5);
+    ui->invoiceContentView->hideColumn(0);
 
     initializeFileResourceView(ui->templatesView);
     initializeFileResourceView(ui->stylesheetsView);
@@ -62,9 +68,8 @@ void MainPage::connectViewsToModels(ClientModel *_clientModel, QAbstractItemMode
 
 void MainPage::onOpenInvoice(const QModelIndex &index)
 {
-    const int invoiceId = invoiceModel->data(invoiceModel->index(index.row(), 0)).toInt();
-    auto dialog = new InvoiceViewDialog (invoiceId, this);
-    //dialog->setData();
+    auto dialog = new InvoiceViewDialog(this);
+    dialog->setData(createInvoiceTemplateData(index));
     dialog->show();
 }
 
@@ -80,5 +85,11 @@ void MainPage::setViewDefaults(QTableView *view)
 {
     view->verticalHeader()->hide();
     view->setSelectionBehavior(QAbstractItemView::SelectRows);
+}
+
+InvoiceTemplateData MainPage::createInvoiceTemplateData(const QModelIndex& index)
+{
+   const int invoiceId = invoiceModel->data(invoiceModel->index(index.row(), 0)).toInt();
+   return controller->getInvoiceTemplateData(invoiceId);
 }
 

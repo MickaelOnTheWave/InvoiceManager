@@ -14,15 +14,13 @@ class InvoiceViewDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit InvoiceViewDialog(const int _invoiceId, QWidget *parent = nullptr);
-    ~InvoiceViewDialog();
+    explicit InvoiceViewDialog(QWidget *parent = nullptr);
+    virtual ~InvoiceViewDialog();
 
     void setData(const InvoiceTemplateData& data);
 
 private:
     Ui::InvoiceViewDialog *ui;
-
-    const int invoiceId;
 };
 
 #endif // INVOICEVIEWDIALOG_H
