@@ -41,12 +41,14 @@ signals:
 
 private slots:
     void onOpenInvoice(const QModelIndex& index);
+    void onOpenClient(const QModelIndex& index);
 
 private:
     void initializeFileResourceView(QTableView* viewControl);
     void setViewDefaults(QTableView* view);
 
     InvoiceTemplateData createInvoiceTemplateData(const QModelIndex& index);
+    CompanyData createCompanyData(const QModelIndex& index);
 
     Ui::MainPage *ui;
     ClientModel* clientModel;

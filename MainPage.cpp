@@ -1,7 +1,9 @@
 #include "MainPage.h"
 #include "ui_MainPage.h"
 
+#include "CompanyDetailsWidget.h"
 #include "InvoiceViewDialog.h"
+#include "NewDataDialog.h"
 
 MainPage::MainPage(QWidget *parent) :
     QWidget(parent),
@@ -14,6 +16,7 @@ MainPage::MainPage(QWidget *parent) :
     connect(ui->backButton, &QAbstractButton::clicked, this, &MainPage::closeDb);
 
     connect(ui->invoiceContentView, &QTableView::doubleClicked, this, &MainPage::onOpenInvoice);
+    connect(ui->clientsView, &QTableView::doubleClicked, this, &MainPage::onOpenClient);
 
     connect(ui->titleBarWidget, &TitleBarWidget::settingsClicked, this, &MainPage::settingsClicked);
     connect(ui->titleBarWidget, &TitleBarWidget::aboutClicked, this, &MainPage::aboutClicked);
@@ -76,6 +79,15 @@ void MainPage::onOpenInvoice(const QModelIndex &index)
     dialog->show();
 }
 
+void MainPage::onOpenClient(const QModelIndex& index)
+{
+   auto companyWidget = new CompanyDetailsWidget();
+   companyWidget->fill(createCompanyData(index));
+   auto dialog = new NewDataDialog(companyWidget, this);
+   dialog->setWindowTitle("Company Details");
+   dialog->show();
+}
+
 void MainPage::initializeFileResourceView(QTableView *viewControl)
 {
     viewControl->hideColumn(0);
@@ -94,5 +106,10 @@ InvoiceTemplateData MainPage::createInvoiceTemplateData(const QModelIndex& index
 {
    const int invoiceId = invoiceModel->data(invoiceModel->index(index.row(), 0)).toInt();
    return controller->getInvoiceTemplateData(invoiceId);
+}
+
+CompanyData MainPage::createCompanyData(const QModelIndex& index)
+{
+   return clientModel->getDataAtRow(index.row());
 }
 
