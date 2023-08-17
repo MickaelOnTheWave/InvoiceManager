@@ -15,6 +15,8 @@ public:
    explicit SettingsPage(QWidget *parent = nullptr);
    ~SettingsPage();
 
+   void refresh();
+
 signals:
    void done();
 
@@ -23,6 +25,9 @@ private slots:
    void onSave();
 
 private:
+   void loadSettings();
+   void saveSettings();
+
    Ui::SettingsPage *ui;
 };
 

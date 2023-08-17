@@ -13,7 +13,6 @@
 // - Add error management in New invoice page, specially for already existing id case
 //  - Add error field in page with error displayed in case of error
 // - Add about dialog with copyright / version info
-// - Add Settings dialog
 // - Implement remove button in data handler widget
 
 // TODO Not that important :
@@ -119,6 +118,7 @@ void MainWindow::onCloseDb()
 void MainWindow::onSettings()
 {
    previousPage = ui->stackedWidget->currentWidget();
+   ui->settingsPage->refresh();
    ui->stackedWidget->setCurrentWidget(ui->settingsPage);
 }
 
