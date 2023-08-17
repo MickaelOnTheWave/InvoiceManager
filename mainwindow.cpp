@@ -12,7 +12,6 @@
 // TODO Important :
 // - Add error management in New invoice page, specially for already existing id case
 //  - Add error field in page with error displayed in case of error
-// - Add about dialog with copyright / version info
 // - Implement remove button in data handler widget
 
 // TODO Not that important :
@@ -22,6 +21,7 @@
 // - Add versioning to clients / company
 // - Add template/stylesheet contents to DB
 
+const QString appVersion = "0.7";
 const QString lastDbKey = "lastdbfile";
 
 
@@ -58,8 +58,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->morePage, &MorePage::aboutClicked, this, &MainWindow::onAbout);
 
     connect(ui->settingsPage, &SettingsPage::done, this, &MainWindow::onBackToPreviousPage);
+    connect(ui->aboutPage, &AboutPage::backClicked, this, &MainWindow::onBackToPreviousPage);
 
     initializeOpenLastDb();
+    ui->aboutPage->setVersions(appVersion, InvoiceDbController::currentDbVersion);
 
     ui->stackedWidget->setCurrentWidget(ui->startPage);
 }

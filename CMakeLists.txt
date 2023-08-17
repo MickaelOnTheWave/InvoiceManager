@@ -29,6 +29,7 @@ set(PROJECT_SOURCES
         NewDataDialog.h NewDataDialog.cpp NewDataDialog.ui
         InvoiceViewDialog.h InvoiceViewDialog.cpp InvoiceViewDialog.ui
         SettingsPage.h SettingsPage.cpp SettingsPage.ui
+        AboutPage.h AboutPage.cpp AboutPage.ui
         TitleBarWidget.h TitleBarWidget.cpp TitleBarWidget.ui
         GuiUtils.h GuiUtils.cpp
         InvoiceDbController.h InvoiceDbController.cpp
