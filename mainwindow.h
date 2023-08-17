@@ -27,6 +27,7 @@ public:
 private slots:
     void onCreateDb();
     void onOpenDb();
+    void onOpenLastDb();
     void onCloseDb();
     void onSettings();
     void onAbout();
@@ -42,12 +43,15 @@ private slots:
 
 
 private:
+    void initializeOpenLastDb();
     void createModels();
     void switchToMainWidget();
 
     void showError(const QString& title, const QString& details);
 
     bool isDbOpeningConfirmed();
+
+    void openDb(const QString& file);
 
     Ui::MainWindow *ui;
 

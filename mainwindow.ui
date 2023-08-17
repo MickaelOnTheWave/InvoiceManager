@@ -18,7 +18,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>5</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="startPage">
        <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -63,6 +63,13 @@
              <widget class="QPushButton" name="openDbButton">
               <property name="text">
                <string>Open Invoice Database</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="openLastDbButton">
+              <property name="text">
+               <string>Open Last Database</string>
               </property>
              </widget>
             </item>

@@ -18,10 +18,11 @@
 // TODO Not that important :
 // - Change Date format in DB to Date
 // - Add company visualization / edit when double clicking
-// - Add open last db option
 // - Add sorting in UI (ProxyModels)
 // - Add versioning to clients / company
 // - Add template/stylesheet contents to DB
+
+const QString lastDbKey = "lastdbfile";
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -32,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->createDbButton, &QPushButton::clicked, this, &MainWindow::onCreateDb);
     connect(ui->openDbButton, &QPushButton::clicked, this, &MainWindow::onOpenDb);
+    connect(ui->openLastDbButton, &QPushButton::clicked, this, &MainWindow::onOpenLastDb);
     connect(ui->settingsButton, &QPushButton::clicked, this, &MainWindow::onSettings);
     connect(ui->aboutButton, &QPushButton::clicked, this, &MainWindow::onAbout);
     connect(ui->quitButton, &QPushButton::clicked, this, &QMainWindow::close);
@@ -56,6 +58,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->morePage, &MorePage::aboutClicked, this, &MainWindow::onAbout);
 
     connect(ui->settingsPage, &SettingsPage::done, this, &MainWindow::onBackToPreviousPage);
+
+    initializeOpenLastDb();
 
     ui->stackedWidget->setCurrentWidget(ui->startPage);
 }
@@ -93,25 +97,21 @@ void MainWindow::onOpenDb()
     const QString title = tr("Select an existing Invoice Database file");
     const QString typeDescription = tr("Invoice Database (*.idb)");
     const QString dbFile = QFileDialog::getOpenFileName(this, title, QString(), typeDescription);
-    if (!dbFile.isEmpty())
-    {
-        const bool ok = controller.openDb(dbFile);
-        if (ok)
-        {
-            if (isDbOpeningConfirmed())
-            {
-                createModels();
-                switchToMainWidget();
-            }
-        }
-        else
-            showError("Error", "Error while trying to open database file");
-    }
+    openDb(dbFile);
+}
+
+void MainWindow::onOpenLastDb()
+{
+   QSettings settings;
+   const QString dbFile = settings.value(lastDbKey).toString();
+   openDb(dbFile);
 }
 
 void MainWindow::onCloseDb()
 {
     controller.closeDb();
+
+    initializeOpenLastDb();
     ui->stackedWidget->setCurrentWidget(ui->startPage);
 }
 
@@ -169,6 +169,20 @@ void MainWindow::onBackToPreviousPage()
    ui->stackedWidget->setCurrentWidget(previousPage);
 }
 
+void MainWindow::initializeOpenLastDb()
+{
+   QSettings settings;
+   const bool hasLastDbKey = settings.contains(lastDbKey);
+   if (hasLastDbKey)
+   {
+      QFileInfo lastDbFile(settings.value("lastdbfile").toString());
+
+      const QString labelText = tr("Open Last Db (%1)").arg(lastDbFile.fileName());
+      ui->openLastDbButton->setText(labelText);
+   }
+   ui->openLastDbButton->setEnabled(hasLastDbKey);
+}
+
 void MainWindow::onGoToMore()
 {
     ui->stackedWidget->setCurrentWidget(ui->morePage);
@@ -191,6 +205,8 @@ void MainWindow::createModels()
 
 void MainWindow::switchToMainWidget()
 {
+   QSettings settings;
+   settings.setValue(lastDbKey, controller.getDatabaseFile());
     ui->mainPage->setDisplayData(controller.getUserCompanyName(), controller.getDatabaseFile(),
                                  controller.getDatabaseVersion());
     ui->stackedWidget->setCurrentWidget(ui->mainPage);
@@ -218,4 +234,23 @@ bool MainWindow::isDbOpeningConfirmed()
         openDb = (button == QMessageBox::Yes);
     }
     return openDb;
+}
+
+void MainWindow::openDb(const QString& file)
+{
+   if (file.isEmpty())
+      return;
+
+   const bool ok = controller.openDb(file);
+   if (!ok)
+   {
+      showError("Error", "Error while trying to open database file");
+      return;
+   }
+
+   if (!isDbOpeningConfirmed())
+      return;
+
+   createModels();
+   switchToMainWidget();
 }
