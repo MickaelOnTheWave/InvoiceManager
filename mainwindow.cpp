@@ -7,19 +7,22 @@
 #include <QSqlTableModel>
 
 #include "NewInvoicePage.h"
+#include "TitleBarWidget.h"
 
 // TODO Important :
-// - Add open last db option
 // - Add error management in New invoice page, specially for already existing id case
 //  - Add error field in page with error displayed in case of error
+// - Add about dialog with copyright / version info
+// - Add Settings dialog
+// - Implement remove button in data handler widget
 
 // TODO Not that important :
-// - Implement remove button in data handler widget
-// - Add about dialog with copyright / version info
+// - Change Date format in DB to Date
 // - Add company visualization / edit when double clicking
+// - Add open last db option
 // - Add sorting in UI (ProxyModels)
 // - Add versioning to clients / company
-// - Add Settings dialog
+// - Add template/stylesheet contents to DB
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -30,6 +33,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->createDbButton, &QPushButton::clicked, this, &MainWindow::onCreateDb);
     connect(ui->openDbButton, &QPushButton::clicked, this, &MainWindow::onOpenDb);
+    connect(ui->settingsButton, &QPushButton::clicked, this, &MainWindow::onSettings);
+    connect(ui->aboutButton, &QPushButton::clicked, this, &MainWindow::onAbout);
     connect(ui->quitButton, &QPushButton::clicked, this, &QMainWindow::close);
 
     connect(ui->createPage, &CreatePage::confirm, this, &MainWindow::onFinishDbCreation);
@@ -39,11 +44,19 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->mainPage, &MainPage::createNewInvoiceFromLast, this, &MainWindow::onGoToCreateNewInvoiceFromLast);
     connect(ui->mainPage, &MainPage::goToMore, this, &MainWindow::onGoToMore);
     connect(ui->mainPage, &MainPage::closeDb, this, &MainWindow::onCloseDb);
+    connect(ui->mainPage, &MainPage::settingsClicked, this, &MainWindow::onSettings);
+    connect(ui->mainPage, &MainPage::aboutClicked, this, &MainWindow::onAbout);
 
     connect(ui->newInvoicePage, &NewInvoicePage::create, this, &MainWindow::onCreateNewInvoice);
     connect(ui->newInvoicePage, &NewInvoicePage::cancel, this, &MainWindow::onBackToMainPage);
+    connect(ui->newInvoicePage, &NewInvoicePage::settingsClicked, this, &MainWindow::onSettings);
+    connect(ui->newInvoicePage, &NewInvoicePage::aboutClicked, this, &MainWindow::onAbout);
 
     connect(ui->morePage, &MorePage::back, this, &MainWindow::onBackToMainPage);
+    connect(ui->morePage, &MorePage::settingsClicked, this, &MainWindow::onSettings);
+    connect(ui->morePage, &MorePage::aboutClicked, this, &MainWindow::onAbout);
+
+    connect(ui->settingsPage, &SettingsPage::done, this, &MainWindow::onBackToPreviousPage);
 
     ui->stackedWidget->setCurrentWidget(ui->startPage);
 }
@@ -103,6 +116,18 @@ void MainWindow::onCloseDb()
     ui->stackedWidget->setCurrentWidget(ui->startPage);
 }
 
+void MainWindow::onSettings()
+{
+   previousPage = ui->stackedWidget->currentWidget();
+   ui->stackedWidget->setCurrentWidget(ui->settingsPage);
+}
+
+void MainWindow::onAbout()
+{
+   previousPage = ui->stackedWidget->currentWidget();
+   ui->stackedWidget->setCurrentWidget(ui->aboutPage);
+}
+
 void MainWindow::onFinishDbCreation()
 {
     CompanyData userCompany = ui->createPage->getCompanyData();
@@ -136,7 +161,12 @@ void MainWindow::onCreateNewInvoice()
 
 void MainWindow::onBackToMainPage()
 {
-    ui->stackedWidget->setCurrentWidget(ui->mainPage);
+   ui->stackedWidget->setCurrentWidget(ui->mainPage);
+}
+
+void MainWindow::onBackToPreviousPage()
+{
+   ui->stackedWidget->setCurrentWidget(previousPage);
 }
 
 void MainWindow::onGoToMore()

@@ -11,7 +11,8 @@ SettingsPage::SettingsPage(QWidget *parent) :
 
    connect(ui->resetButton, &QPushButton::clicked, this, &SettingsPage::onReset);
    connect(ui->quitBox, &QDialogButtonBox::accepted, this, &SettingsPage::onSave);
-   connect(ui->quitBox, &QDialogButtonBox::rejected, this, &SettingsPage::done);
+   connect(ui->quitBox->button(QDialogButtonBox::Discard), &QAbstractButton::clicked,
+           this, &SettingsPage::done);
 }
 
 SettingsPage::~SettingsPage()
