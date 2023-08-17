@@ -15,6 +15,9 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
+    <widget class="TitleBarWidget" name="titleBarWidget" native="true"/>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0">
      <item>
       <spacer name="horizontalSpacer">
@@ -114,6 +117,12 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>TitleBarWidget</class>
+   <extends>QWidget</extends>
+   <header>TitleBarWidget.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>DataHandlerWidget</class>
    <extends>QWidget</extends>

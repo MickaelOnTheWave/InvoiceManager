@@ -28,6 +28,8 @@ private slots:
     void onCreateDb();
     void onOpenDb();
     void onCloseDb();
+    void onSettings();
+    void onAbout();
 
     void onFinishDbCreation();
 
@@ -36,6 +38,7 @@ private slots:
     void onGoToMore();
     void onCreateNewInvoice();
     void onBackToMainPage();
+    void onBackToPreviousPage();
 
 
 private:
@@ -53,5 +56,6 @@ private:
     FileResourceModel* templateModel;
     FileResourceModel* stylesheetModel;
     InvoiceModel* invoiceModel;
+    QWidget* previousPage;
 };
 #endif // MAINWINDOW_H

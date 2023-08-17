@@ -37,6 +37,9 @@ NewInvoicePage::NewInvoicePage(QWidget *parent) :
     connect(ui->dateEdit, &QDateEdit::dateChanged, this, &NewInvoicePage::onCustomDateUpdated);
     connect(ui->generateButton, &QAbstractButton::clicked, this, &NewInvoicePage::onGeneratePreviewClicked);
 
+    connect(ui->titleBarWidget, &TitleBarWidget::settingsClicked, this, &NewInvoicePage::settingsClicked);
+    connect(ui->titleBarWidget, &TitleBarWidget::aboutClicked, this, &NewInvoicePage::aboutClicked);
+
     ui->lastDayOfMonthButton->setChecked(true);
     onLastDayOfMonthClicked();
 }
@@ -174,10 +177,10 @@ void NewInvoicePage::computeTotalRow()
 
 void NewInvoicePage::resetInputData(const QString &companyName)
 {
-    ui->companyNameLabel->setText(companyName);
-    resetComboData(ui->clientCombo, clientModel);
-    resetComboData(ui->templateCombo, templateModel);
-    resetComboData(ui->stylesheetCombo, stylesheetModel);
+   ui->titleBarWidget->setTitle(companyName);
+   resetComboData(ui->clientCombo, clientModel);
+   resetComboData(ui->templateCombo, templateModel);
+   resetComboData(ui->stylesheetCombo, stylesheetModel);
 }
 
 void NewInvoicePage::resetInvoiceData()

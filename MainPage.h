@@ -36,6 +36,8 @@ signals:
     void createNewInvoice();
     void createNewInvoiceFromLast();
     void goToMore();
+    void settingsClicked();
+    void aboutClicked();
 
 private slots:
     void onOpenInvoice(const QModelIndex& index);

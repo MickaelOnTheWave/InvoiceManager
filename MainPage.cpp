@@ -15,6 +15,9 @@ MainPage::MainPage(QWidget *parent) :
 
     connect(ui->invoiceContentView, &QTableView::doubleClicked, this, &MainPage::onOpenInvoice);
 
+    connect(ui->titleBarWidget, &TitleBarWidget::settingsClicked, this, &MainPage::settingsClicked);
+    connect(ui->titleBarWidget, &TitleBarWidget::aboutClicked, this, &MainPage::aboutClicked);
+
     setViewDefaults(ui->invoiceContentView);
     setViewDefaults(ui->clientsView);
     setViewDefaults(ui->templatesView);
@@ -29,8 +32,8 @@ MainPage::~MainPage()
 void MainPage::setDisplayData(const QString &companyName, const QString& dbFile,
                               const int dbVersion)
 {
-    ui->companyNameLabel->setText(companyName);
-    ui->dbStatusWidget->setData(dbFile, dbVersion);
+   ui->titleBarWidget->setTitle(companyName);
+   ui->dbStatusWidget->setData(dbFile, dbVersion);
 }
 
 void MainPage::setController(InvoiceDbController* _controller)

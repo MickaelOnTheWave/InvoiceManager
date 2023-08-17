@@ -19,6 +19,9 @@ MorePage::MorePage(QWidget *parent) :
     connect(ui->templatesWidget, &DataHandlerWidget::addClicked, this, &MorePage::onAddTemplate);
     connect(ui->stylesheetsWidget, &DataHandlerWidget::addClicked, this, &MorePage::onAddStylesheet);
     connect(ui->backButton, &QAbstractButton::clicked, this, &MorePage::back);
+
+    connect(ui->titleBarWidget, &TitleBarWidget::settingsClicked, this, &MorePage::settingsClicked);
+    connect(ui->titleBarWidget, &TitleBarWidget::aboutClicked, this, &MorePage::aboutClicked);
 }
 
 MorePage::~MorePage()

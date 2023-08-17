@@ -18,7 +18,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>5</number>
       </property>
       <widget class="QWidget" name="startPage">
        <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -67,6 +67,20 @@
              </widget>
             </item>
             <item>
+             <widget class="QPushButton" name="settingsButton">
+              <property name="text">
+               <string>Settings</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="aboutButton">
+              <property name="text">
+               <string>About</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QPushButton" name="quitButton">
               <property name="text">
                <string>Quit</string>
@@ -109,6 +123,8 @@
       <widget class="MainPage" name="mainPage"/>
       <widget class="NewInvoicePage" name="newInvoicePage"/>
       <widget class="MorePage" name="morePage"/>
+      <widget class="SettingsPage" name="settingsPage"/>
+      <widget class="QWidget" name="aboutPage"/>
      </widget>
     </item>
    </layout>
@@ -137,6 +153,12 @@
    <class>CreatePage</class>
    <extends>QWidget</extends>
    <header>CreatePage.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>SettingsPage</class>
+   <extends>QWidget</extends>
+   <header>SettingsPage.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

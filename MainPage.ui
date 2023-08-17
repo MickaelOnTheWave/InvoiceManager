@@ -15,48 +15,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_6">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QLabel" name="companyNameLabel">
-       <property name="font">
-        <font>
-         <pointsize>20</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Company Name</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
+    <widget class="TitleBarWidget" name="titleBarWidget" native="true"/>
    </item>
    <item>
     <spacer name="verticalSpacer">
@@ -208,6 +167,12 @@
    <class>DbStatusForm</class>
    <extends>QWidget</extends>
    <header>DbStatusForm.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TitleBarWidget</class>
+   <extends>QWidget</extends>
+   <header>TitleBarWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

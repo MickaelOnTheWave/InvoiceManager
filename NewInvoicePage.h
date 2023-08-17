@@ -33,6 +33,8 @@ public:
 signals:
     void create();
     void cancel();
+    void settingsClicked();
+    void aboutClicked();
 
 private slots:
     void onClientComboChange(int index);

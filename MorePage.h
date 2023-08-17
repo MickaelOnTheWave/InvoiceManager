@@ -25,6 +25,8 @@ public:
 
 signals:
     void back();
+    void settingsClicked();
+    void aboutClicked();
 
 private slots:
     void onAddClient();
