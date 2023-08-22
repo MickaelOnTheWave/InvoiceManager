@@ -33,13 +33,13 @@ public:
 
 signals:
     void addClicked();
+    void removeClicked(const QModelIndex index);
     void editingFinished();
 
 protected:
     void resizeEvent(QResizeEvent* event) override;
 
 private slots:
-    void onAddClicked();
     void onRemoveClicked();
     void onSelectionChanged(const QModelIndex &current, const QModelIndex &previous);
 

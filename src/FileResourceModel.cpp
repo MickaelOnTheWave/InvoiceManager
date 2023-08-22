@@ -29,3 +29,12 @@ bool FileResourceModel::insertAtEnd(const QString &name,
     setData(index(rowIndex, 2), path);
     return submitAll();
 }
+
+bool FileResourceModel::remove(const QModelIndex& index)
+{
+   bool ok = removeRow(index.row());
+   if (!ok)
+      return false;
+
+   return submitAll();
+}

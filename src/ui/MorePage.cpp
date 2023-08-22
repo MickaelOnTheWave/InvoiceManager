@@ -18,6 +18,7 @@ MorePage::MorePage(QWidget *parent) :
     connect(ui->clientsWidget, &DataHandlerWidget::addClicked, this, &MorePage::onAddClient);
     connect(ui->templatesWidget, &DataHandlerWidget::addClicked, this, &MorePage::onAddTemplate);
     connect(ui->stylesheetsWidget, &DataHandlerWidget::addClicked, this, &MorePage::onAddStylesheet);
+    connect(ui->stylesheetsWidget, &DataHandlerWidget::removeClicked, this, &MorePage::onRemoveStylesheet);
     connect(ui->backButton, &QAbstractButton::clicked, this, &MorePage::back);
 
     connect(ui->titleBarWidget, &TitleBarWidget::settingsClicked, this, &MorePage::settingsClicked);
@@ -63,5 +64,10 @@ void MorePage::onAddTemplate()
 
 void MorePage::onAddStylesheet()
 {
-    GuiUtils::OnAddStylesheet(stylesheetModel);
+   GuiUtils::OnAddStylesheet(stylesheetModel);
+}
+
+void MorePage::onRemoveStylesheet(const QModelIndex index)
+{
+   stylesheetModel->remove(index);
 }

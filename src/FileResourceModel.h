@@ -15,6 +15,7 @@ public:
     int getId(const int i) const;
 
     bool insertAtEnd(const QString& name, const QString &path);
+    bool remove(const QModelIndex& index);
 
 private:
 };

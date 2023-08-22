@@ -10,7 +10,7 @@ DataHandlerWidget::DataHandlerWidget(QWidget *parent) :
     ui->removeButton->setEnabled(false); // Initially disabled
 
     // Connect signals and slots
-    connect(ui->addButton, &QPushButton::clicked, this, &DataHandlerWidget::onAddClicked);
+    connect(ui->addButton, &QPushButton::clicked, this, &DataHandlerWidget::addClicked);
     connect(ui->removeButton, &QPushButton::clicked, this, &DataHandlerWidget::onRemoveClicked);
 
     ui->dataView->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -71,23 +71,9 @@ void DataHandlerWidget::resizeEvent(QResizeEvent *event)
     //ui->dataView->resizeColumnsToContents();
 }
 
-void DataHandlerWidget::onAddClicked()
-{
-    // Emit the signal when Add button is clicked
-    emit addClicked();
-
-    // TODO : Check if really necessary. It might be better to track for model updated event.
-    //ui->dataView->update();
-    //ui->dataView->resizeColumnsToContents();
-}
-
 void DataHandlerWidget::onRemoveClicked()
 {
-    // Remove the selected item when Remove button is clicked
-    QModelIndex currentIndex = ui->dataView->currentIndex();
-    if (currentIndex.isValid()) {
-        model->removeRow(currentIndex.row());
-    }
+   emit removeClicked(ui->dataView->currentIndex());
 }
 
 void DataHandlerWidget::onSelectionChanged(const QModelIndex &current, const QModelIndex &previous)

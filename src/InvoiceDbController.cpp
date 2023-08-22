@@ -31,6 +31,8 @@ bool InvoiceDbController::createDb(const QString &filename)
         return false;
     }
 
+    // TODO : Move template and stylesheet to a single table with a type column
+
     if (!query.exec("CREATE TABLE template (id INTEGER primary key, name TEXT, file TEXT)"))
     {
         lastErrorMessage = query.lastError().text();
