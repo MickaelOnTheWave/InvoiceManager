@@ -12,7 +12,7 @@ NewInvoicePage::NewInvoicePage(QWidget *parent) :
     ui->setupUi(this);
 
     connect(ui->closeBox, &QDialogButtonBox::accepted, this, &NewInvoicePage::onCreateInvoice);
-    connect(ui->closeBox, &QDialogButtonBox::rejected, this, &NewInvoicePage::cancel);
+    connect(ui->closeBox, &QDialogButtonBox::rejected, this, &NewInvoicePage::onCancel);
     connect(ui->clientCombo, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &NewInvoicePage::onClientComboChange);
 
@@ -114,17 +114,38 @@ void NewInvoicePage::onAddInvoiceDetail()
 
 void NewInvoicePage::onCreateInvoice()
 {
+   ui->errorLabel->hide();
     const int invoiceId = ui->invoiceIdBox->value();
     const int clientId = clientModel->getId(ui->clientCombo->currentIndex());
     const int templateId = templateModel->getId(ui->templateCombo->currentIndex());
     const int stylesheetId = stylesheetModel->getId(ui->stylesheetCombo->currentIndex());
+
+    if (controller->invoiceExists(invoiceId))
+    {
+       setError(QString("Invoice with id %1 already exists").arg(invoiceId));
+       return;
+    }
+
+    // TODO : Be smart. If line is exactly the same as previous invoice, we can reuse it.
     const std::vector<int> invoiceElementsIds = writeInvoiceElements();
 
     const bool ok = controller->writeInvoice(invoiceId, clientId, templateId, stylesheetId,
                                              invoiceElementsIds, ui->dateEdit->date(),
                                              ui->notesEdit->text(), ui->currencyEdit->text());
-    if (ok)
-        emit create();
+    if (!ok)
+    {
+       setError("Unexpected error while creating Invoice");
+       // TODO : remove inserted invoice elements
+       return;
+    }
+
+    emit create();
+}
+
+void NewInvoicePage::onCancel()
+{
+   ui->errorLabel->hide();
+   emit cancel();
 }
 
 void NewInvoicePage::onTodayClicked()
@@ -185,6 +206,7 @@ void NewInvoicePage::resetInputData(const QString &companyName)
 
 void NewInvoicePage::resetInvoiceData()
 {
+    ui->errorLabel->hide();
     invoiceDetailsModel->removeRows(0, invoiceDetailsModel->rowCount());
     insertTotalRow();
     onAddInvoiceDetail();
@@ -270,4 +292,10 @@ InvoiceTemplateData NewInvoicePage::createInvoiceTemplateData() const
    data.currency = ui->currencyEdit->text();
    data.notes = ui->notesEdit->text();
    return data;
+}
+
+void NewInvoicePage::setError(const QString& description)
+{
+   ui->errorLabel->setText(description);
+   ui->errorLabel->show();
 }

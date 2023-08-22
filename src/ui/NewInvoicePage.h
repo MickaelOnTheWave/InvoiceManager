@@ -40,6 +40,7 @@ private slots:
     void onClientComboChange(int index);
     void onAddInvoiceDetail();
     void onCreateInvoice();
+    void onCancel();
 
     void onTodayClicked();
     void onLastDayOfMonthClicked();
@@ -72,6 +73,8 @@ private:
     QString getCssFile() const;
 
     InvoiceTemplateData createInvoiceTemplateData() const;
+
+    void setError(const QString& description);
 
     Ui::NewInvoicePage *ui;
     ClientModel* clientModel;

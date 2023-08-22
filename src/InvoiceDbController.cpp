@@ -146,6 +146,15 @@ bool InvoiceDbController::writeInvoice(const int invoiceId, const int clientId, 
     return false;
 }
 
+bool InvoiceDbController::invoiceExists(const int id) const
+{
+   QSqlQuery query;
+   query.prepare("SELECT id FROM invoice WHERE id = :id LIMIT 1");
+   query.bindValue(":id", id);
+   const bool result = query.exec();
+   return (result && query.next());
+}
+
 QString InvoiceDbController::getUserCompanyName() const
 {
     QSqlQuery query(db);
