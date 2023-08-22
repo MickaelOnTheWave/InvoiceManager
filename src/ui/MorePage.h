@@ -7,6 +7,7 @@
 
 #include "ClientModel.h"
 #include "FileResourceModel.h"
+#include "InvoiceDbController.h"
 
 namespace Ui {
 class MorePage;
@@ -19,6 +20,8 @@ class MorePage : public QWidget
 public:
     explicit MorePage(QWidget *parent = nullptr);
     ~MorePage();
+
+   void setController(InvoiceDbController* _controller);
 
     void connectViewsToModels(ClientModel* _clientModel, FileResourceModel *_templateModel,
                               FileResourceModel* _stylesheetModel);
@@ -36,11 +39,14 @@ private slots:
 
 private:
     void addDataToModel(QWidget* dataWidget, std::function<bool()> insertDataFunc);
+    bool canRemoveStylesheet(const int id) const;
+    bool isRemovalConfirmed() const;
 
     Ui::MorePage *ui;
     ClientModel* clientModel;
     FileResourceModel* templateModel;
     FileResourceModel* stylesheetModel;
+    InvoiceDbController* controller = nullptr;
 };
 
 #endif // MOREPAGE_H

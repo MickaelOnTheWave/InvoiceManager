@@ -2,6 +2,7 @@
 #include "ui_MorePage.h"
 
 #include <QMessageBox>
+#include <QSettings>
 
 #include "CompanyData.h"
 #include "CompanyDetailsWidget.h"
@@ -28,6 +29,11 @@ MorePage::MorePage(QWidget *parent) :
 MorePage::~MorePage()
 {
     delete ui;
+}
+
+void MorePage::setController(InvoiceDbController* _controller)
+{
+   controller = _controller;
 }
 
 void MorePage::connectViewsToModels(ClientModel *_clientModel,
@@ -69,5 +75,37 @@ void MorePage::onAddStylesheet()
 
 void MorePage::onRemoveStylesheet(const QModelIndex index)
 {
-   stylesheetModel->remove(index);
+   const int selectedId = stylesheetModel->data(stylesheetModel->index(index.row(), 0)).toInt();
+   if (!canRemoveStylesheet(selectedId))
+      return;
+
+   if (isRemovalConfirmed())
+      stylesheetModel->remove(index);
+}
+
+bool MorePage::canRemoveStylesheet(const int id) const
+{
+   const int usingCount = controller->getInvoiceCountUsingStylesheet(id);
+   if (usingCount > 0)
+   {
+      const QString message = tr("There are %1 invoices using this stylesheet. If you wish to remove it, you need to first"
+                                 " remove the invoices that are using it.").arg(usingCount);
+      QMessageBox::warning(nullptr, "Error", message);
+      return false;
+   }
+   return true;
+}
+
+bool MorePage::isRemovalConfirmed() const
+{
+   QSettings settings;
+   const bool confirmRemoval = settings.value("user/removeconfirmation", true).toBool();
+
+   if (confirmRemoval)
+   {
+      // TODO : Create dialog with a "Don't ask me again" checkbox.
+      const auto selectedButton = QMessageBox::question(nullptr, "Removal", "Are you sure?");
+      return (selectedButton == QMessageBox::Yes);
+   }
+   return true;
 }

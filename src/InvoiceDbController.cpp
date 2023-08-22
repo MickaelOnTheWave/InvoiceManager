@@ -280,7 +280,20 @@ QString InvoiceDbController::getTemplateFilename(const int id) const
 
 QString InvoiceDbController::getStylesheetFilename(const int id) const
 {
-    return getFilenameFromId("stylesheet", id);
+   return getFilenameFromId("stylesheet", id);
+}
+
+int InvoiceDbController::getInvoiceCountUsingStylesheet(const int stylesheetId) const
+{
+   QSqlQuery query;
+   const QString queryStr = "SELECT COUNT(id) FROM invoice WHERE stylesheetId = %1";
+   const bool result = query.exec(queryStr.arg(stylesheetId));
+   if (result && query.next())
+   {
+       return query.value(0).toInt();
+   }
+
+   return -1;
 }
 
 QSqlQuery InvoiceDbController::createWriteCompanyQuery(const CompanyData &data, const bool isClient)
