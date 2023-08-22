@@ -35,10 +35,12 @@ private slots:
     void onAddClient();
     void onAddTemplate();
     void onAddStylesheet();
+    void onRemoveTemplate(const QModelIndex index);
     void onRemoveStylesheet(const QModelIndex index);
 
 private:
     void addDataToModel(QWidget* dataWidget, std::function<bool()> insertDataFunc);
+    bool canRemoveTemplate(const int id) const;
     bool canRemoveStylesheet(const int id) const;
     bool isRemovalConfirmed() const;
 

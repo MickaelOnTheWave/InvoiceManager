@@ -48,6 +48,7 @@ public:
     QString getTemplateFilename(const int id) const;
     QString getStylesheetFilename(const int id) const;
 
+    int getInvoiceCountUsingTemplate(const int id) const;
     int getInvoiceCountUsingStylesheet(const int stylesheetId) const;
 
     QSqlDatabase getDatabase();

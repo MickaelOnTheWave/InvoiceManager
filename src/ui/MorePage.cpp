@@ -18,6 +18,7 @@ MorePage::MorePage(QWidget *parent) :
 
     connect(ui->clientsWidget, &DataHandlerWidget::addClicked, this, &MorePage::onAddClient);
     connect(ui->templatesWidget, &DataHandlerWidget::addClicked, this, &MorePage::onAddTemplate);
+    connect(ui->templatesWidget, &DataHandlerWidget::removeClicked, this, &MorePage::onRemoveTemplate);
     connect(ui->stylesheetsWidget, &DataHandlerWidget::addClicked, this, &MorePage::onAddStylesheet);
     connect(ui->stylesheetsWidget, &DataHandlerWidget::removeClicked, this, &MorePage::onRemoveStylesheet);
     connect(ui->backButton, &QAbstractButton::clicked, this, &MorePage::back);
@@ -73,6 +74,16 @@ void MorePage::onAddStylesheet()
    GuiUtils::OnAddStylesheet(stylesheetModel);
 }
 
+void MorePage::onRemoveTemplate(const QModelIndex index)
+{
+   const int selectedId = templateModel->data(templateModel->index(index.row(), 0)).toInt();
+   if (!canRemoveTemplate(selectedId))
+      return;
+
+   if (isRemovalConfirmed())
+      templateModel->remove(index);
+}
+
 void MorePage::onRemoveStylesheet(const QModelIndex index)
 {
    const int selectedId = stylesheetModel->data(stylesheetModel->index(index.row(), 0)).toInt();
@@ -81,6 +92,20 @@ void MorePage::onRemoveStylesheet(const QModelIndex index)
 
    if (isRemovalConfirmed())
       stylesheetModel->remove(index);
+}
+
+bool MorePage::canRemoveTemplate(const int id) const
+{
+   const int usingCount = controller->getInvoiceCountUsingTemplate(id);
+   if (usingCount > 0)
+   {
+      const QString message = tr("There are %1 invoices using this template. If you wish to remove it, you need to first"
+                                 " remove the invoices that are using it.").arg(usingCount);
+      QMessageBox::warning(nullptr, "Error", message);
+      return false;
+   }
+   return true;
+
 }
 
 bool MorePage::canRemoveStylesheet(const int id) const
