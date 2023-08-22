@@ -3,8 +3,8 @@
 
 #include <QWidget>
 
-#include "CompanyData.h"
-#include "FileResourceModel.h"
+#include "src/CompanyData.h"
+#include "src/FileResourceModel.h"
 
 namespace Ui {
 class CreatePage;

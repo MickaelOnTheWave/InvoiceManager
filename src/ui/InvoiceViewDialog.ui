@@ -47,7 +47,7 @@
   <customwidget>
    <class>InvoiceViewWidget</class>
    <extends>QWidget</extends>
-   <header>InvoiceViewWidget.h</header>
+   <header>ui/InvoiceViewWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

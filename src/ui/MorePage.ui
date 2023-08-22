@@ -120,13 +120,13 @@
   <customwidget>
    <class>TitleBarWidget</class>
    <extends>QWidget</extends>
-   <header>TitleBarWidget.h</header>
+   <header>ui/TitleBarWidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>DataHandlerWidget</class>
    <extends>QWidget</extends>
-   <header>DataHandlerWidget.h</header>
+   <header>ui/DataHandlerWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

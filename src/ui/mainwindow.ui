@@ -18,7 +18,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>6</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="startPage">
        <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -141,37 +141,37 @@
   <customwidget>
    <class>NewInvoicePage</class>
    <extends>QWidget</extends>
-   <header>NewInvoicePage.h</header>
+   <header>ui/NewInvoicePage.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>MorePage</class>
    <extends>QWidget</extends>
-   <header>MorePage.h</header>
+   <header>ui/MorePage.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>MainPage</class>
    <extends>QWidget</extends>
-   <header>MainPage.h</header>
+   <header>ui/MainPage.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>CreatePage</class>
    <extends>QWidget</extends>
-   <header>CreatePage.h</header>
+   <header>ui/CreatePage.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>SettingsPage</class>
    <extends>QWidget</extends>
-   <header>SettingsPage.h</header>
+   <header>ui/SettingsPage.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>AboutPage</class>
    <extends>QWidget</extends>
-   <header>AboutPage.h</header>
+   <header>ui/AboutPage.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

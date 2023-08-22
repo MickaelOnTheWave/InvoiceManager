@@ -344,25 +344,25 @@
   <customwidget>
    <class>TitleBarWidget</class>
    <extends>QWidget</extends>
-   <header>TitleBarWidget.h</header>
+   <header>ui/TitleBarWidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>DataHandlerWidget</class>
    <extends>QWidget</extends>
-   <header>DataHandlerWidget.h</header>
+   <header>ui/DataHandlerWidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>CompanyDetailsWidget</class>
    <extends>QWidget</extends>
-   <header>CompanyDetailsWidget.h</header>
+   <header>ui/CompanyDetailsWidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>InvoiceViewWidget</class>
    <extends>QWidget</extends>
-   <header>InvoiceViewWidget.h</header>
+   <header>ui/InvoiceViewWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

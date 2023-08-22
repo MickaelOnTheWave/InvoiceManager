@@ -14,32 +14,36 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets Sql WebKitWidgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets Sql WebKitWidgets REQUIRED)
 
-set(PROJECT_SOURCES
-        main.cpp
-        mainwindow.h mainwindow.cpp mainwindow.ui
-        CreatePage.h CreatePage.cpp CreatePage.ui
-        MainPage.h MainPage.cpp MainPage.ui
-        NewInvoicePage.h NewInvoicePage.cpp NewInvoicePage.ui
-        MorePage.h MorePage.cpp MorePage.ui
-        DbStatusForm.h DbStatusForm.cpp DbStatusForm.ui
-        DataHandlerWidget.h DataHandlerWidget.cpp DataHandlerWidget.ui
-        CompanyDetailsWidget.h CompanyDetailsWidget.cpp CompanyDetailsWidget.ui
-        FileResourceAddWidget.h FileResourceAddWidget.cpp FileResourceAddWidget.ui
-        InvoiceViewWidget.h InvoiceViewWidget.cpp InvoiceViewWidget.ui
-        NewDataDialog.h NewDataDialog.cpp NewDataDialog.ui
-        InvoiceViewDialog.h InvoiceViewDialog.cpp InvoiceViewDialog.ui
-        SettingsPage.h SettingsPage.cpp SettingsPage.ui
-        AboutPage.h AboutPage.cpp AboutPage.ui
-        TitleBarWidget.h TitleBarWidget.cpp TitleBarWidget.ui
-        GuiUtils.h GuiUtils.cpp
-        InvoiceDbController.h InvoiceDbController.cpp
-        CompanyData.h CompanyData.cpp
-        InvoiceDetail.h InvoiceDetail.cpp
-        InvoiceData.h InvoiceData.cpp
-        ClientModel.h ClientModel.cpp
-        FileResourceModel.h FileResourceModel.cpp
-        InvoiceModel.h InvoiceModel.cpp
+set(UI_SOURCES
+    src/ui/mainwindow.h src/ui/mainwindow.cpp src/ui/mainwindow.ui
+    src/ui/CreatePage.h src/ui/CreatePage.cpp src/ui/CreatePage.ui
+    src/ui/MainPage.h src/ui/MainPage.cpp src/ui/MainPage.ui
+    src/ui/NewInvoicePage.h src/ui/NewInvoicePage.cpp src/ui/NewInvoicePage.ui
+    src/ui/MorePage.h src/ui/MorePage.cpp src/ui/MorePage.ui
+    src/ui/DbStatusForm.h src/ui/DbStatusForm.cpp src/ui/DbStatusForm.ui
+    src/ui/DataHandlerWidget.h src/ui/DataHandlerWidget.cpp src/ui/DataHandlerWidget.ui
+    src/ui/CompanyDetailsWidget.h src/ui/CompanyDetailsWidget.cpp src/ui/CompanyDetailsWidget.ui
+    src/ui/FileResourceAddWidget.h src/ui/FileResourceAddWidget.cpp src/ui/FileResourceAddWidget.ui
+    src/ui/InvoiceViewWidget.h src/ui/InvoiceViewWidget.cpp src/ui/InvoiceViewWidget.ui
+    src/ui/NewDataDialog.h src/ui/NewDataDialog.cpp src/ui/NewDataDialog.ui
+    src/ui/InvoiceViewDialog.h src/ui/InvoiceViewDialog.cpp src/ui/InvoiceViewDialog.ui
+    src/ui/SettingsPage.h src/ui/SettingsPage.cpp src/ui/SettingsPage.ui
+    src/ui/AboutPage.h src/ui/AboutPage.cpp src/ui/AboutPage.ui
+    src/ui/TitleBarWidget.h src/ui/TitleBarWidget.cpp src/ui/TitleBarWidget.ui
+    src/ui/GuiUtils.h src/ui/GuiUtils.cpp
 )
+
+set(OTHER_SOURCES
+    src/main.cpp
+    src/InvoiceDbController.h src/InvoiceDbController.cpp
+    src/CompanyData.h src/CompanyData.cpp
+    src/InvoiceDetail.h src/InvoiceDetail.cpp
+    src/InvoiceData.h src/InvoiceData.cpp
+    src/ClientModel.h src/ClientModel.cpp
+    src/FileResourceModel.h src/FileResourceModel.cpp
+    src/InvoiceModel.h src/InvoiceModel.cpp
+)
+set(PROJECT_SOURCES ${UI_SOURCES} ${OTHER_SOURCES})
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(InvoiceManager
@@ -64,6 +68,7 @@ else()
     endif()
 endif()
 
+target_include_directories(InvoiceManager PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(InvoiceManager PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Sql Qt${QT_VERSION_MAJOR}::WebKitWidgets)
 
 set_target_properties(InvoiceManager PROPERTIES

@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-#include "CompanyData.h"
+#include "src/CompanyData.h"
 
 namespace Ui {
 class CompanyDetailsWidget;

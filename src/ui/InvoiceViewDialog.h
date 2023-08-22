@@ -3,7 +3,7 @@
 
 #include <QDialog>
 
-#include "InvoiceData.h"
+#include "src/InvoiceData.h"
 
 namespace Ui {
 class InvoiceViewDialog;

@@ -217,13 +217,13 @@
   <customwidget>
    <class>DataHandlerWidget</class>
    <extends>QWidget</extends>
-   <header>DataHandlerWidget.h</header>
+   <header>ui/DataHandlerWidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>CompanyDetailsWidget</class>
    <extends>QWidget</extends>
-   <header>CompanyDetailsWidget.h</header>
+   <header>ui/CompanyDetailsWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

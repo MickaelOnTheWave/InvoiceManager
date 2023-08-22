@@ -166,13 +166,13 @@
   <customwidget>
    <class>DbStatusForm</class>
    <extends>QWidget</extends>
-   <header>DbStatusForm.h</header>
+   <header>ui/DbStatusForm.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>TitleBarWidget</class>
    <extends>QWidget</extends>
-   <header>TitleBarWidget.h</header>
+   <header>ui/TitleBarWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
