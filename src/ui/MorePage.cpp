@@ -76,44 +76,20 @@ void MorePage::onAddStylesheet()
 
 void MorePage::onRemoveTemplate(const QModelIndex index)
 {
-   const int selectedId = templateModel->data(templateModel->index(index.row(), 0)).toInt();
-   if (!canRemoveTemplate(selectedId))
-      return;
-
-   if (isRemovalConfirmed())
-      templateModel->remove(index);
+   onRemoveFileResource(index, templateModel, "templateId");
 }
 
 void MorePage::onRemoveStylesheet(const QModelIndex index)
 {
-   const int selectedId = stylesheetModel->data(stylesheetModel->index(index.row(), 0)).toInt();
-   if (!canRemoveStylesheet(selectedId))
-      return;
-
-   if (isRemovalConfirmed())
-      stylesheetModel->remove(index);
+   onRemoveFileResource(index, stylesheetModel, "stylesheetId");
 }
 
-bool MorePage::canRemoveTemplate(const int id) const
+bool MorePage::canRemoveFileResource(const int id, const QString& dbField) const
 {
-   const int usingCount = controller->getInvoiceCountUsingTemplate(id);
+   const int usingCount = controller->getInvoiceCountUsingFile(id, dbField);
    if (usingCount > 0)
    {
-      const QString message = tr("There are %1 invoices using this template. If you wish to remove it, you need to first"
-                                 " remove the invoices that are using it.").arg(usingCount);
-      QMessageBox::warning(nullptr, "Error", message);
-      return false;
-   }
-   return true;
-
-}
-
-bool MorePage::canRemoveStylesheet(const int id) const
-{
-   const int usingCount = controller->getInvoiceCountUsingStylesheet(id);
-   if (usingCount > 0)
-   {
-      const QString message = tr("There are %1 invoices using this stylesheet. If you wish to remove it, you need to first"
+      const QString message = tr("There are %1 invoices using this resource. If you wish to remove it, you need to first"
                                  " remove the invoices that are using it.").arg(usingCount);
       QMessageBox::warning(nullptr, "Error", message);
       return false;
@@ -133,4 +109,15 @@ bool MorePage::isRemovalConfirmed() const
       return (selectedButton == QMessageBox::Yes);
    }
    return true;
+}
+
+void MorePage::onRemoveFileResource(const QModelIndex index, FileResourceModel* model,
+                                    const QString& dbField)
+{
+   const int selectedId = model->data(model->index(index.row(), 0)).toInt();
+   if (!canRemoveFileResource(selectedId, dbField))
+      return;
+
+   if (isRemovalConfirmed())
+      model->remove(index);
 }

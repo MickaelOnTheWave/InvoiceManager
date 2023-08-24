@@ -283,30 +283,15 @@ QString InvoiceDbController::getStylesheetFilename(const int id) const
    return getFilenameFromId("stylesheet", id);
 }
 
-// TODO remove duplication
-int InvoiceDbController::getInvoiceCountUsingTemplate(const int id) const
+int InvoiceDbController::getInvoiceCountUsingFile(const int id, const QString& fieldName) const
 {
    QSqlQuery query;
-   const QString queryStr = "SELECT COUNT(id) FROM invoice WHERE templateId = %1";
-   const bool result = query.exec(queryStr.arg(id));
+   const QString queryStr = "SELECT COUNT(id) FROM invoice WHERE %1 = %2";
+   const bool result = query.exec(queryStr.arg(fieldName).arg(id));
    if (result && query.next())
    {
        return query.value(0).toInt();
    }
-
-   return -1;
-}
-
-int InvoiceDbController::getInvoiceCountUsingStylesheet(const int stylesheetId) const
-{
-   QSqlQuery query;
-   const QString queryStr = "SELECT COUNT(id) FROM invoice WHERE stylesheetId = %1";
-   const bool result = query.exec(queryStr.arg(stylesheetId));
-   if (result && query.next())
-   {
-       return query.value(0).toInt();
-   }
-
    return -1;
 }
 

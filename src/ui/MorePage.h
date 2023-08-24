@@ -40,9 +40,10 @@ private slots:
 
 private:
     void addDataToModel(QWidget* dataWidget, std::function<bool()> insertDataFunc);
-    bool canRemoveTemplate(const int id) const;
-    bool canRemoveStylesheet(const int id) const;
+    bool canRemoveFileResource(const int id, const QString& dbField) const;
     bool isRemovalConfirmed() const;
+    void onRemoveFileResource(const QModelIndex index, FileResourceModel* model,
+                              const QString& dbField);
 
     Ui::MorePage *ui;
     ClientModel* clientModel;
