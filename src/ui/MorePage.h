@@ -35,6 +35,7 @@ private slots:
     void onAddClient();
     void onAddTemplate();
     void onAddStylesheet();
+    void onRemoveClient(const QModelIndex index);
     void onRemoveTemplate(const QModelIndex index);
     void onRemoveStylesheet(const QModelIndex index);
 

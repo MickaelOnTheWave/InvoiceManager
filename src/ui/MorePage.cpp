@@ -17,6 +17,7 @@ MorePage::MorePage(QWidget *parent) :
     ui->setupUi(this);
 
     connect(ui->clientsWidget, &DataHandlerWidget::addClicked, this, &MorePage::onAddClient);
+    connect(ui->clientsWidget, &DataHandlerWidget::removeClicked, this, &MorePage::onRemoveClient);
     connect(ui->templatesWidget, &DataHandlerWidget::addClicked, this, &MorePage::onAddTemplate);
     connect(ui->templatesWidget, &DataHandlerWidget::removeClicked, this, &MorePage::onRemoveTemplate);
     connect(ui->stylesheetsWidget, &DataHandlerWidget::addClicked, this, &MorePage::onAddStylesheet);
@@ -72,6 +73,16 @@ void MorePage::onAddTemplate()
 void MorePage::onAddStylesheet()
 {
    GuiUtils::OnAddStylesheet(stylesheetModel);
+}
+
+void MorePage::onRemoveClient(const QModelIndex index)
+{
+   // TODO : adapt this code to accept client Model.
+   // Maybe should be abstractModel instead?
+   // Maybe onRemoveFileResource should be separated?
+   // Maybe clientModel and FileResourceModel should have common ancestor?
+   // Maybe FileResourceModel should use AbstractModel facilities instead of remove?
+   //onRemoveFileResource(index, clientModel, "clientId");
 }
 
 void MorePage::onRemoveTemplate(const QModelIndex index)
