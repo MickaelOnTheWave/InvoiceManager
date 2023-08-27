@@ -18,7 +18,6 @@ public:
     bool insertAtEnd(const CompanyData& data);
     bool remove(const QModelIndex& i);
 
-private:
     void refreshModel();
 };
 

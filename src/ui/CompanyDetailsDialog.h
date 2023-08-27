@@ -21,6 +21,9 @@ public:
 
    void setData(const CompanyData& _data, const int _id);
 
+signals:
+   void createdUpdatedCompany();
+
 private slots:
    void onDataChanged();
    void onUpdateCompany();

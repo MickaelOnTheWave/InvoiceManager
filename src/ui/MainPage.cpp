@@ -4,6 +4,8 @@
 #include "CompanyDetailsDialog.h"
 #include "InvoiceViewDialog.h"
 
+// TODO add checkbox to display (or not) old parent companies
+
 MainPage::MainPage(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MainPage)
@@ -85,12 +87,18 @@ void MainPage::onOpenClient(const QModelIndex& index)
    const int companyId = clientModel->getId(index.row());
    dialog->setData(createCompanyData(index), companyId);
    dialog->show();
+   connect(dialog, &CompanyDetailsDialog::createdUpdatedCompany, this, &MainPage::onCompanyUpdateCreated);
 }
 
 void MainPage::onRemoveInvoice(const int id)
 {
    controller->removeInvoice(id);
    invoiceModel->refresh();
+}
+
+void MainPage::onCompanyUpdateCreated()
+{
+   clientModel->refreshModel();
 }
 
 void MainPage::initializeFileResourceView(QTableView *viewControl)
