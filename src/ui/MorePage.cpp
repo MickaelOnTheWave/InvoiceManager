@@ -10,8 +10,6 @@
 #include "FileResourceAddWidget.h"
 #include "NewDataDialog.h"
 
-// TODO resolve title bug
-
 MorePage::MorePage(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MorePage)
@@ -32,7 +30,12 @@ MorePage::MorePage(QWidget *parent) :
 
 MorePage::~MorePage()
 {
-    delete ui;
+   delete ui;
+}
+
+void MorePage::setCompanyTitle(const QString& title)
+{
+   ui->titleBarWidget->setTitle(title);
 }
 
 void MorePage::setController(InvoiceDbController* _controller)

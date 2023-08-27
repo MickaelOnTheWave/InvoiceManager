@@ -21,6 +21,8 @@ public:
     explicit MorePage(QWidget *parent = nullptr);
     ~MorePage();
 
+   void setCompanyTitle(const QString& title);
+
    void setController(InvoiceDbController* _controller);
 
     void connectViewsToModels(ClientModel* _clientModel, FileResourceModel *_templateModel,

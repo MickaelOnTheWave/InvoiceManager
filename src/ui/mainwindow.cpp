@@ -209,9 +209,14 @@ void MainWindow::switchToMainWidget()
 {
    QSettings settings;
    settings.setValue(lastDbKey, controller.getDatabaseFile());
-    ui->mainPage->setDisplayData(controller.getUserCompanyName(), controller.getDatabaseFile(),
-                                 controller.getDatabaseVersion());
-    ui->stackedWidget->setCurrentWidget(ui->mainPage);
+
+   const QString userCompanyName = controller.getUserCompanyName();
+
+
+   ui->mainPage->setDisplayData(userCompanyName, controller.getDatabaseFile(),
+                              controller.getDatabaseVersion());
+   ui->morePage->setCompanyTitle(userCompanyName);
+   ui->stackedWidget->setCurrentWidget(ui->mainPage);
 }
 
 void MainWindow::showError(const QString &title, const QString &details)
