@@ -104,10 +104,22 @@ bool InvoiceDbController::writeUserCompany(const CompanyData &company)
     QSqlQuery query = createWriteCompanyQuery(company, false);
     const bool result = query.exec();
     if (!result)
-    {
         lastErrorMessage = query.lastError().text();
-    }
     return result;
+}
+
+bool InvoiceDbController::writeUpdatedCompany(const CompanyData& company, const int parentCompanyId)
+{
+   QSqlQuery query = createWriteCompanyQuery(company, true);
+   const bool result = query.exec();
+   if (!result)
+   {
+       lastErrorMessage = query.lastError().text();
+       return false;
+   }
+
+   const int newCompanyId = query.lastInsertId().toInt();
+   return updateParentCompanyParenting(parentCompanyId, newCompanyId);
 }
 
 std::vector<int> InvoiceDbController::writeInvoiceDetails(const std::vector<InvoiceDetail> &details)
@@ -295,14 +307,14 @@ bool InvoiceDbController::removeInvoice(const int id)
 QSqlQuery InvoiceDbController::createWriteCompanyQuery(const CompanyData &data, const bool isClient)
 {
     QSqlQuery query;
-    query.prepare("INSERT INTO company (name, address, email, phone, isClient, childId) "
-                  "VALUES (:name, :address, :email, :phone, :isClient)");
+    query.prepare("INSERT INTO company (name, address, email, phone, isClient, idChild) "
+                  "VALUES (:name, :address, :email, :phone, :isClient, :idChild)");
     query.bindValue(":name", data.name);
     query.bindValue(":address", data.address);
     query.bindValue(":email", data.email);
     query.bindValue(":phone", data.phoneNumber);
     query.bindValue(":isClient", isClient);
-    query.bindValue(":childId", -1);
+    query.bindValue(":idChild", -1);
     return query;
 }
 
@@ -466,4 +478,11 @@ bool InvoiceDbController::removeFromInvoiceMap(const int id)
    const QString queryStr = "DELETE FROM invoicedetailmap WHERE idInvoice = %1";
    QSqlQuery query;
    return query.exec(queryStr.arg(id));
+}
+
+bool InvoiceDbController::updateParentCompanyParenting(const int targetId, const int childId)
+{
+   const QString queryStr = "UPDATE company SET idChild = %1 WHERE id = %2";
+   QSqlQuery query;
+   return query.exec(queryStr.arg(childId).arg(targetId));
 }

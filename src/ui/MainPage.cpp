@@ -81,8 +81,9 @@ void MainPage::onOpenInvoice(const QModelIndex &index)
 
 void MainPage::onOpenClient(const QModelIndex& index)
 {
-   auto dialog = new CompanyDetailsDialog(this);
-   dialog->setData(createCompanyData(index));
+   auto dialog = new CompanyDetailsDialog(controller, this);
+   const int companyId = clientModel->getId(index.row());
+   dialog->setData(createCompanyData(index), companyId);
    dialog->show();
 }
 

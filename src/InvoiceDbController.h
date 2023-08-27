@@ -26,6 +26,7 @@ public:
     QString getLastError() const;
 
     bool writeUserCompany(const CompanyData& company);
+    bool writeUpdatedCompany(const CompanyData& company, const int parentCompanyId);
     std::vector<int> writeInvoiceDetails(const std::vector<InvoiceDetail>& details);
 
     bool writeInvoice(const int invoiceId, const int clientId, const int templateId, const int stylesheetId,
@@ -76,6 +77,8 @@ private:
     bool removeFromInvoiceTable(const int id);
     bool removeFromInvoiceElements(const int id);
     bool removeFromInvoiceMap(const int id);
+
+    bool updateParentCompanyParenting(const int targetId, const int childId);
 
 
     QString dbFilename;

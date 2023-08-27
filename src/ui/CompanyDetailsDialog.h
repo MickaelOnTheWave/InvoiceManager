@@ -4,6 +4,7 @@
 #include <QDialog>
 
 #include "CompanyData.h"
+#include "InvoiceDbController.h"
 
 namespace Ui {
    class CompanyDetailsDialog;
@@ -14,10 +15,11 @@ class CompanyDetailsDialog : public QDialog
    Q_OBJECT
 
 public:
-   explicit CompanyDetailsDialog(QWidget *parent = nullptr);
+   explicit CompanyDetailsDialog(InvoiceDbController* _controller,
+                                 QWidget *parent = nullptr);
    ~CompanyDetailsDialog();
 
-   void setData(const CompanyData& _data);
+   void setData(const CompanyData& _data, const int _id);
 
 private slots:
    void onDataChanged();
@@ -26,7 +28,9 @@ private slots:
 private:
    Ui::CompanyDetailsDialog *ui;
 
+   InvoiceDbController* controller;
    CompanyData data;
+   int companyId;
 };
 
 #endif // COMPANYDETAILSDIALOG_H
