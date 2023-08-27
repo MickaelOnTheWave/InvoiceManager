@@ -16,6 +16,7 @@ public:
     CompanyData getDataAtRow(const int i) const;
 
     bool insertAtEnd(const CompanyData& data);
+    bool remove(const QModelIndex& i);
 
 private:
     void refreshModel();

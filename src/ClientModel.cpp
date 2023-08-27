@@ -44,6 +44,17 @@ bool ClientModel::insertAtEnd(const CompanyData &data)
     return result;
 }
 
+bool ClientModel::remove(const QModelIndex& i)
+{
+   QString queryStr = "DELETE FROM company WHERE id = %1";
+   const int id = data(index(i.row(), 0)).toInt();
+   QSqlQuery query;
+   const bool result = query.exec(queryStr.arg(id));
+   if (result)
+      refreshModel();
+   return result;
+}
+
 void ClientModel::refreshModel()
 {
     setQuery("SELECT * FROM company WHERE isClient = TRUE");

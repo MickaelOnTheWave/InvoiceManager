@@ -45,6 +45,8 @@ private:
     bool isRemovalConfirmed() const;
     void onRemoveFileResource(const QModelIndex index, FileResourceModel* model,
                               const QString& dbField);
+    void onRemoveFromModel(const QModelIndex& index, QAbstractItemModel* model,
+                           const QString& dbField,std::function<void(const QModelIndex&)> deleteFunc);
 
     Ui::MorePage *ui;
     ClientModel* clientModel;

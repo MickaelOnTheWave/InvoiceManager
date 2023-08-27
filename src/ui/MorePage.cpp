@@ -77,12 +77,10 @@ void MorePage::onAddStylesheet()
 
 void MorePage::onRemoveClient(const QModelIndex index)
 {
-   // TODO : adapt this code to accept client Model.
-   // Maybe should be abstractModel instead?
-   // Maybe onRemoveFileResource should be separated?
-   // Maybe clientModel and FileResourceModel should have common ancestor?
-   // Maybe FileResourceModel should use AbstractModel facilities instead of remove?
-   //onRemoveFileResource(index, clientModel, "clientId");
+   auto deleter = [this] (const QModelIndex& index) {
+      clientModel->remove(index);
+   };
+   onRemoveFromModel(index, clientModel, "clientId", deleter);
 }
 
 void MorePage::onRemoveTemplate(const QModelIndex index)
@@ -125,10 +123,19 @@ bool MorePage::isRemovalConfirmed() const
 void MorePage::onRemoveFileResource(const QModelIndex index, FileResourceModel* model,
                                     const QString& dbField)
 {
+   auto deleter = [model](const QModelIndex& index) {
+      model->remove(index);
+   };
+   onRemoveFromModel(index, model, dbField, deleter);
+}
+
+void MorePage::onRemoveFromModel(const QModelIndex& index, QAbstractItemModel* model, const QString& dbField,
+                                 std::function<void (const QModelIndex&)> deleteFunc)
+{
    const int selectedId = model->data(model->index(index.row(), 0)).toInt();
    if (!canRemoveFileResource(selectedId, dbField))
       return;
 
    if (isRemovalConfirmed())
-      model->remove(index);
+      deleteFunc(index);
 }
