@@ -1,9 +1,8 @@
 #include "MainPage.h"
 #include "ui_MainPage.h"
 
-#include "CompanyDetailsWidget.h"
+#include "CompanyDetailsDialog.h"
 #include "InvoiceViewDialog.h"
-#include "NewDataDialog.h"
 
 MainPage::MainPage(QWidget *parent) :
     QWidget(parent),
@@ -82,10 +81,8 @@ void MainPage::onOpenInvoice(const QModelIndex &index)
 
 void MainPage::onOpenClient(const QModelIndex& index)
 {
-   auto companyWidget = new CompanyDetailsWidget();
-   companyWidget->fill(createCompanyData(index));
-   auto dialog = new NewDataDialog(companyWidget, this);
-   dialog->setWindowTitle("Company Details");
+   auto dialog = new CompanyDetailsDialog(this);
+   dialog->setData(createCompanyData(index));
    dialog->show();
 }
 

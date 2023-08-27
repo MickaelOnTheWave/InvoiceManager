@@ -25,7 +25,9 @@ bool InvoiceDbController::createDb(const QString &filename)
     createDbConnection(filename);
 
     QSqlQuery query;
-    if (!query.exec("CREATE TABLE company (id INTEGER primary key, name TEXT, address TEXT, email TEXT, phone TEXT, isClient BOOLEAN)"))
+    // TODO change isClient to companyType table
+    if (!query.exec("CREATE TABLE company (id INTEGER primary key, name TEXT, address TEXT, email TEXT, phone TEXT, "
+                    "isClient BOOLEAN, idChild INTEGER)"))
     {
         lastErrorMessage = query.lastError().text();
         return false;
@@ -293,13 +295,14 @@ bool InvoiceDbController::removeInvoice(const int id)
 QSqlQuery InvoiceDbController::createWriteCompanyQuery(const CompanyData &data, const bool isClient)
 {
     QSqlQuery query;
-    query.prepare("INSERT INTO company (name, address, email, phone, isClient) "
+    query.prepare("INSERT INTO company (name, address, email, phone, isClient, childId) "
                   "VALUES (:name, :address, :email, :phone, :isClient)");
     query.bindValue(":name", data.name);
     query.bindValue(":address", data.address);
     query.bindValue(":email", data.email);
     query.bindValue(":phone", data.phoneNumber);
     query.bindValue(":isClient", isClient);
+    query.bindValue(":childId", -1);
     return query;
 }
 
