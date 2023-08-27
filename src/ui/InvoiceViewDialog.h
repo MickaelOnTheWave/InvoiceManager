@@ -19,8 +19,15 @@ public:
 
     void setData(const InvoiceTemplateData& data);
 
+signals:
+    void deleteConfirmed(const int id);
+
+private slots:
+    void onDeleteClicked();
+
 private:
     Ui::InvoiceViewDialog *ui;
+    InvoiceTemplateData invoiceData;
 };
 
 #endif // INVOICEVIEWDIALOG_H

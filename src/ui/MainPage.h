@@ -42,6 +42,7 @@ signals:
 private slots:
     void onOpenInvoice(const QModelIndex& index);
     void onOpenClient(const QModelIndex& index);
+    void onRemoveInvoice(const int id);
 
 private:
     void initializeFileResourceView(QTableView* viewControl);

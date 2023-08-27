@@ -77,6 +77,7 @@ void MainPage::onOpenInvoice(const QModelIndex &index)
     auto dialog = new InvoiceViewDialog(this);
     dialog->setData(createInvoiceTemplateData(index));
     dialog->show();
+    connect(dialog, &InvoiceViewDialog::deleteConfirmed, this, &MainPage::onRemoveInvoice);
 }
 
 void MainPage::onOpenClient(const QModelIndex& index)
@@ -86,6 +87,12 @@ void MainPage::onOpenClient(const QModelIndex& index)
    auto dialog = new NewDataDialog(companyWidget, this);
    dialog->setWindowTitle("Company Details");
    dialog->show();
+}
+
+void MainPage::onRemoveInvoice(const int id)
+{
+   controller->removeInvoice(id);
+   invoiceModel->refresh();
 }
 
 void MainPage::initializeFileResourceView(QTableView *viewControl)

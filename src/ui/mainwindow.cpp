@@ -21,7 +21,7 @@
 // - Add versioning to clients / company
 // - Add template/stylesheet contents to DB
 
-const QString appVersion = "0.7";
+const QString appVersion = "0.8";
 const QString lastDbKey = "lastdbfile";
 
 

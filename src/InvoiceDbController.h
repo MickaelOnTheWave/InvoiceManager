@@ -50,6 +50,8 @@ public:
 
     int getInvoiceCountUsingFile(const int id, const QString& fieldName) const;
 
+    bool removeInvoice(const int id);
+
     QSqlDatabase getDatabase();
 
     static QSqlQuery createWriteCompanyQuery(const CompanyData& data, const bool isClient);
@@ -69,6 +71,12 @@ private:
     CompanyData getCompanyData(const int id) const;
 
     std::vector<InvoiceDetail> createInvoiceDetails(const int id) const;
+    std::vector<int> getInvoiceElements(const int invoiceId) const;
+
+    bool removeFromInvoiceTable(const int id);
+    bool removeFromInvoiceElements(const int id);
+    bool removeFromInvoiceMap(const int id);
+
 
     QString dbFilename;
     QSqlDatabase db; // TODO : remove this. See tip from Qt documentation.

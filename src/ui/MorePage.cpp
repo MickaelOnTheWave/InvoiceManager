@@ -10,6 +10,8 @@
 #include "FileResourceAddWidget.h"
 #include "NewDataDialog.h"
 
+// TODO resolve title bug
+
 MorePage::MorePage(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MorePage)

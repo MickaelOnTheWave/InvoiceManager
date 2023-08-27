@@ -111,9 +111,6 @@ bool InvoiceDbController::writeUserCompany(const CompanyData &company)
 std::vector<int> InvoiceDbController::writeInvoiceDetails(const std::vector<InvoiceDetail> &details)
 {
     std::vector<int> insertedIds;
-    // Fail safe behaviour : insert elements one by one.
-    // Once we have an answer from StackOverflow we can do the batch insert.
-
     for (const auto& detail : details)
     {
         QSqlQuery query;
@@ -123,18 +120,6 @@ std::vector<int> InvoiceDbController::writeInvoiceDetails(const std::vector<Invo
         if (query.exec())
             insertedIds.push_back(query.lastInsertId().toInt());
     }
-
-
-
-/*    QSqlQuery query(db);
-    const bool result = query.exec(createInvoiceDetailsWriteQuery(details));
-
-    std::vector<int> insertedIds;
-    if (result)
-    {
-        while (query.next())
-            insertedIds.push_back(query.value(0).toInt());
-    }*/
     return insertedIds;
 }
 
@@ -295,6 +280,16 @@ int InvoiceDbController::getInvoiceCountUsingFile(const int id, const QString& f
    return -1;
 }
 
+bool InvoiceDbController::removeInvoice(const int id)
+{
+   const bool result = removeFromInvoiceTable(id);
+   if (!result)
+      return false;
+
+   removeFromInvoiceElements(id);
+   return removeFromInvoiceElements(id);
+}
+
 QSqlQuery InvoiceDbController::createWriteCompanyQuery(const CompanyData &data, const bool isClient)
 {
     QSqlQuery query;
@@ -410,24 +405,62 @@ std::vector<InvoiceDetail> InvoiceDbController::createInvoiceDetails(const int i
 {
    std::vector<InvoiceDetail> details;
 
-   const QString queryStr = "SELECT idElement FROM invoicedetailmap WHERE idInvoice = %1";
-   QSqlQuery query;
-   const bool ok = query.exec(queryStr.arg(id));
-   if (ok)
+   const std::vector<int> elementsIds = getInvoiceElements(id);
+   for (const int elementId : elementsIds)
    {
-       while (query.next())
-       {
-           const int elementId = query.value(0).toInt();
-           const QString queryStr = "SELECT description, value FROM invoiceelement WHERE id = %1";
-           const bool ok = query.exec(queryStr.arg(elementId));
-           if (ok && query.next())
-           {
-               const QString service = query.value(0).toString();
-               const double value = query.value(1).toDouble();
-               details.emplace_back(service, value);
-           }
-       }
+      const QString queryStr = "SELECT description, value FROM invoiceelement WHERE id = %1";
+      QSqlQuery query;
+      const bool ok = query.exec(queryStr.arg(elementId));
+      if (ok && query.next())
+      {
+          const QString service = query.value(0).toString();
+          const double value = query.value(1).toDouble();
+          details.emplace_back(service, value);
+      }
    }
 
    return details;
+}
+
+std::vector<int> InvoiceDbController::getInvoiceElements(const int invoiceId) const
+{
+   std::vector<int> elementsIds;
+
+   const QString queryStr = "SELECT idElement FROM invoicedetailmap WHERE idInvoice = %1";
+   QSqlQuery query;
+   const bool ok = query.exec(queryStr.arg(invoiceId));
+   if (ok)
+   {
+      while (query.next())
+         elementsIds.push_back(query.value(0).toInt());
+   }
+   return elementsIds;
+}
+
+bool InvoiceDbController::removeFromInvoiceTable(const int id)
+{
+   const QString queryStr = "DELETE FROM invoice WHERE id = %1";
+   QSqlQuery query;
+   return query.exec(queryStr.arg(id));
+}
+
+bool InvoiceDbController::removeFromInvoiceElements(const int id)
+{
+   const std::vector<int> invoiceElementsIds = getInvoiceElements(id);
+   for (const int elementId : invoiceElementsIds)
+   {
+      const QString queryStr = "DELETE FROM invoiceelement WHERE id = %1";
+      QSqlQuery query;
+      const bool result = query.exec(queryStr.arg(elementId));
+      if (!result)
+         return false;
+   }
+   return true;
+}
+
+bool InvoiceDbController::removeFromInvoiceMap(const int id)
+{
+   const QString queryStr = "DELETE FROM invoicedetailmap WHERE idInvoice = %1";
+   QSqlQuery query;
+   return query.exec(queryStr.arg(id));
 }
