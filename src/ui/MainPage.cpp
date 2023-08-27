@@ -58,9 +58,10 @@ void MainPage::connectViewsToModels(ClientModel *_clientModel, QAbstractItemMode
     ui->stylesheetsView->setModel(stylesheetModel);
     ui->invoiceContentView->setModel(invoiceModel);
 
-    ui->clientsView->hideColumn(0);
-    ui->clientsView->hideColumn(2);
-    ui->clientsView->hideColumn(5);
+    ui->clientsView->hideColumn(0); // Id
+    ui->clientsView->hideColumn(2); // Address
+    ui->clientsView->hideColumn(5); // isClient
+    ui->clientsView->hideColumn(6); // idChild
     ui->invoiceContentView->hideColumn(0);
 
     initializeFileResourceView(ui->templatesView);

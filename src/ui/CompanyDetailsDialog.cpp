@@ -36,4 +36,5 @@ void CompanyDetailsDialog::onUpdateCompany()
 {
    controller->writeUpdatedCompany(ui->companyWidget->getData(), companyId);
    emit createdUpdatedCompany();
+   close();
 }

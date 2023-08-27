@@ -51,13 +51,14 @@ bool ClientModel::remove(const QModelIndex& i)
    QSqlQuery query;
    const bool result = query.exec(queryStr.arg(id));
    if (result)
+      // TODO : update parent company
       refreshModel();
    return result;
 }
 
 void ClientModel::refreshModel()
 {
-    setQuery("SELECT * FROM company WHERE isClient = TRUE");
+    setQuery("SELECT * FROM company WHERE isClient = TRUE AND idChild = -1");
     setHeaderData(0, Qt::Horizontal, tr("Id"));
     setHeaderData(1, Qt::Horizontal, tr("Name"));
     setHeaderData(2, Qt::Horizontal, tr("Address"));
