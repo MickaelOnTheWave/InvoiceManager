@@ -9,19 +9,13 @@
 #include "NewInvoicePage.h"
 #include "TitleBarWidget.h"
 
-// TODO Important :
-// - Add error management in New invoice page, specially for already existing id case
-//  - Add error field in page with error displayed in case of error
-// - Implement remove button in data handler widget
-
 // TODO Not that important :
 // - Change Date format in DB to Date
-// - Add company visualization / edit when double clicking
 // - Add sorting in UI (ProxyModels)
 // - Add versioning to clients / company
 // - Add template/stylesheet contents to DB
 
-const QString appVersion = "0.8";
+const QString appVersion = "0.81";
 const QString lastDbKey = "lastdbfile";
 
 
