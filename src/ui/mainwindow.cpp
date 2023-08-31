@@ -152,11 +152,12 @@ void MainWindow::onGoToCreateNewInvoiceFromLast()
 void MainWindow::onCreateNewInvoice()
 {
     invoiceModel->refresh();
-    ui->stackedWidget->setCurrentWidget(ui->mainPage);
+    onBackToMainPage();
 }
 
 void MainWindow::onBackToMainPage()
 {
+   ui->mainPage->update();
    ui->stackedWidget->setCurrentWidget(ui->mainPage);
 }
 
@@ -205,12 +206,10 @@ void MainWindow::switchToMainWidget()
    settings.setValue(lastDbKey, controller.getDatabaseFile());
 
    const QString userCompanyName = controller.getUserCompanyName();
-
-
    ui->mainPage->setDisplayData(userCompanyName, controller.getDatabaseFile(),
                               controller.getDatabaseVersion());
    ui->morePage->setCompanyTitle(userCompanyName);
-   ui->stackedWidget->setCurrentWidget(ui->mainPage);
+   onBackToMainPage();
 }
 
 void MainWindow::showError(const QString &title, const QString &details)

@@ -30,7 +30,13 @@ MainPage::MainPage(QWidget *parent) :
 
 MainPage::~MainPage()
 {
-    delete ui;
+   delete ui;
+}
+
+void MainPage::update()
+{
+   const bool enable = (controller->getLastUsedInvoiceId() > -1);
+   ui->newInvoiceFromLastButton->setVisible(enable);
 }
 
 void MainPage::setDisplayData(const QString &companyName, const QString& dbFile,

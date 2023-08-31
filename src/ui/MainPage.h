@@ -21,6 +21,8 @@ public:
     explicit MainPage(QWidget *parent = nullptr);
     ~MainPage();
 
+    void update();
+
     void setDisplayData(const QString &companyName, const QString& dbFile,
                         const int dbVersion);
 
