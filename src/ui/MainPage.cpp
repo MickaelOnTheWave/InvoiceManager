@@ -1,9 +1,10 @@
 #include "MainPage.h"
 #include "ui_MainPage.h"
 
-#include "CompanyDetailsWidget.h"
+#include "CompanyDetailsDialog.h"
 #include "InvoiceViewDialog.h"
-#include "NewDataDialog.h"
+
+// TODO add checkbox to display (or not) old parent companies
 
 MainPage::MainPage(QWidget *parent) :
     QWidget(parent),
@@ -57,9 +58,10 @@ void MainPage::connectViewsToModels(ClientModel *_clientModel, QAbstractItemMode
     ui->stylesheetsView->setModel(stylesheetModel);
     ui->invoiceContentView->setModel(invoiceModel);
 
-    ui->clientsView->hideColumn(0);
-    ui->clientsView->hideColumn(2);
-    ui->clientsView->hideColumn(5);
+    ui->clientsView->hideColumn(0); // Id
+    ui->clientsView->hideColumn(2); // Address
+    ui->clientsView->hideColumn(5); // isClient
+    ui->clientsView->hideColumn(6); // idChild
     ui->invoiceContentView->hideColumn(0);
 
     initializeFileResourceView(ui->templatesView);
@@ -82,17 +84,22 @@ void MainPage::onOpenInvoice(const QModelIndex &index)
 
 void MainPage::onOpenClient(const QModelIndex& index)
 {
-   auto companyWidget = new CompanyDetailsWidget();
-   companyWidget->fill(createCompanyData(index));
-   auto dialog = new NewDataDialog(companyWidget, this);
-   dialog->setWindowTitle("Company Details");
+   auto dialog = new CompanyDetailsDialog(controller, this);
+   const int companyId = clientModel->getId(index.row());
+   dialog->setData(createCompanyData(index), companyId);
    dialog->show();
+   connect(dialog, &CompanyDetailsDialog::createdUpdatedCompany, this, &MainPage::onCompanyUpdateCreated);
 }
 
 void MainPage::onRemoveInvoice(const int id)
 {
    controller->removeInvoice(id);
    invoiceModel->refresh();
+}
+
+void MainPage::onCompanyUpdateCreated()
+{
+   clientModel->refreshModel();
 }
 
 void MainPage::initializeFileResourceView(QTableView *viewControl)

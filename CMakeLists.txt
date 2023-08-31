@@ -27,6 +27,7 @@ set(UI_SOURCES
     src/ui/InvoiceViewWidget.h src/ui/InvoiceViewWidget.cpp src/ui/InvoiceViewWidget.ui
     src/ui/NewDataDialog.h src/ui/NewDataDialog.cpp src/ui/NewDataDialog.ui
     src/ui/InvoiceViewDialog.h src/ui/InvoiceViewDialog.cpp src/ui/InvoiceViewDialog.ui
+    src/ui/CompanyDetailsDialog.h src/ui/CompanyDetailsDialog.cpp src/ui/CompanyDetailsDialog.ui
     src/ui/SettingsPage.h src/ui/SettingsPage.cpp src/ui/SettingsPage.ui
     src/ui/AboutPage.h src/ui/AboutPage.cpp src/ui/AboutPage.ui
     src/ui/TitleBarWidget.h src/ui/TitleBarWidget.cpp src/ui/TitleBarWidget.ui

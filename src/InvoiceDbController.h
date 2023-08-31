@@ -15,7 +15,7 @@ class InvoiceDbController : public QObject
     Q_OBJECT
 
 public:
-    static const int currentDbVersion = 7;
+    static const int currentDbVersion = 8;
 
     InvoiceDbController();
 
@@ -26,6 +26,7 @@ public:
     QString getLastError() const;
 
     bool writeUserCompany(const CompanyData& company);
+    bool writeUpdatedCompany(const CompanyData& company, const int parentCompanyId);
     std::vector<int> writeInvoiceDetails(const std::vector<InvoiceDetail>& details);
 
     bool writeInvoice(const int invoiceId, const int clientId, const int templateId, const int stylesheetId,
@@ -54,6 +55,9 @@ public:
 
     QSqlDatabase getDatabase();
 
+    int getParentCompanyId(const int id);
+    bool updateCompanyParenting(const int targetId, const int childId);
+
     static QSqlQuery createWriteCompanyQuery(const CompanyData& data, const bool isClient);
 
 private:
@@ -76,7 +80,6 @@ private:
     bool removeFromInvoiceTable(const int id);
     bool removeFromInvoiceElements(const int id);
     bool removeFromInvoiceMap(const int id);
-
 
     QString dbFilename;
     QSqlDatabase db; // TODO : remove this. See tip from Qt documentation.

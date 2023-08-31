@@ -6,6 +6,10 @@ CompanyDetailsWidget::CompanyDetailsWidget(QWidget *parent) :
     ui(new Ui::CompanyDetailsWidget)
 {
     ui->setupUi(this);
+
+    dataControls = {ui->nameEdit, ui->phoneEdit, ui->emailEdit, ui->addressLineEdit1,
+                    ui->addressLineEdit2, ui->addressLineEdit3, ui->addressLineEdit4};
+    connectTextEditChanges();
 }
 
 CompanyDetailsWidget::~CompanyDetailsWidget()
@@ -38,14 +42,14 @@ void CompanyDetailsWidget::fill(const CompanyData &data)
 
 void CompanyDetailsWidget::reset()
 {
-    ui->nameEdit->setText("");
-    ui->emailEdit->setText("");
-    ui->phoneEdit->setText("");
+   for (auto lineEdit : dataControls)
+      lineEdit->setText("");
+}
 
-    ui->addressLineEdit1->setText("");
-    ui->addressLineEdit2->setText("");
-    ui->addressLineEdit3->setText("");
-    ui->addressLineEdit4->setText("");
+void CompanyDetailsWidget::connectTextEditChanges()
+{
+   for (auto lineEdit : dataControls)
+      connect(lineEdit, &QLineEdit::textChanged, this, &CompanyDetailsWidget::dataChanged);
 }
 
 QString CompanyDetailsWidget::buildAddress() const

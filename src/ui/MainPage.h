@@ -43,6 +43,7 @@ private slots:
     void onOpenInvoice(const QModelIndex& index);
     void onOpenClient(const QModelIndex& index);
     void onRemoveInvoice(const int id);
+    void onCompanyUpdateCreated();
 
 private:
     void initializeFileResourceView(QTableView* viewControl);

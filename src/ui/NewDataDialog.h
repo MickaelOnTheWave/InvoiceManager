@@ -13,7 +13,7 @@ class NewDataDialog : public QDialog
 
 public:
     explicit NewDataDialog(QWidget *contentWidget, QWidget *parent = nullptr);
-    ~NewDataDialog();
+    virtual ~NewDataDialog();
 
 private:
     Ui::NewDataDialog *ui;

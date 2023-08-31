@@ -8,7 +8,6 @@
 #include "CompanyDetailsWidget.h"
 #include "GuiUtils.h"
 #include "FileResourceAddWidget.h"
-#include "NewDataDialog.h"
 
 MorePage::MorePage(QWidget *parent) :
     QWidget(parent),
