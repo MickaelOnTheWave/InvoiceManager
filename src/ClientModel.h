@@ -4,13 +4,15 @@
 #include <QSqlQueryModel>
 
 #include "CompanyData.h"
+#include "InvoiceDbController.h"
 
 class ClientModel : public QSqlQueryModel
 {
     Q_OBJECT
 
 public:
-    explicit ClientModel(QObject *parent = nullptr);
+    explicit ClientModel(InvoiceDbController* _controller,
+                         QObject *parent = nullptr);
 
     int getId(const int i) const;
     CompanyData getDataAtRow(const int i) const;
@@ -19,6 +21,9 @@ public:
     bool remove(const QModelIndex& i);
 
     void refreshModel();
+
+private:
+    InvoiceDbController* controller;
 };
 
 #endif // CLIENTMODEL_H

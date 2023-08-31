@@ -119,7 +119,7 @@ bool InvoiceDbController::writeUpdatedCompany(const CompanyData& company, const 
    }
 
    const int newCompanyId = query.lastInsertId().toInt();
-   return updateParentCompanyParenting(parentCompanyId, newCompanyId);
+   return updateCompanyParenting(parentCompanyId, newCompanyId);
 }
 
 std::vector<int> InvoiceDbController::writeInvoiceDetails(const std::vector<InvoiceDetail> &details)
@@ -320,7 +320,19 @@ QSqlQuery InvoiceDbController::createWriteCompanyQuery(const CompanyData &data, 
 
 QSqlDatabase InvoiceDbController::getDatabase()
 {
-    return db;
+   return db;
+}
+
+int InvoiceDbController::getParentCompanyId(const int id)
+{
+   const QString queryStr = "SELECT id FROM company WHERE idChild = %1";
+   QSqlQuery query;
+   const bool ok = query.exec(queryStr.arg(id));
+   if (ok && query.next())
+   {
+      return query.value(0).toInt();
+   }
+   return -1;
 }
 
 bool InvoiceDbController::createDbConnection(const QString &filename)
@@ -480,7 +492,7 @@ bool InvoiceDbController::removeFromInvoiceMap(const int id)
    return query.exec(queryStr.arg(id));
 }
 
-bool InvoiceDbController::updateParentCompanyParenting(const int targetId, const int childId)
+bool InvoiceDbController::updateCompanyParenting(const int targetId, const int childId)
 {
    const QString queryStr = "UPDATE company SET idChild = %1 WHERE id = %2";
    QSqlQuery query;

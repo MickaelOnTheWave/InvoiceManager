@@ -55,6 +55,9 @@ public:
 
     QSqlDatabase getDatabase();
 
+    int getParentCompanyId(const int id);
+    bool updateCompanyParenting(const int targetId, const int childId);
+
     static QSqlQuery createWriteCompanyQuery(const CompanyData& data, const bool isClient);
 
 private:
@@ -77,9 +80,6 @@ private:
     bool removeFromInvoiceTable(const int id);
     bool removeFromInvoiceElements(const int id);
     bool removeFromInvoiceMap(const int id);
-
-    bool updateParentCompanyParenting(const int targetId, const int childId);
-
 
     QString dbFilename;
     QSqlDatabase db; // TODO : remove this. See tip from Qt documentation.

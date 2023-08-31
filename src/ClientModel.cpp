@@ -6,8 +6,10 @@
 #include <QSqlField>
 #include <QSqlRecord>
 
-ClientModel::ClientModel(QObject *parent)
-    : QSqlQueryModel(parent)
+ClientModel::ClientModel(InvoiceDbController* _controller,
+                         QObject *parent)
+    : QSqlQueryModel(parent),
+      controller(_controller)
 {
     refreshModel();
 }
@@ -46,12 +48,19 @@ bool ClientModel::insertAtEnd(const CompanyData &data)
 
 bool ClientModel::remove(const QModelIndex& i)
 {
-   QString queryStr = "DELETE FROM company WHERE id = %1";
    const int id = data(index(i.row(), 0)).toInt();
+   const int parentCompanyId = controller->getParentCompanyId(id);
+   if (parentCompanyId > -1)
+   {
+      const bool result = controller->updateCompanyParenting(parentCompanyId, -1);
+      if (!result)
+         return false;
+   }
+
+   QString queryStr = "DELETE FROM company WHERE id = %1";
    QSqlQuery query;
    const bool result = query.exec(queryStr.arg(id));
    if (result)
-      // TODO : update parent company
       refreshModel();
    return result;
 }
