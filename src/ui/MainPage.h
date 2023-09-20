@@ -47,6 +47,8 @@ private slots:
     void onRemoveInvoice(const int id);
     void onCompanyUpdateCreated();
 
+    void onInvoiceHeaderClicked(int logicalIndex);
+
 private:
     void initializeFileResourceView(QTableView* viewControl);
     void setViewDefaults(QTableView* view);

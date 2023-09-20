@@ -1,6 +1,8 @@
 #include "MainPage.h"
 #include "ui_MainPage.h"
 
+#include <QSortFilterProxyModel>
+
 #include "CompanyDetailsDialog.h"
 #include "InvoiceViewDialog.h"
 
@@ -26,6 +28,8 @@ MainPage::MainPage(QWidget *parent) :
     setViewDefaults(ui->clientsView);
     setViewDefaults(ui->templatesView);
     setViewDefaults(ui->stylesheetsView);
+
+    ui->invoiceContentView->horizontalHeader()->setSortIndicatorShown(true);
 }
 
 MainPage::~MainPage()
@@ -62,7 +66,11 @@ void MainPage::connectViewsToModels(ClientModel *_clientModel, QAbstractItemMode
     ui->clientsView->setModel(clientModel);
     ui->templatesView->setModel(templateModel);
     ui->stylesheetsView->setModel(stylesheetModel);
-    ui->invoiceContentView->setModel(invoiceModel);
+
+   auto proxyModel = new QSortFilterProxyModel(this);
+   proxyModel->setSourceModel(invoiceModel);
+   ui->invoiceContentView->setModel(proxyModel);
+   ui->invoiceContentView->setSortingEnabled(true);
 
     ui->clientsView->hideColumn(0); // Id
     ui->clientsView->hideColumn(2); // Address
@@ -78,6 +86,9 @@ void MainPage::connectViewsToModels(ClientModel *_clientModel, QAbstractItemMode
 
     ui->invoiceContentView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
     ui->invoiceContentView->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
+
+    auto header = ui->invoiceContentView->horizontalHeader();
+    connect(header, &QHeaderView::sectionClicked, this, &MainPage::onInvoiceHeaderClicked);
 }
 
 void MainPage::onOpenInvoice(const QModelIndex &index)
@@ -106,6 +117,12 @@ void MainPage::onRemoveInvoice(const int id)
 void MainPage::onCompanyUpdateCreated()
 {
    clientModel->refreshModel();
+}
+
+void MainPage::onInvoiceHeaderClicked(int logicalIndex)
+{
+   auto view = ui->invoiceContentView;
+   view->sortByColumn(logicalIndex, view->horizontalHeader()->sortIndicatorOrder());
 }
 
 void MainPage::initializeFileResourceView(QTableView *viewControl)
