@@ -1,6 +1,7 @@
 #include "InvoiceSortProxyModel.h"
 
 #include <QDate>
+#include <QLocale>
 
 InvoiceSortProxyModel::InvoiceSortProxyModel(QObject *parent)
    : QSortFilterProxyModel{parent}
@@ -17,8 +18,9 @@ bool InvoiceSortProxyModel::lessThan(const QModelIndex& left, const QModelIndex&
    const int dateColumn = 4;
    if (left.column() == amountColumn)
    {
-      const double leftDouble = leftData.toDouble();
-      const double rightDouble = rightData.toDouble();
+      QLocale locale(QLocale::English);
+      const double leftDouble = locale.toDouble(leftData.toString());
+      const double rightDouble = locale.toDouble(rightData.toString());
       if (isEqual(leftDouble, rightDouble))
          return dateLessThan(left, right);
       return leftDouble < rightDouble;
