@@ -1,9 +1,24 @@
 #include "InvoiceModel.h"
 
+#include <QLocale>
+
 InvoiceModel::InvoiceModel(QObject *parent)
     : QSqlQueryModel(parent)
 {
-    refresh();
+   refresh();
+}
+
+QVariant InvoiceModel::data(const QModelIndex& item, int role) const
+{
+   QVariant targetData = QSqlQueryModel::data(item, role);
+
+   const int amountColumn = 2;
+   if (role == Qt::DisplayRole && item.column() == amountColumn && targetData.isValid())
+   {
+      const double amountValue = targetData.toDouble();
+      return QVariant(QLocale(QLocale::English).toString(amountValue, 'f', 2));
+   }
+   return targetData;
 }
 
 void InvoiceModel::refresh()

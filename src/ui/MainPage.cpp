@@ -1,9 +1,9 @@
 #include "MainPage.h"
 #include "ui_MainPage.h"
 
-#include <QSortFilterProxyModel>
 
 #include "CompanyDetailsDialog.h"
+#include "InvoiceSortProxyModel.h"
 #include "InvoiceViewDialog.h"
 
 // TODO add checkbox to display (or not) old parent companies
@@ -67,7 +67,7 @@ void MainPage::connectViewsToModels(ClientModel *_clientModel, QAbstractItemMode
     ui->templatesView->setModel(templateModel);
     ui->stylesheetsView->setModel(stylesheetModel);
 
-   auto proxyModel = new QSortFilterProxyModel(this);
+   auto proxyModel = new InvoiceSortProxyModel(this);
    proxyModel->setSourceModel(invoiceModel);
    ui->invoiceContentView->setModel(proxyModel);
    ui->invoiceContentView->setSortingEnabled(true);
