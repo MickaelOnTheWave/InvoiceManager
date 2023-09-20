@@ -31,6 +31,7 @@ set(UI_SOURCES
     src/ui/SettingsPage.h src/ui/SettingsPage.cpp src/ui/SettingsPage.ui
     src/ui/AboutPage.h src/ui/AboutPage.cpp src/ui/AboutPage.ui
     src/ui/TitleBarWidget.h src/ui/TitleBarWidget.cpp src/ui/TitleBarWidget.ui
+    src/ui/InvoiceSortProxyModel.h src/ui/InvoiceSortProxyModel.cpp
     src/ui/GuiUtils.h src/ui/GuiUtils.cpp
 )
 

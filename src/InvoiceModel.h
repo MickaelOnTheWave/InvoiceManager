@@ -10,6 +10,8 @@ class InvoiceModel : public QSqlQueryModel
 public:
     explicit InvoiceModel(QObject *parent = nullptr);
 
+   QVariant data(const QModelIndex& item, int role = Qt::DisplayRole) const override;
+
     void refresh();
 };
 
