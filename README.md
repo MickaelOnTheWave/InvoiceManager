@@ -31,3 +31,4 @@ You should have an "InvoiceManager" executable file. You can launch it directly 
 InvoiceManager is built around Qt Framework, and as such should run on all platforms that are supported by Qt : Windows, Mac and Linux.
 Please note however that as of today, it has been tested only on Linux.
 
+This program with all its components are released according to the terms of the GNU GPLv3 license. The details about this license are provided in the LICENSE file.
