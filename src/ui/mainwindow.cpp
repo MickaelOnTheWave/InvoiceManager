@@ -10,12 +10,11 @@
 #include "TitleBarWidget.h"
 
 // TODO Not that important :
-// - Change Date format in DB to Date
-// - Add sorting in UI (ProxyModels)
 // - Add versioning to clients / company
 // - Add template/stylesheet contents to DB
+// - Change InvoiceModule to include files without needing include/ in path
 
-const QString appVersion = "0.81";
+const QString appVersion = "0.82";
 const QString lastDbKey = "lastdbfile";
 
 
