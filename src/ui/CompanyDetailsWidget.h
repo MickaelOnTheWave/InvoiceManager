@@ -4,7 +4,7 @@
 #include <QWidget>
 
 #include <QLineEdit>
-#include "src/CompanyData.h"
+#include "InvoiceModule/include/CompanyData.h"
 
 namespace Ui {
 class CompanyDetailsWidget;

@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-#include "InvoiceData.h"
+#include "InvoiceModule/include/InvoiceData.h"
 
 namespace Ui {
    class InvoiceViewWidget;

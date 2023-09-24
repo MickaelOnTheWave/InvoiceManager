@@ -6,7 +6,7 @@
 #include <QComboBox>
 
 #include "ClientModel.h"
-#include "InvoiceDbController.h"
+#include "InvoiceModule/include/InvoiceDbController.h"
 #include <QtWebKit>
 #include "FileResourceModel.h"
 

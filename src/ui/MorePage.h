@@ -7,7 +7,7 @@
 
 #include "ClientModel.h"
 #include "FileResourceModel.h"
-#include "InvoiceDbController.h"
+#include "InvoiceModule/include/InvoiceDbController.h"
 
 namespace Ui {
 class MorePage;

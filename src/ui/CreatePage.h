@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-#include "src/CompanyData.h"
+#include "InvoiceModule/include/CompanyData.h"
 #include "src/FileResourceModel.h"
 
 namespace Ui {

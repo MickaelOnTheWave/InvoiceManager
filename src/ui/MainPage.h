@@ -4,10 +4,11 @@
 #include <QTableView>
 #include <QWidget>
 
+#include "InvoiceModule/include/InvoiceDbController.h"
+#include "InvoiceModule/include/InvoiceData.h"
+
 #include "ClientModel.h"
-#include "InvoiceDbController.h"
 #include "InvoiceModel.h"
-#include "InvoiceData.h"
 
 namespace Ui {
 class MainPage;

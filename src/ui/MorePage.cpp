@@ -4,7 +4,7 @@
 #include <QMessageBox>
 #include <QSettings>
 
-#include "CompanyData.h"
+#include "InvoiceModule/include/CompanyData.h"
 #include "CompanyDetailsWidget.h"
 #include "GuiUtils.h"
 #include "FileResourceAddWidget.h"

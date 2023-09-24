@@ -14,6 +14,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets Sql WebKitWidgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets Sql WebKitWidgets REQUIRED)
 
+add_subdirectory(InvoiceModule)
+
 set(UI_SOURCES
     src/ui/mainwindow.h src/ui/mainwindow.cpp src/ui/mainwindow.ui
     src/ui/CreatePage.h src/ui/CreatePage.cpp src/ui/CreatePage.ui
@@ -37,10 +39,6 @@ set(UI_SOURCES
 
 set(OTHER_SOURCES
     src/main.cpp
-    src/InvoiceDbController.h src/InvoiceDbController.cpp
-    src/CompanyData.h src/CompanyData.cpp
-    src/InvoiceDetail.h src/InvoiceDetail.cpp
-    src/InvoiceData.h src/InvoiceData.cpp
     src/ClientModel.h src/ClientModel.cpp
     src/FileResourceModel.h src/FileResourceModel.cpp
     src/InvoiceModel.h src/InvoiceModel.cpp
@@ -71,7 +69,10 @@ else()
 endif()
 
 target_include_directories(InvoiceManager PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
-target_link_libraries(InvoiceManager PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Sql Qt${QT_VERSION_MAJOR}::WebKitWidgets)
+target_link_libraries(InvoiceManager PRIVATE
+    Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Sql Qt${QT_VERSION_MAJOR}::WebKitWidgets
+    InvoiceModule
+)
 
 set_target_properties(InvoiceManager PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
