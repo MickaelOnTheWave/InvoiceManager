@@ -47,27 +47,27 @@
 <context>
     <name>ClientModel</name>
     <message>
-        <location filename="../src/ClientModel.cpp" line="71"/>
+        <location filename="../src/ClientModel.cpp" line="89"/>
         <source>Id</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ClientModel.cpp" line="72"/>
+        <location filename="../src/ClientModel.cpp" line="90"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ClientModel.cpp" line="73"/>
+        <location filename="../src/ClientModel.cpp" line="91"/>
         <source>Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ClientModel.cpp" line="74"/>
+        <location filename="../src/ClientModel.cpp" line="92"/>
         <source>Email</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ClientModel.cpp" line="75"/>
+        <location filename="../src/ClientModel.cpp" line="93"/>
         <source>Phone number</source>
         <translation type="unfinished"></translation>
     </message>
@@ -226,7 +226,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/FileResourceAddWidget.cpp" line="33"/>
+        <location filename="../src/ui/FileResourceAddWidget.cpp" line="51"/>
         <source>Select a file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -234,17 +234,17 @@
 <context>
     <name>FileResourceModel</name>
     <message>
-        <location filename="../src/FileResourceModel.cpp" line="10"/>
+        <location filename="../src/FileResourceModel.cpp" line="28"/>
         <source>Id</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/FileResourceModel.cpp" line="11"/>
+        <location filename="../src/FileResourceModel.cpp" line="29"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/FileResourceModel.cpp" line="12"/>
+        <location filename="../src/FileResourceModel.cpp" line="30"/>
         <source>File</source>
         <translation type="unfinished"></translation>
     </message>
@@ -277,7 +277,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/InvoiceViewDialog.cpp" line="28"/>
+        <location filename="../src/ui/InvoiceViewDialog.cpp" line="46"/>
         <source>This invoice will be permanently removed from the database.Are you sure you want to proceed ?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -381,19 +381,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="70"/>
-        <location filename="../src/ui/mainwindow.cpp" line="93"/>
+        <location filename="../src/ui/mainwindow.cpp" line="87"/>
+        <location filename="../src/ui/mainwindow.cpp" line="110"/>
         <source>Select an existing Invoice Database file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="71"/>
-        <location filename="../src/ui/mainwindow.cpp" line="94"/>
+        <location filename="../src/ui/mainwindow.cpp" line="88"/>
+        <location filename="../src/ui/mainwindow.cpp" line="111"/>
         <source>Invoice Database (*.idb)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="177"/>
+        <location filename="../src/ui/mainwindow.cpp" line="194"/>
         <source>Open Last Db (%1)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -431,12 +431,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/MorePage.cpp" line="67"/>
+        <location filename="../src/ui/MorePage.cpp" line="85"/>
         <source>New Client</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/MorePage.cpp" line="105"/>
+        <location filename="../src/ui/MorePage.cpp" line="123"/>
         <source>There are %1 invoices using this resource. If you wish to remove it, you need to first remove the invoices that are using it.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -542,12 +542,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/NewInvoicePage.cpp" line="22"/>
+        <location filename="../src/ui/NewInvoicePage.cpp" line="40"/>
         <source>Service</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/NewInvoicePage.cpp" line="23"/>
+        <location filename="../src/ui/NewInvoicePage.cpp" line="41"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
