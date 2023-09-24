@@ -32,9 +32,8 @@
 // - Add template/stylesheet contents to DB
 // - Change InvoiceModule to include files without needing include/ in path
 
-const QString appVersion = "0.82";
+const QString appVersion = "0.9";
 const QString lastDbKey = "lastdbfile";
-
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
