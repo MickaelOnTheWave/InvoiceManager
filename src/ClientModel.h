@@ -3,8 +3,8 @@
 
 #include <QSqlQueryModel>
 
-#include "CompanyData.h"
-#include "InvoiceDbController.h"
+#include "InvoiceModule/include/CompanyData.h"
+#include "InvoiceModule/include/InvoiceDbController.h"
 
 class ClientModel : public QSqlQueryModel
 {

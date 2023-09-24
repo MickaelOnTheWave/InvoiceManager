@@ -7,7 +7,7 @@
 #include "InvoiceModel.h"
 #include "FileResourceModel.h"
 
-#include "InvoiceDbController.h"
+#include "InvoiceModule/include/InvoiceDbController.h"
 #include "DbStatusForm.h"
 
 QT_BEGIN_NAMESPACE
