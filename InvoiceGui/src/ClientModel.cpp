@@ -19,7 +19,7 @@
 #include "ClientModel.h"
 
 #include <QSqlQuery>
-#include "InvoiceModule/include/InvoiceDbController.h"
+#include "InvoiceDbController.h"
 
 #include <QSqlField>
 #include <QSqlRecord>

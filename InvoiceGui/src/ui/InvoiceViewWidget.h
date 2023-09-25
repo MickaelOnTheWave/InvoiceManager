@@ -21,7 +21,7 @@
 
 #include <QWidget>
 
-#include "InvoiceModule/include/InvoiceData.h"
+#include "InvoiceData.h"
 
 namespace Ui {
    class InvoiceViewWidget;

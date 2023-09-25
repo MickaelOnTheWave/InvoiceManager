@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(InvoiceCLI LANGUAGES CXX)
+project(InvoiceCli LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -14,13 +14,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core LinguistTools REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core LinguistTools REQUIRED)
 
-set(TS_FILES InvoiceCLI_en_GB.ts)
+set(TS_FILES InvoiceCli_en_GB.ts)
 
-add_executable(InvoiceCLI
+add_executable(InvoiceCli
   src/main.cpp
   ${TS_FILES}
 )
-target_link_libraries(InvoiceCLI Qt${QT_VERSION_MAJOR}::Core)
+target_link_libraries(InvoiceCli Qt${QT_VERSION_MAJOR}::Core)
 
 if(COMMAND qt_create_translation)
     qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})

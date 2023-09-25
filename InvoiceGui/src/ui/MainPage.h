@@ -22,8 +22,8 @@
 #include <QTableView>
 #include <QWidget>
 
-#include "InvoiceModule/include/InvoiceDbController.h"
-#include "InvoiceModule/include/InvoiceData.h"
+#include "InvoiceDbController.h"
+#include "InvoiceData.h"
 
 #include "ClientModel.h"
 #include "InvoiceModel.h"

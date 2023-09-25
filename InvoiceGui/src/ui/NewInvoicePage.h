@@ -24,7 +24,7 @@
 #include <QComboBox>
 
 #include "ClientModel.h"
-#include "InvoiceModule/include/InvoiceDbController.h"
+#include "InvoiceDbController.h"
 #include <QtWebKit>
 #include "FileResourceModel.h"
 

@@ -25,7 +25,7 @@
 
 #include "ClientModel.h"
 #include "FileResourceModel.h"
-#include "InvoiceModule/include/InvoiceDbController.h"
+#include "InvoiceDbController.h"
 
 namespace Ui {
 class MorePage;

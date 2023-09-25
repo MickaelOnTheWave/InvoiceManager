@@ -21,8 +21,8 @@
 
 #include <QDialog>
 
-#include "InvoiceModule/include/CompanyData.h"
-#include "InvoiceModule/include/InvoiceDbController.h"
+#include "CompanyData.h"
+#include "InvoiceDbController.h"
 
 namespace Ui {
    class CompanyDetailsDialog;

@@ -16,32 +16,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENTMODEL_H
-#define CLIENTMODEL_H
+#ifndef CreatePage_H
+#define CreatePage_H
 
-#include <QSqlQueryModel>
+#include <QWidget>
 
-#include "InvoiceModule/include/CompanyData.h"
-#include "InvoiceModule/include/InvoiceDbController.h"
+#include "CompanyData.h"
+#include "src/FileResourceModel.h"
 
-class ClientModel : public QSqlQueryModel
+namespace Ui {
+class CreatePage;
+}
+
+class CreatePage : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit ClientModel(InvoiceDbController* _controller,
-                         QObject *parent = nullptr);
+    explicit CreatePage(QWidget *parent = nullptr);
+    ~CreatePage();
 
-    int getId(const int i) const;
-    CompanyData getDataAtRow(const int i) const;
+    void reset();
 
-    bool insertAtEnd(const CompanyData& data);
-    bool remove(const QModelIndex& i);
+    CompanyData getCompanyData() const;
 
-    void refreshModel();
+    void setModel(FileResourceModel* _templateModel,
+                  FileResourceModel* _stylesheetModel);
+
+signals:
+    void confirm();
+    void cancel();
+
+private slots:
+    void onAddStylesheet();
+    void onAddTemplate();
 
 private:
-    InvoiceDbController* controller;
+    Ui::CreatePage *ui;
+    FileResourceModel* templateModel;
+    FileResourceModel* stylesheetModel;
 };
 
-#endif // CLIENTMODEL_H
+#endif // CreatePage_H

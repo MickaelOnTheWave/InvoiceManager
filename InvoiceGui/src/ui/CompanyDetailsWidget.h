@@ -16,45 +16,44 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CreatePage_H
-#define CreatePage_H
+#ifndef COMPANYDETAILSWIDGET_H
+#define COMPANYDETAILSWIDGET_H
 
 #include <QWidget>
 
-#include "InvoiceModule/include/CompanyData.h"
-#include "src/FileResourceModel.h"
+#include <QLineEdit>
+
+#include "CompanyData.h"
 
 namespace Ui {
-class CreatePage;
+class CompanyDetailsWidget;
 }
 
-class CreatePage : public QWidget
+class CompanyDetailsWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit CreatePage(QWidget *parent = nullptr);
-    ~CreatePage();
+    explicit CompanyDetailsWidget(QWidget *parent = nullptr);
+    ~CompanyDetailsWidget();
 
+    CompanyData getData() const;
+    void fill(const CompanyData& data);
     void reset();
 
-    CompanyData getCompanyData() const;
-
-    void setModel(FileResourceModel* _templateModel,
-                  FileResourceModel* _stylesheetModel);
-
 signals:
-    void confirm();
-    void cancel();
-
-private slots:
-    void onAddStylesheet();
-    void onAddTemplate();
+    void dataChanged();
 
 private:
-    Ui::CreatePage *ui;
-    FileResourceModel* templateModel;
-    FileResourceModel* stylesheetModel;
+    void connectTextEditChanges();
+
+    QString buildAddress() const;
+
+    static void addAddressLine(QString& finalAddress, const QString& addressLine);
+    static QString getExplodedValue(const QStringList& exploded, const int index);
+
+    Ui::CompanyDetailsWidget *ui;
+    std::vector<QLineEdit*> dataControls;
 };
 
-#endif // CreatePage_H
+#endif // COMPANYDETAILSWIDGET_H

@@ -22,7 +22,7 @@
 #include <QMessageBox>
 #include <QSettings>
 
-#include "InvoiceModule/include/CompanyData.h"
+#include "CompanyData.h"
 #include "CompanyDetailsWidget.h"
 #include "GuiUtils.h"
 #include "FileResourceAddWidget.h"
