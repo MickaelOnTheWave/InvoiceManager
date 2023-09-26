@@ -273,6 +273,44 @@ InvoiceTemplateData InvoiceDbController::getInvoiceTemplateData(const int invoic
    return data;
 }
 
+std::vector<InvoiceTemplateData> InvoiceDbController::getAllInvoiceTemplateData() const
+{
+   std::vector<InvoiceTemplateData> data;
+
+   const QString queryStr = "SELECT id, companyId, clientId, templateId, stylesheetId, date, notes, currency "
+                            "FROM invoice";
+   QSqlQuery query;
+   const bool result = query.exec(queryStr);
+   if (result)
+   {
+      while (query.next())
+      {
+         InvoiceTemplateData invoiceData;
+         const int invoiceId = query.value(0).toInt();
+         const int companyId = query.value(1).toInt();
+         const int clientId = query.value(2).toInt();
+         const int templateId = query.value(3).toInt();
+         const int stylesheetId = query.value(4).toInt();
+         const QString dateStr = query.value(5).toString();
+         const QString notes = query.value(6).toString();
+         const QString currency = query.value(7).toString();
+
+         invoiceData.id = invoiceId;
+         invoiceData.date = QDate::fromString(dateStr, dateFormatStr);
+         invoiceData.notes = notes;
+         invoiceData.currency = currency;
+         invoiceData.templatePath = getTemplateFilename(templateId);
+         invoiceData.stylesheetPath = getStylesheetFilename(stylesheetId);
+         invoiceData.userCompany = getCompanyData(companyId);
+         invoiceData.clientCompany = getCompanyData(clientId);
+         invoiceData.details = createInvoiceDetails(invoiceId);
+         data.push_back(invoiceData);
+      }
+   }
+
+   return data;
+}
+
 QString InvoiceDbController::getDatabaseFile() const
 {
     return dbFilename;

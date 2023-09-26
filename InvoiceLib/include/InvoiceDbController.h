@@ -60,6 +60,7 @@ public:
 
     InvoiceData getLastInvoiceData() const;
     InvoiceTemplateData getInvoiceTemplateData(const int invoiceId) const;
+    std::vector<InvoiceTemplateData> getAllInvoiceTemplateData() const;
 
     QString getDatabaseFile() const;
     int getDatabaseVersion() const;

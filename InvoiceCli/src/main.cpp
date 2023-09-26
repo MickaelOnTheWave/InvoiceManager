@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 #include <string>
 
@@ -5,6 +6,7 @@
 #include "InvoiceDbController.h"
 
 // TODO Make ToolsLib usable lib and use it here instead of using copied cpp/h
+// TODO use same version in installer, cli, gui and everywhere
 
 using std::string;
 using std::cout;
@@ -43,10 +45,75 @@ void setupCommandLine(CommandLineManager& cli)
    cli.EnableVersionCommand(appName, appVersion, author, copyrightInfo);
 }
 
+void printInvoiceListHeader()
+{
+   cout << "|--------------------------------------------------------------------------|" << endl;
+   cout << "|  id  |                 Client             | Total value |      Date      |" << endl;
+   cout << "|--------------------------------------------------------------------------|" << endl;
+}
+
+double getTotalValue(const std::vector<InvoiceDetail> details)
+{
+   auto operation = [] (double sum, const InvoiceDetail& detail) {
+      return sum + detail.value;
+   };
+   return std::accumulate(details.begin(), details.end(), 0.0, operation);
+}
+
+// TODO Remove duplication with commandlinemanager.cpp
+string Spaces(const int spaceCount)
+{
+   string spaceStr;
+   for (int i=0; i<spaceCount; ++i)
+      spaceStr += " ";
+   return spaceStr;
+}
+
+void addLineInformation(string& lineStr, const string& data, const int minPosition, const int maxPosition)
+{
+   const int spacesToAdd = minPosition - lineStr.length();
+   if (spacesToAdd > 0)
+      lineStr += Spaces(spacesToAdd);
+
+   const int maxDataLength = maxPosition - minPosition;
+   const string dataToUse = (data.length() > maxDataLength) ? data.substr(0, maxDataLength) : data;
+   lineStr += dataToUse;
+}
+
+void addLineInformation(string& lineStr, const QString data, const int minPosition, const int maxPosition)
+{
+   addLineInformation(lineStr, data.toStdString(), minPosition, maxPosition);
+}
+
+void addLineInformation(string& lineStr, const int data, const int minPosition, const int maxPosition)
+{
+   addLineInformation(lineStr, QString::number(data), minPosition, maxPosition);
+}
+
+void addLineInformation(string& lineStr, const double data, const int minPosition, const int maxPosition)
+{
+   addLineInformation(lineStr, QString::number(data), minPosition, maxPosition);
+}
+
+void printInvoiceOneLine(const InvoiceTemplateData& data)
+{
+   string oneLinerStr;
+   addLineInformation(oneLinerStr, data.id, 1, 7);
+   addLineInformation(oneLinerStr, data.clientCompany.name, 9, 44);
+   addLineInformation(oneLinerStr, getTotalValue(data.details), 46, 57);
+   addLineInformation(oneLinerStr, data.date.toString(), 59, 75);
+   cout << oneLinerStr << endl;
+}
+
 void runListCommand(const InvoiceDbController& controller)
 {
+   const std::vector<InvoiceTemplateData> allData = controller.getAllInvoiceTemplateData();
 
+   cout << allData.size() << " invoices in database." << endl;
 
+   printInvoiceListHeader();
+   for (const auto& invoiceData : allData)
+      printInvoiceOneLine(invoiceData);
 }
 
 void runShowLastCommand(const InvoiceDbController& controller)
