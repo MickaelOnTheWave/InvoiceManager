@@ -18,6 +18,7 @@ set(TS_FILES InvoiceCli_en_GB.ts)
 
 add_executable(InvoiceCli
   src/main.cpp
+  src/commandlinemanager.cpp src/commandlinemanager.h
   ${TS_FILES}
 )
 target_link_libraries(InvoiceCli Qt${QT_VERSION_MAJOR}::Core)
