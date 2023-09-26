@@ -92,7 +92,7 @@ void addLineInformation(string& lineStr, const int data, const int minPosition, 
 
 void addLineInformation(string& lineStr, const double data, const int minPosition, const int maxPosition)
 {
-   addLineInformation(lineStr, QString::number(data), minPosition, maxPosition);
+   addLineInformation(lineStr, QString::asprintf("%.2f", data), minPosition, maxPosition);
 }
 
 void printInvoiceOneLine(const InvoiceTemplateData& data)
@@ -101,7 +101,7 @@ void printInvoiceOneLine(const InvoiceTemplateData& data)
    addLineInformation(oneLinerStr, data.id, 1, 7);
    addLineInformation(oneLinerStr, data.clientCompany.name, 9, 44);
    addLineInformation(oneLinerStr, getTotalValue(data.details), 46, 57);
-   addLineInformation(oneLinerStr, data.date.toString(), 59, 75);
+   addLineInformation(oneLinerStr, data.date.toString("dd/MM/yyyy"), 59, 75);
    cout << oneLinerStr << endl;
 }
 
