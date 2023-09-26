@@ -21,7 +21,7 @@ add_executable(InvoiceCli
   src/commandlinemanager.cpp src/commandlinemanager.h
   ${TS_FILES}
 )
-target_link_libraries(InvoiceCli Qt${QT_VERSION_MAJOR}::Core)
+target_link_libraries(InvoiceCli Qt${QT_VERSION_MAJOR}::Core InvoiceLib)
 
 if(COMMAND qt_create_translation)
     qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
