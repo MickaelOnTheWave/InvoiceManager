@@ -8,9 +8,6 @@
 // TODO Make ToolsLib usable lib and use it here instead of using copied cpp/h
 // TODO use same version in installer, cli, gui and everywhere
 // TODO Next :
-// - Add support for Show command
-// - Implement select command
-// - Remove Show last command
 // - Implement Generate PDF command
 // - Implement file template command
 // TODO Refactor all this, there should be some classes for command / printing etc
@@ -19,11 +16,14 @@ using std::string;
 using std::cout;
 using std::endl;
 
-const std::string dbCommand = "db";
-const std::string listCommand = "list";
-const std::string showCommand = "show";
-const std::string showLastCommand = "showlast";
-const std::string pdfCommand = "generatePdf";
+const string dbCommand = "db";
+const string listCommand = "list";
+const string showCommand = "show";
+const string pdfCommand = "generatePdf";
+
+const string selectParam = "select";
+const string valueParam = "value";
+const std::vector<string> selectTypes = {"first", "last", "id"};
 
 void setupCommandLine(CommandLineManager& cli)
 {
@@ -32,15 +32,16 @@ void setupCommandLine(CommandLineManager& cli)
    // Actions
    cli.AddParameter(listCommand, "List all invoices in the database");
    cli.AddParameter(showCommand, "Display a single invoice in the database");
-   cli.AddParameter(showLastCommand, "Display the last invoice in the database (by ID)");
    cli.AddParameter(pdfCommand, "Generates a PDF file of the selected invoice");
 
    // Data parameters for actions
-   cli.AddParameter("select", "Used to select a single invoice in the database.\n"
-                              "Used by show and generatePdf commands. Values can be :\n"
-                              "  first : selects the first invoice in the Dababase (by ID)\n"
-                              "  last : selects the last invoice in the Dababase (by ID)\n"
-                              "  id [ID]: selects the invoice in the Dababase with the specified ID");
+   cli.AddParameter(selectParam, "Used to select a single invoice in the database.\n"
+                                 "Used by show and generatePdf commands. Values can be :\n"
+                                 "  first : selects the first invoice in the Dababase (by ID)\n"
+                                 "  last : selects the last invoice in the Dababase (by ID)\n"
+                                 "  id : selects the invoice in the Dababase with the specified ID");
+   cli.AddParameter(valueParam, "Value to use for the select type. Can be Id, Name... whatever was\n"
+                                "specified in by the type parameter.");
    cli.AddParameter("template", "Filename template to use when generating a PDF file");
 
    cli.EnableHelpCommand();
@@ -121,19 +122,25 @@ void runListCommand(const InvoiceDbController& controller)
    printInvoiceListHeader();
    for (const auto& invoiceData : allData)
       printInvoiceOneLine(invoiceData);
+   cout << "|--------------------------------------------------------------------------|" << endl;
 }
 
-void runShowLastCommand(const InvoiceDbController& controller)
+void runShowCommand(const InvoiceDbController& controller, const int invoiceId)
 {
-   const auto lastInvoiceData = controller.getLastInvoiceData();
+   const InvoiceTemplateData data = controller.getInvoiceTemplateData(invoiceId);
 
-   cout << "Last Invoice Data :" << endl;
-   cout << "  Client id     : " << lastInvoiceData.clientId << endl;
-   cout << "  Template id   : " << lastInvoiceData.templateId << endl;
-   cout << "  Stylesheed id : " << lastInvoiceData.stylesheetId << endl;
-   cout << "  Currency      : " << lastInvoiceData.currency.toStdString() << endl;
+   const QString totalValue = QString::asprintf("%.2f", getTotalValue(data.details));
+
+   cout << "|--------------------------------------------------------------------------|" << endl;
+   cout << "|  Invoice Details                                                         |" << endl;
+   cout << "|--------------------------------------------------------------------------|" << endl;
+   cout << "  id            : " << invoiceId << endl;
+   cout << "  Client        : " << data.clientCompany.name.toStdString() << endl;
+   cout << "  Total Value   : " << totalValue.toStdString() << " " << data.currency.toStdString() << endl;
+   cout << "  Template      : " << data.templatePath.toStdString() << endl;
+   cout << "  Stylesheet    : " << data.stylesheetPath.toStdString() << endl;
+   cout << "|--------------------------------------------------------------------------|" << endl;
 }
-
 
 void executeCommands(CommandLineManager& cli)
 {
@@ -154,9 +161,25 @@ void executeCommands(CommandLineManager& cli)
       if (cli.HasParameter(listCommand))
          runListCommand(controller);
       else if (cli.HasParameter(showCommand))
-         ;// run show cmd
-      else if (cli.HasParameter(showLastCommand))
-         runShowLastCommand(controller);
+      {
+         const string selectType = cli.GetParameterValue(selectParam);
+         if (selectType.empty())
+            cout << "Error : No selection type provided." << endl;
+         else if (std::find(selectTypes.begin(), selectTypes.end(), selectType) == selectTypes.end())
+            cout << " Error : unknown selection type " << selectType << endl;
+         else
+         {
+            int invoiceId = -1;
+            if (selectType == "first")
+               invoiceId = controller.getLastUsedInvoiceId();
+            else if (selectType == "last")
+               invoiceId = controller.getLastUsedInvoiceId();
+            else if (selectType == "id")
+               invoiceId = static_cast<int>(cli.GetParameterValueAsUnsignedLong("value"));
+
+            runShowCommand(controller, invoiceId);
+         }
+      }
       else if (cli.HasParameter(pdfCommand))
          ;// run pdf cmd
    }
