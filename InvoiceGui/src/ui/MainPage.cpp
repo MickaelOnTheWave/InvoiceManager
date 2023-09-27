@@ -57,7 +57,7 @@ MainPage::~MainPage()
 
 void MainPage::update()
 {
-   const bool enable = (controller->getLastUsedInvoiceId() > -1);
+   const bool enable = (controller->getLastInvoiceId() > -1);
    ui->newInvoiceFromLastButton->setVisible(enable);
 }
 
@@ -157,10 +157,10 @@ void MainPage::setViewDefaults(QTableView *view)
     view->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
-InvoiceTemplateData MainPage::createInvoiceTemplateData(const QModelIndex& index)
+InvoiceUserData MainPage::createInvoiceTemplateData(const QModelIndex& index)
 {
    const int invoiceId = invoiceModel->data(invoiceModel->index(index.row(), 0)).toInt();
-   return controller->getInvoiceTemplateData(invoiceId);
+   return controller->getInvoiceUserData(invoiceId);
 }
 
 CompanyData MainPage::createCompanyData(const QModelIndex& index)

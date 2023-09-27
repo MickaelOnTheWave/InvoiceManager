@@ -90,7 +90,7 @@ private:
     QString getTemplateFile() const;
     QString getCssFile() const;
 
-    InvoiceTemplateData createInvoiceTemplateData() const;
+    InvoiceUserData createInvoiceTemplateData() const;
 
     void setError(const QString& description);
 

@@ -18,7 +18,7 @@
 
 #include "InvoiceData.h"
 
-InvoiceData::InvoiceData()
+InvoiceDbData::InvoiceDbData()
 {
 
 }

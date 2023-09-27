@@ -50,18 +50,23 @@ public:
     bool writeInvoice(const int invoiceId, const int clientId, const int templateId, const int stylesheetId,
                       const std::vector<int>& detailsIds, const QDate& date, const QString &notes, const QString &currency);
 
+    bool writeInvoice(const InvoiceUserData& data);
+
     bool invoiceExists(const int id) const;
+
+    InvoiceUserData toUserData(const InvoiceDbData& dbData) const;
 
     QString getUserCompanyName() const;
     int getUserCompanyId() const;
     CompanyData getUserCompanyData() const;
 
     int getFirstInvoiceId() const;
-    int getLastUsedInvoiceId() const;
+    int getLastInvoiceId() const;
 
-    InvoiceData getLastInvoiceData() const;
-    InvoiceTemplateData getInvoiceTemplateData(const int invoiceId) const;
-    std::vector<InvoiceTemplateData> getAllInvoiceTemplateData() const;
+    InvoiceDbData getLastInvoiceData() const;
+    InvoiceDbData getInvoiceDbData(const int invoiceId) const;
+    InvoiceUserData getInvoiceUserData(const int invoiceId) const;
+    std::vector<InvoiceUserData> getAllInvoiceTemplateData() const;
 
     QString getDatabaseFile() const;
     int getDatabaseVersion() const;

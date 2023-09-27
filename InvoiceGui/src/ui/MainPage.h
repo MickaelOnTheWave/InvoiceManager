@@ -72,7 +72,7 @@ private:
     void initializeFileResourceView(QTableView* viewControl);
     void setViewDefaults(QTableView* view);
 
-    InvoiceTemplateData createInvoiceTemplateData(const QModelIndex& index);
+    InvoiceUserData createInvoiceTemplateData(const QModelIndex& index);
     CompanyData createCompanyData(const QModelIndex& index);
 
     Ui::MainPage *ui;

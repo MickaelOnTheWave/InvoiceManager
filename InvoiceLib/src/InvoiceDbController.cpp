@@ -165,6 +165,13 @@ bool InvoiceDbController::writeInvoice(const int invoiceId, const int clientId, 
     return false;
 }
 
+bool InvoiceDbController::writeInvoice(const InvoiceUserData& data)
+{
+   // TODO implement
+   //return writeInfoice(data.id, data.clientCompany.)
+   return false;
+}
+
 bool InvoiceDbController::invoiceExists(const int id) const
 {
    QSqlQuery query;
@@ -172,6 +179,16 @@ bool InvoiceDbController::invoiceExists(const int id) const
    query.bindValue(":id", id);
    const bool result = query.exec();
    return (result && query.next());
+}
+
+InvoiceUserData InvoiceDbController::toUserData(const InvoiceDbData& dbData) const
+{
+   InvoiceUserData userData(dbData);
+   userData.templatePath = getTemplateFilename(dbData.templateId);
+   userData.stylesheetPath = getStylesheetFilename(dbData.stylesheetId);
+   userData.userCompany = getCompanyData(dbData.clientId);
+   userData.clientCompany = getCompanyData(dbData.clientId);
+   return userData;
 }
 
 QString InvoiceDbController::getUserCompanyName() const
@@ -217,15 +234,15 @@ int InvoiceDbController::getFirstInvoiceId() const
    return getSingleInvoiceId("ASC");
 }
 
-int InvoiceDbController::getLastUsedInvoiceId() const
+int InvoiceDbController::getLastInvoiceId() const
 {
    return getSingleInvoiceId("DESC");
 }
 
 // TODO : Remove duplication between here and getInvoiceTemplateData()
-InvoiceData InvoiceDbController::getLastInvoiceData() const
+InvoiceDbData InvoiceDbController::getLastInvoiceData() const
 {
-    InvoiceData data;
+    InvoiceDbData data;
     QSqlQuery query;
     const bool ok = query.exec("SELECT id, clientId, templateId, stylesheetId, notes, currency FROM invoice ORDER BY id DESC LIMIT 1");
     if (ok && query.next())
@@ -243,9 +260,39 @@ InvoiceData InvoiceDbController::getLastInvoiceData() const
     return data;
 }
 
-InvoiceTemplateData InvoiceDbController::getInvoiceTemplateData(const int invoiceId) const
+InvoiceDbData InvoiceDbController::getInvoiceDbData(const int invoiceId) const
 {
-   InvoiceTemplateData data;
+   InvoiceDbData data;
+   data.id = invoiceId;
+
+   const QString queryStr = "SELECT companyId, clientId, templateId, stylesheetId, date, notes, currency "
+                            "FROM invoice WHERE id = %1";
+   QSqlQuery query(queryStr.arg(invoiceId));
+   if (query.first())
+   {
+      const int companyId = query.value(0).toInt();
+      const int clientId = query.value(1).toInt();
+      const int templateId = query.value(2).toInt();
+      const int stylesheetId = query.value(3).toInt();
+      const QString dateStr = query.value(4).toString();
+      const QString notes = query.value(5).toString();
+      const QString currency = query.value(6).toString();
+
+      data.date = QDate::fromString(dateStr, dateFormatStr);
+      data.details = createInvoiceDetails(invoiceId);
+      data.notes = notes;
+      data.currency = currency;
+      data.clientId = clientId;
+      data.templateId = templateId;
+      data.stylesheetId = stylesheetId;
+   }
+
+   return data;
+}
+
+InvoiceUserData InvoiceDbController::getInvoiceUserData(const int invoiceId) const
+{
+   InvoiceUserData data;
    data.id = invoiceId;
 
    const QString queryStr = "SELECT companyId, clientId, templateId, stylesheetId, date, notes, currency "
@@ -274,9 +321,9 @@ InvoiceTemplateData InvoiceDbController::getInvoiceTemplateData(const int invoic
    return data;
 }
 
-std::vector<InvoiceTemplateData> InvoiceDbController::getAllInvoiceTemplateData() const
+std::vector<InvoiceUserData> InvoiceDbController::getAllInvoiceTemplateData() const
 {
-   std::vector<InvoiceTemplateData> data;
+   std::vector<InvoiceUserData> data;
 
    const QString queryStr = "SELECT id, companyId, clientId, templateId, stylesheetId, date, notes, currency "
                             "FROM invoice";
@@ -286,7 +333,7 @@ std::vector<InvoiceTemplateData> InvoiceDbController::getAllInvoiceTemplateData(
    {
       while (query.next())
       {
-         InvoiceTemplateData invoiceData;
+         InvoiceUserData invoiceData;
          const int invoiceId = query.value(0).toInt();
          const int companyId = query.value(1).toInt();
          const int clientId = query.value(2).toInt();

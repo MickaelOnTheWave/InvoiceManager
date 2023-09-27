@@ -35,7 +35,7 @@ InvoiceViewDialog::~InvoiceViewDialog()
    delete ui;
 }
 
-void InvoiceViewDialog::setData(const InvoiceTemplateData& data)
+void InvoiceViewDialog::setData(const InvoiceUserData& data)
 {
    invoiceData = data;
    ui->viewWidget->show(data);

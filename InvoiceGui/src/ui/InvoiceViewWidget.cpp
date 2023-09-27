@@ -33,7 +33,7 @@ InvoiceViewWidget::~InvoiceViewWidget()
    delete ui;
 }
 
-void InvoiceViewWidget::show(const InvoiceTemplateData& data)
+void InvoiceViewWidget::show(const InvoiceUserData& data)
 {
    const QString templateContent = readFileContent(data.templatePath);
    const QString previewContent = fillTemplate(templateContent, data);
@@ -55,7 +55,7 @@ QString InvoiceViewWidget::readFileContent(const QString &filename)
 }
 
 QString InvoiceViewWidget::fillTemplate(const QString& templateModel,
-                                        const InvoiceTemplateData& data)
+                                        const InvoiceUserData& data)
 {
    QString filledTemplate = templateModel;
 

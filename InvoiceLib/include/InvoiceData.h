@@ -25,34 +25,51 @@
 #include "CompanyData.h"
 #include "InvoiceDetail.h"
 
+// TODO : Create cpp with proper implementation
 class InvoiceBaseData
 {
 public:
+   InvoiceBaseData() = default;
+
+   InvoiceBaseData(const InvoiceBaseData& other)
+      : details(other.details), notes(other.notes),
+        currency(other.currency), date(other.date),
+        id(other.id)
+   {
+   }
+
    std::vector<InvoiceDetail> details;
    QString notes = "";
-   QString currency;
+   QString currency = "€";
+   QDate date;
+   int id = -1;
 };
 
-class InvoiceData : public InvoiceBaseData
+class InvoiceDbData : public InvoiceBaseData
 {
 public:
-    InvoiceData();
+    InvoiceDbData();
 
     int clientId = -1;
     int templateId = -1;
     int stylesheetId = -1;
 };
 
-class InvoiceTemplateData : public InvoiceBaseData
+class InvoiceUserData : public InvoiceBaseData
 {
 public:
+   InvoiceUserData() = default;
+   InvoiceUserData(const InvoiceBaseData& other)
+      : InvoiceBaseData(other)
+   {
+
+   }
+
    QString templatePath;
    QString stylesheetPath;
 
    CompanyData userCompany;
    CompanyData clientCompany;
-   QDate date;
-   int id;
 };
 
 #endif // INVOICEDATA_H

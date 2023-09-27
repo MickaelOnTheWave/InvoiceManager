@@ -112,7 +112,7 @@ void addLineInformation(string& lineStr, const double data, const int minPositio
    addLineInformation(lineStr, QString::asprintf("%.2f", data), minPosition, maxPosition);
 }
 
-void printInvoiceOneLine(const InvoiceTemplateData& data)
+void printInvoiceOneLine(const InvoiceUserData& data)
 {
    string oneLinerStr;
    addLineInformation(oneLinerStr, data.id, 1, 7);
@@ -124,7 +124,7 @@ void printInvoiceOneLine(const InvoiceTemplateData& data)
 
 void runListCommand(const InvoiceDbController& controller)
 {
-   const std::vector<InvoiceTemplateData> allData = controller.getAllInvoiceTemplateData();
+   const std::vector<InvoiceUserData> allData = controller.getAllInvoiceTemplateData();
 
    cout << allData.size() << " invoices in database." << endl;
 
@@ -134,7 +134,7 @@ void runListCommand(const InvoiceDbController& controller)
    cout << "|--------------------------------------------------------------------------|" << endl;
 }
 
-void printInvoiceDetails(const InvoiceTemplateData& data)
+void printInvoiceDetails(const InvoiceUserData& data)
 {
    const QString totalValue = QString::asprintf("%.2f", getTotalValue(data.details));
 
@@ -152,14 +152,18 @@ void printInvoiceDetails(const InvoiceTemplateData& data)
 
 void runCreateFromLastCommand(const InvoiceDbController& controller, const QDate& date)
 {
-   InvoiceTemplateData data = controller.getInvoiceTemplateData(controller.getLastUsedInvoiceId());
+   InvoiceDbData dbData = controller.getInvoiceDbData(controller.getLastInvoiceId());
 
-   ++data.id;
-   data.date = date;
+   InvoiceUserData userData = controller.toUserData(dbData);
+
    cout << "Here are is the invoice that will be created :" << endl;
-   printInvoiceDetails(data);
+   ++dbData.id; ++userData.id;
+   dbData.date = userData.date = date;
+   printInvoiceDetails(userData);
 
-   //controller.(data);
+   const bool ok = false;//controller.writeInvoice(dbData);
+   if (!ok)
+      cout << "Error creating new invoice." << endl;
 }
 
 void runShowCommand(const InvoiceDbController& controller, const int invoiceId)
@@ -170,7 +174,7 @@ void runShowCommand(const InvoiceDbController& controller, const int invoiceId)
       return;
    }
 
-   const InvoiceTemplateData data = controller.getInvoiceTemplateData(invoiceId);
+   const InvoiceUserData data = controller.getInvoiceUserData(invoiceId);
    printInvoiceDetails(data);
 }
 
@@ -211,7 +215,7 @@ void executeCommands(CommandLineManager& cli)
             if (selectType == "first")
                invoiceId = controller.getFirstInvoiceId();
             else if (selectType == "last")
-               invoiceId = controller.getLastUsedInvoiceId();
+               invoiceId = controller.getLastInvoiceId();
             else if (selectType == "id")
             {
                const string valueStr = cli.GetParameterValue("value");

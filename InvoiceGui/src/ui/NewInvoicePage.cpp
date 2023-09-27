@@ -88,7 +88,7 @@ void NewInvoicePage::reset()
     ui->notesEdit->setText("");
     ui->currencyEdit->setText("€");
 
-    const int nextId = controller->getLastUsedInvoiceId() + 1;
+    const int nextId = controller->getLastInvoiceId() + 1;
     ui->invoiceIdBox->setValue(nextId);
 
     onGeneratePreviewClicked();
@@ -100,10 +100,10 @@ void NewInvoicePage::resetFromLast()
     invoiceDetailsModel->removeRows(0, invoiceDetailsModel->rowCount());
     insertTotalRow();
 
-    const int nextId = controller->getLastUsedInvoiceId() + 1;
+    const int nextId = controller->getLastInvoiceId() + 1;
     ui->invoiceIdBox->setValue(nextId);
 
-    const InvoiceData data = controller->getLastInvoiceData();
+    const InvoiceDbData data = controller->getLastInvoiceData();
     ui->clientCombo->setCurrentIndex(getComboIndex(ui->clientCombo, data.clientId));
     ui->templateCombo->setCurrentIndex(getComboIndex(ui->templateCombo, data.templateId));
     ui->stylesheetCombo->setCurrentIndex(getComboIndex(ui->stylesheetCombo, data.stylesheetId));
@@ -297,9 +297,9 @@ QString NewInvoicePage::getCssFile() const
     return controller->getStylesheetFilename(stylesheetId);
 }
 
-InvoiceTemplateData NewInvoicePage::createInvoiceTemplateData() const
+InvoiceUserData NewInvoicePage::createInvoiceTemplateData() const
 {
-   InvoiceTemplateData data;
+   InvoiceUserData data;
    data.templatePath = getTemplateFile();
    data.stylesheetPath = getCssFile();
    data.id = ui->invoiceIdBox->value();

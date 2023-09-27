@@ -35,12 +35,12 @@ public:
    explicit InvoiceViewWidget(QWidget *parent = nullptr);
    ~InvoiceViewWidget();
 
-   void show(const InvoiceTemplateData& data);
+   void show(const InvoiceUserData& data);
 
 private:
    static QString readFileContent(const QString& filename);
    static QString fillTemplate(const QString& templateModel,
-                               const InvoiceTemplateData& data);
+                               const InvoiceUserData& data);
 
    static QString buildReplaceAddress(const QString& recordedAddress);
    static QString buildReplaceDetails(const std::vector<InvoiceDetail>& details);

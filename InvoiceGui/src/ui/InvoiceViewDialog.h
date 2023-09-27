@@ -35,7 +35,7 @@ public:
     explicit InvoiceViewDialog(QWidget *parent = nullptr);
     virtual ~InvoiceViewDialog();
 
-    void setData(const InvoiceTemplateData& data);
+    void setData(const InvoiceUserData& data);
 
 signals:
     void deleteConfirmed(const int id);
@@ -45,7 +45,7 @@ private slots:
 
 private:
     Ui::InvoiceViewDialog *ui;
-    InvoiceTemplateData invoiceData;
+    InvoiceUserData invoiceData;
 };
 
 #endif // INVOICEVIEWDIALOG_H
