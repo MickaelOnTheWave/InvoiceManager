@@ -56,6 +56,7 @@ public:
     int getUserCompanyId() const;
     CompanyData getUserCompanyData() const;
 
+    int getFirstInvoiceId() const;
     int getLastUsedInvoiceId() const;
 
     InvoiceData getLastInvoiceData() const;
@@ -99,6 +100,8 @@ private:
     bool removeFromInvoiceTable(const int id);
     bool removeFromInvoiceElements(const int id);
     bool removeFromInvoiceMap(const int id);
+
+    int getSingleInvoiceId(const QString& sortOrder) const;
 
     QString dbFilename;
     QSqlDatabase db; // TODO : remove this. See tip from Qt documentation.

@@ -212,13 +212,14 @@ CompanyData InvoiceDbController::getUserCompanyData() const
     return data;
 }
 
+int InvoiceDbController::getFirstInvoiceId() const
+{
+   return getSingleInvoiceId("ASC");
+}
+
 int InvoiceDbController::getLastUsedInvoiceId() const
 {
-    QSqlQuery query;
-    const bool ok = query.exec("SELECT id FROM invoice ORDER BY id DESC LIMIT 1");
-    if (ok && query.next())
-        return query.value(0).toInt();
-    return -1;
+   return getSingleInvoiceId("DESC");
 }
 
 // TODO : Remove duplication between here and getInvoiceTemplateData()
@@ -553,4 +554,15 @@ bool InvoiceDbController::updateCompanyParenting(const int targetId, const int c
    const QString queryStr = "UPDATE company SET idChild = %1 WHERE id = %2";
    QSqlQuery query;
    return query.exec(queryStr.arg(childId).arg(targetId));
+}
+
+int InvoiceDbController::getSingleInvoiceId(const QString& sortOrder) const
+{
+   const QString queryStr = "SELECT id FROM invoice ORDER BY id %1 LIMIT 1";
+   QSqlQuery query;
+   const bool ok = query.exec(queryStr.arg(sortOrder));
+   if (ok && query.next())
+       return query.value(0).toInt();
+   return -1;
+
 }

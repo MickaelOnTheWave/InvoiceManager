@@ -127,6 +127,12 @@ void runListCommand(const InvoiceDbController& controller)
 
 void runShowCommand(const InvoiceDbController& controller, const int invoiceId)
 {
+   if (!controller.invoiceExists(invoiceId))
+   {
+      cout << "There is no invoice with id " << invoiceId << " in the database." << endl;
+      return;
+   }
+
    const InvoiceTemplateData data = controller.getInvoiceTemplateData(invoiceId);
 
    const QString totalValue = QString::asprintf("%.2f", getTotalValue(data.details));
@@ -137,6 +143,7 @@ void runShowCommand(const InvoiceDbController& controller, const int invoiceId)
    cout << "  id            : " << invoiceId << endl;
    cout << "  Client        : " << data.clientCompany.name.toStdString() << endl;
    cout << "  Total Value   : " << totalValue.toStdString() << " " << data.currency.toStdString() << endl;
+   cout << "  Date          : " << data.date.toString().toStdString() << endl;
    cout << "  Template      : " << data.templatePath.toStdString() << endl;
    cout << "  Stylesheet    : " << data.stylesheetPath.toStdString() << endl;
    cout << "|--------------------------------------------------------------------------|" << endl;
@@ -171,13 +178,26 @@ void executeCommands(CommandLineManager& cli)
          {
             int invoiceId = -1;
             if (selectType == "first")
-               invoiceId = controller.getLastUsedInvoiceId();
+               invoiceId = controller.getFirstInvoiceId();
             else if (selectType == "last")
                invoiceId = controller.getLastUsedInvoiceId();
             else if (selectType == "id")
-               invoiceId = static_cast<int>(cli.GetParameterValueAsUnsignedLong("value"));
+            {
+               const string valueStr = cli.GetParameterValue("value");
+               if (valueStr.empty())
+                  cout << "Error : No value specified. Required for select " << selectType << endl;
+               else
+               {
+                  try {
+                     invoiceId = std::stoi(valueStr);
+                  }  catch (...) {
+                     cout << "Error : " << valueStr << " is not a valid value for an id." << endl;
+                  }
+               }
+            }
 
-            runShowCommand(controller, invoiceId);
+            if (invoiceId > -1)
+               runShowCommand(controller, invoiceId);
          }
       }
       else if (cli.HasParameter(pdfCommand))
