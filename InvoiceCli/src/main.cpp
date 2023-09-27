@@ -20,9 +20,12 @@ const string dbCommand = "db";
 const string listCommand = "list";
 const string showCommand = "show";
 const string pdfCommand = "generatePdf";
+const string createFromLastCommand = "createFromLast";
 
 const string selectParam = "select";
 const string valueParam = "value";
+const string dateParam = "date";
+
 const std::vector<string> selectTypes = {"first", "last", "id"};
 
 void setupCommandLine(CommandLineManager& cli)
@@ -33,6 +36,8 @@ void setupCommandLine(CommandLineManager& cli)
    cli.AddParameter(listCommand, "List all invoices in the database");
    cli.AddParameter(showCommand, "Display a single invoice in the database");
    cli.AddParameter(pdfCommand, "Generates a PDF file of the selected invoice");
+   cli.AddParameter(createFromLastCommand, "Creates a new invoice that is a copy of the last invoice,\n"
+                                           "but at the specified date");
 
    // Data parameters for actions
    cli.AddParameter(selectParam, "Used to select a single invoice in the database.\n"
@@ -43,6 +48,10 @@ void setupCommandLine(CommandLineManager& cli)
    cli.AddParameter(valueParam, "Value to use for the select type. Can be Id, Name... whatever was\n"
                                 "specified in by the type parameter.");
    cli.AddParameter("template", "Filename template to use when generating a PDF file");
+   cli.AddParameter(dateParam, "Date of the new invoice. Values can be :\n"
+                               "  today : uses today as the date of the new invoice.\n"
+                               "  lastDayOfThisMonth : uses the last day of this month.\n"
+                               "  dd/mm/yyy : uses the date specified by this format.");
 
    cli.EnableHelpCommand();
 
@@ -125,6 +134,34 @@ void runListCommand(const InvoiceDbController& controller)
    cout << "|--------------------------------------------------------------------------|" << endl;
 }
 
+void printInvoiceDetails(const InvoiceTemplateData& data)
+{
+   const QString totalValue = QString::asprintf("%.2f", getTotalValue(data.details));
+
+   cout << "|--------------------------------------------------------------------------|" << endl;
+   cout << "|  Invoice Details                                                         |" << endl;
+   cout << "|--------------------------------------------------------------------------|" << endl;
+   cout << "  id            : " << data.id << endl;
+   cout << "  Client        : " << data.clientCompany.name.toStdString() << endl;
+   cout << "  Total Value   : " << totalValue.toStdString() << " " << data.currency.toStdString() << endl;
+   cout << "  Date          : " << data.date.toString().toStdString() << endl;
+   cout << "  Template      : " << data.templatePath.toStdString() << endl;
+   cout << "  Stylesheet    : " << data.stylesheetPath.toStdString() << endl;
+   cout << "|--------------------------------------------------------------------------|" << endl;
+}
+
+void runCreateFromLastCommand(const InvoiceDbController& controller, const QDate& date)
+{
+   InvoiceTemplateData data = controller.getInvoiceTemplateData(controller.getLastUsedInvoiceId());
+
+   ++data.id;
+   data.date = date;
+   cout << "Here are is the invoice that will be created :" << endl;
+   printInvoiceDetails(data);
+
+   //controller.(data);
+}
+
 void runShowCommand(const InvoiceDbController& controller, const int invoiceId)
 {
    if (!controller.invoiceExists(invoiceId))
@@ -134,19 +171,13 @@ void runShowCommand(const InvoiceDbController& controller, const int invoiceId)
    }
 
    const InvoiceTemplateData data = controller.getInvoiceTemplateData(invoiceId);
+   printInvoiceDetails(data);
+}
 
-   const QString totalValue = QString::asprintf("%.2f", getTotalValue(data.details));
-
-   cout << "|--------------------------------------------------------------------------|" << endl;
-   cout << "|  Invoice Details                                                         |" << endl;
-   cout << "|--------------------------------------------------------------------------|" << endl;
-   cout << "  id            : " << invoiceId << endl;
-   cout << "  Client        : " << data.clientCompany.name.toStdString() << endl;
-   cout << "  Total Value   : " << totalValue.toStdString() << " " << data.currency.toStdString() << endl;
-   cout << "  Date          : " << data.date.toString().toStdString() << endl;
-   cout << "  Template      : " << data.templatePath.toStdString() << endl;
-   cout << "  Stylesheet    : " << data.stylesheetPath.toStdString() << endl;
-   cout << "|--------------------------------------------------------------------------|" << endl;
+QDate GetLastDayOfThisMonth()
+{
+   QDate today = QDate::currentDate();
+   return QDate(today.year(), today.month(), today.daysInMonth());
 }
 
 void executeCommands(CommandLineManager& cli)
@@ -202,6 +233,30 @@ void executeCommands(CommandLineManager& cli)
       }
       else if (cli.HasParameter(pdfCommand))
          ;// run pdf cmd
+      else if (cli.HasParameter(createFromLastCommand))
+      {
+         QDate selectedDate;
+         const string dateValue = cli.GetParameterValue(dateParam);
+         cout << "Date param : " << dateValue << endl;
+         if (dateValue == "today")
+            selectedDate = QDate::currentDate();
+         else if (dateValue == "lastDayOfThisMonth")
+            selectedDate = GetLastDayOfThisMonth();
+         else
+         {
+            if (dateValue.empty())
+            {
+               cout << "No date provided. Using last day of this month." << endl;
+               selectedDate = GetLastDayOfThisMonth();
+            }
+            else
+               selectedDate = QDate::fromString(QString::fromStdString(dateValue), "DD/MM/yyyy");
+         }
+         if (selectedDate.isValid())
+            runCreateFromLastCommand(controller, selectedDate);
+         else
+            cout << "Error : invalid date specified." << endl;
+      }
    }
 }
 
