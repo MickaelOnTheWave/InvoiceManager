@@ -11,8 +11,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets Sql WebKitWidgets REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets Sql WebKitWidgets REQUIRED)
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets Sql WebKitWidgets PrintSupport REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets Sql WebKitWidgets PrintSupport REQUIRED)
 
 set(UI_SOURCES
     src/ui/mainwindow.h src/ui/mainwindow.cpp src/ui/mainwindow.ui
@@ -68,7 +68,7 @@ endif()
 
 target_include_directories(InvoiceGui PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(InvoiceGui PRIVATE
-    Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Sql Qt${QT_VERSION_MAJOR}::WebKitWidgets
+    Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Sql Qt${QT_VERSION_MAJOR}::WebKitWidgets Qt5::PrintSupport
     InvoiceLib
 )
 

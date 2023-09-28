@@ -44,6 +44,13 @@ void InvoiceViewWidget::show(const InvoiceUserData& data)
    ui->webView->show();
 }
 
+void InvoiceViewWidget::show(const QString& htmlContent, const QString& stylesheetPath)
+{
+   const QUrl cssUrl = QUrl::fromLocalFile(stylesheetPath);
+   ui->webView->settings()->setUserStyleSheetUrl(cssUrl);
+   ui->webView->setHtml(htmlContent);
+   ui->webView->show();
+}
 
 QString InvoiceViewWidget::readFileContent(const QString &filename)
 {

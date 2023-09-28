@@ -36,6 +36,7 @@ public:
    ~InvoiceViewWidget();
 
    void show(const InvoiceUserData& data);
+   void show(const QString& htmlContent, const QString& stylesheetPath);
 
 private:
    static QString readFileContent(const QString& filename);

@@ -60,7 +60,7 @@
        <item>
         <widget class="QPushButton" name="createPdfButton">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="text">
           <string>Create PDF</string>

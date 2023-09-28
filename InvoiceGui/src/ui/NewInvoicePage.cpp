@@ -111,8 +111,11 @@ void NewInvoicePage::resetFromLast()
     ui->notesEdit->setText(data.notes);
     ui->currencyEdit->setText(data.currency);
 
-    for (const auto detail : data.details)
+    for (const int detailId : data.detailsIds)
+    {
+       const InvoiceDetail detail = controller->getInvoiceDetail(detailId);
         addInvoiceDetail(detail.description, detail.value);
+    }
     computeTotalRow();
 
     onGeneratePreviewClicked();
