@@ -165,11 +165,10 @@ bool InvoiceDbController::writeInvoice(const int invoiceId, const int clientId, 
     return false;
 }
 
-bool InvoiceDbController::writeInvoice(const InvoiceUserData& data)
+bool InvoiceDbController::writeInvoice(const InvoiceDbData& data)
 {
-   // TODO implement
-   //return writeInfoice(data.id, data.clientCompany.)
-   return false;
+   return writeInvoice(data.id, data.clientId, data.templateId, data.stylesheetId,
+                       data.detailsIds, data.date, data.notes, data.currency);
 }
 
 bool InvoiceDbController::invoiceExists(const int id) const
@@ -188,6 +187,9 @@ InvoiceUserData InvoiceDbController::toUserData(const InvoiceDbData& dbData) con
    userData.stylesheetPath = getStylesheetFilename(dbData.stylesheetId);
    userData.userCompany = getCompanyData(dbData.clientId);
    userData.clientCompany = getCompanyData(dbData.clientId);
+
+   for (const int detailId : dbData.detailsIds)
+      userData.details.push_back(getInvoiceDetail(detailId));
    return userData;
 }
 
@@ -255,7 +257,7 @@ InvoiceDbData InvoiceDbController::getLastInvoiceData() const
         data.currency = query.value(5).toString();
 
         const int invoiceId = query.value(0).toInt();
-        data.details = createInvoiceDetails(invoiceId);
+        data.detailsIds = getInvoiceElements(invoiceId);
     }
     return data;
 }
@@ -279,7 +281,7 @@ InvoiceDbData InvoiceDbController::getInvoiceDbData(const int invoiceId) const
       const QString currency = query.value(6).toString();
 
       data.date = QDate::fromString(dateStr, dateFormatStr);
-      data.details = createInvoiceDetails(invoiceId);
+      data.detailsIds = getInvoiceElements(invoiceId);
       data.notes = notes;
       data.currency = currency;
       data.clientId = clientId;
@@ -539,15 +541,8 @@ std::vector<InvoiceDetail> InvoiceDbController::createInvoiceDetails(const int i
    const std::vector<int> elementsIds = getInvoiceElements(id);
    for (const int elementId : elementsIds)
    {
-      const QString queryStr = "SELECT description, value FROM invoiceelement WHERE id = %1";
-      QSqlQuery query;
-      const bool ok = query.exec(queryStr.arg(elementId));
-      if (ok && query.next())
-      {
-          const QString service = query.value(0).toString();
-          const double value = query.value(1).toDouble();
-          details.emplace_back(service, value);
-      }
+      const InvoiceDetail detail = getInvoiceDetail(elementId);
+      details.push_back(detail);
    }
 
    return details;
@@ -566,6 +561,20 @@ std::vector<int> InvoiceDbController::getInvoiceElements(const int invoiceId) co
          elementsIds.push_back(query.value(0).toInt());
    }
    return elementsIds;
+}
+
+InvoiceDetail InvoiceDbController::getInvoiceDetail(const int detailId) const
+{
+   const QString queryStr = "SELECT description, value FROM invoiceelement WHERE id = %1";
+   QSqlQuery query;
+   const bool ok = query.exec(queryStr.arg(detailId));
+   if (ok && query.next())
+   {
+       const QString service = query.value(0).toString();
+       const double value = query.value(1).toDouble();
+       return InvoiceDetail(service, value);
+   }
+   return InvoiceDetail("", 0.0);
 }
 
 bool InvoiceDbController::removeFromInvoiceTable(const int id)

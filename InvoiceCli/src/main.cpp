@@ -150,7 +150,7 @@ void printInvoiceDetails(const InvoiceUserData& data)
    cout << "|--------------------------------------------------------------------------|" << endl;
 }
 
-void runCreateFromLastCommand(const InvoiceDbController& controller, const QDate& date)
+void runCreateFromLastCommand(InvoiceDbController& controller, const QDate& date)
 {
    InvoiceDbData dbData = controller.getInvoiceDbData(controller.getLastInvoiceId());
 
@@ -161,7 +161,7 @@ void runCreateFromLastCommand(const InvoiceDbController& controller, const QDate
    dbData.date = userData.date = date;
    printInvoiceDetails(userData);
 
-   const bool ok = false;//controller.writeInvoice(dbData);
+   const bool ok = controller.writeInvoice(dbData);
    if (!ok)
       cout << "Error creating new invoice." << endl;
 }

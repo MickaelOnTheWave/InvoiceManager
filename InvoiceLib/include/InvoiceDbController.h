@@ -50,7 +50,7 @@ public:
     bool writeInvoice(const int invoiceId, const int clientId, const int templateId, const int stylesheetId,
                       const std::vector<int>& detailsIds, const QDate& date, const QString &notes, const QString &currency);
 
-    bool writeInvoice(const InvoiceUserData& data);
+    bool writeInvoice(const InvoiceDbData& data);
 
     bool invoiceExists(const int id) const;
 
@@ -59,6 +59,8 @@ public:
     QString getUserCompanyName() const;
     int getUserCompanyId() const;
     CompanyData getUserCompanyData() const;
+
+    InvoiceDetail getInvoiceDetail(const int detailId) const;
 
     int getFirstInvoiceId() const;
     int getLastInvoiceId() const;

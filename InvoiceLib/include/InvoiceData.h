@@ -32,13 +32,12 @@ public:
    InvoiceBaseData() = default;
 
    InvoiceBaseData(const InvoiceBaseData& other)
-      : details(other.details), notes(other.notes),
+      : notes(other.notes),
         currency(other.currency), date(other.date),
         id(other.id)
    {
    }
 
-   std::vector<InvoiceDetail> details;
    QString notes = "";
    QString currency = "€";
    QDate date;
@@ -50,6 +49,7 @@ class InvoiceDbData : public InvoiceBaseData
 public:
     InvoiceDbData();
 
+    std::vector<int> detailsIds;
     int clientId = -1;
     int templateId = -1;
     int stylesheetId = -1;
@@ -65,6 +65,7 @@ public:
 
    }
 
+   std::vector<InvoiceDetail> details;
    QString templatePath;
    QString stylesheetPath;
 
