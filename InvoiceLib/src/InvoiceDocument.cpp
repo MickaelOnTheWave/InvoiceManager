@@ -41,12 +41,17 @@ void InvoiceDocument::CreatePdfFile(const QString& file)
    document->setDefaultStyleSheet(invoiceData.stylesheetPath);
 
    QPrinter printer(QPrinter::HighResolution);
-   printer.setPageSize(QPrinter::A4);
+   //printer.pageLayout().setPageSize(QPageSize::A4);
    printer.setOutputFormat(QPrinter::PdfFormat);
 
    printer.setOutputFileName(file);
 
    document->print(&printer);
+}
+
+void InvoiceDocument::CreatePdfFileFromPattern(const QString& filenamePattern)
+{
+   return CreatePdfFile(GetFileFromPattern(filenamePattern));
 }
 
 int InvoiceDocument::GetInvoiceId() const
@@ -131,4 +136,14 @@ QString InvoiceDocument::buildInvoiceTotal(const std::vector<InvoiceDetail>& det
    };
    const double totalValue = std::accumulate(details.begin(), details.end(), 0.0, accumulator);
    return QString::asprintf("%.2f", totalValue);
+}
+
+QString InvoiceDocument::GetFileFromPattern(const QString& pattern) const
+{
+   QString filename = pattern;
+   filename.replace("[YYYY]", QString::number(invoiceData.date.year()));
+   filename.replace("[MM]", QString::number(invoiceData.date.month()));
+   filename.replace("[DD]", QString::number(invoiceData.date.day()));
+   filename.replace("[CLIENT]", invoiceData.clientCompany.name);
+   return filename;
 }

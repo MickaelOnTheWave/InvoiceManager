@@ -25,15 +25,8 @@
 class ShowCommand
 {
 public:
-   static void runShow(const InvoiceDbController& controller,
+   static void Run(const InvoiceDbController& controller,
                        const CommandLineManager& cli);
-
-private:
-   static int GetInvoiceIdFromCli(const InvoiceDbController& controller,
-                                  const CommandLineManager& cli,
-                                  const std::string& selectType);
-   static void runShowCommand(const InvoiceDbController& controller,
-                              const int invoiceId);
 };
 
 #endif

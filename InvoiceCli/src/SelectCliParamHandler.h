@@ -16,17 +16,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIPARAMETERSDEFINITION_H
-#define CLIPARAMETERSDEFINITION_H
+#ifndef SELECTCLIPARAMHANDLER_H
+#define SELECTCLIPARAMHANDLER_H
 
-#include <string>
-#include <vector>
+#include "commandlinemanager.h"
+#include "InvoiceDbController.h"
 
-const std::string selectParam = "select";
-const std::string valueParam = "value";
-const std::string dateParam = "date";
-const std::string namePatternParam = "namePattern";
+class SelectCliParamHandler
+{
+public:
+   static int GetId(const InvoiceDbController& controller, const CommandLineManager& cli);
 
-const std::vector<std::string> selectTypes = {"first", "last", "id"};
+private:
+   SelectCliParamHandler(const InvoiceDbController& _controller, const CommandLineManager& _cli);
+   virtual ~SelectCliParamHandler() = default;
 
-#endif
+   int GetId();
+
+   int GetInvoiceIdFromCli(const std::string& selectType);
+
+   const InvoiceDbController& controller;
+   const CommandLineManager& cli;
+};
+
+#endif // SELECTCLIPARAMHANDLER_H

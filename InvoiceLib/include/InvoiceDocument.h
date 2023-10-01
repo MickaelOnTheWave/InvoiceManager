@@ -33,10 +33,15 @@ public:
 
    /**
     * @brief CreateFile Creates a PDF file based on the invoice data
-    * @param data
-    * @return the path of the created file, or empty string in case of error.
+    * @param file the path of the file to create
     */
    void CreatePdfFile(const QString& file);
+
+   /**
+    * @brief CreateFile Creates a PDF file based on the invoice data
+    * @param file The name pattern of the file to create
+    */
+   void CreatePdfFileFromPattern(const QString& filenamePattern);
 
    int GetInvoiceId() const;
 
@@ -48,6 +53,8 @@ private:
    static QString buildReplaceAddress(const QString& recordedAddress);
    static QString buildReplaceDetails(const std::vector<InvoiceDetail>& details);
    static QString buildInvoiceTotal(const std::vector<InvoiceDetail>& details);
+
+   QString GetFileFromPattern(const QString& pattern) const;
 
    InvoiceUserData invoiceData;
 };

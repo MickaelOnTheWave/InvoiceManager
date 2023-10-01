@@ -16,25 +16,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ShowCommand.h"
+#include "CreatePdfCommand.h"
 
 #include <iostream>
 
 #include "CliParametersDefinitions.h"
-#include "InvoicePrinter.h"
+#include "InvoiceDocument.h"
 #include "SelectCliParamHandler.h"
 
-using std::string;
 using std::cout;
 using std::endl;
 
-void ShowCommand::Run(const InvoiceDbController& controller, const CommandLineManager& cli)
+void CreatePdfCommand::Run(const InvoiceDbController& controller, const CommandLineManager& cli)
 {
+   std::string namePattern = cli.GetParameterValue(namePatternParam);
+   if (namePattern.empty())
+   {
+      namePattern = "[YYYY]-[MM]-[DD] [CLIENT].pdf";
+      cout << "No name pattern provided. Using \"" << namePattern << "\"." << endl;
+   }
+
    const int invoiceId = SelectCliParamHandler::GetId(controller, cli);
    if (invoiceId > -1)
    {
-      const InvoiceUserData data = controller.getInvoiceUserData(invoiceId);
-      InvoicePrinter::printSingle(data);
+      const InvoiceUserData invoiceData = controller.getInvoiceUserData(invoiceId);
+      InvoiceDocument document;
+      document.setData(invoiceData);
+
+      document.CreatePdfFileFromPattern(QString::fromStdString(namePattern));
    }
 }
-

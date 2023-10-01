@@ -20,12 +20,16 @@
 #include <iostream>
 #include <string>
 
+#include <QCoreApplication>
+
 #include "commandlinemanager.h"
 #include "InvoiceDbController.h"
+#include "InvoiceDocument.h"
 #include "InvoicePrinter.h"
 
 #include "CliParametersDefinitions.h"
 #include "CreateFromLastCommand.h"
+#include "CreatePdfCommand.h"
 #include "ShowCommand.h"
 
 // TODO Make ToolsLib usable lib and use it here instead of using copied cpp/h
@@ -65,7 +69,13 @@ void setupCommandLine(CommandLineManager& cli)
                                  "  id : selects the invoice in the Dababase with the specified ID");
    cli.AddParameter(valueParam, "Value to use for the select type. Can be Id, Name... whatever was\n"
                                 "specified in by the type parameter.");
-   cli.AddParameter("template", "Filename template to use when generating a PDF file");
+   cli.AddParameter(namePatternParam, "Filename template to use when generating a PDF file\n"
+                                      "Available parameters are :\n"
+                                      "  [YYYY] : the year number\n"
+                                      "  [MM]   : the month number\n"
+                                      "  [DD]   : the day of month number\n"
+                                      "  [CLIENT] : the client name\n"
+                                      "All other characters are literal.");
    cli.AddParameter(dateParam, "Date of the new invoice. Values can be :\n"
                                "  today : uses today as the date of the new invoice.\n"
                                "  lastDayOfThisMonth : uses the last day of this month.\n"
@@ -86,12 +96,6 @@ void runListCommand(const InvoiceDbController& controller)
 
    cout << allData.size() << " invoices in database." << endl;
    InvoicePrinter::printMultiple(allData);
-}
-
-void runCreatePdfCommand(const InvoiceDbController& controller,
-                         const CommandLineManager& cli)
-{
-   // run pdf cmd
 }
 
 void executeCommands(CommandLineManager& cli)
@@ -120,15 +124,16 @@ void executeCommands(CommandLineManager& cli)
    if (cli.HasParameter(listCommand))
       runListCommand(controller);
    else if (cli.HasParameter(showCommand))
-      ShowCommand::runShow(controller, cli);
+      ShowCommand::Run(controller, cli);
    else if (cli.HasParameter(pdfCommand))
-      runCreatePdfCommand(controller, cli);
+      CreatePdfCommand::Run(controller, cli);
    else if (cli.HasParameter(createFromLastCommand))
       CreateFromLastCommand::Run(controller, cli);
 }
 
 int main(int argc, char** argv)
 {
+   QCoreApplication application(argc, argv);
    CommandLineManager cliManager(argc, argv);
 
    setupCommandLine(cliManager);

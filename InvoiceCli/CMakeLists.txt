@@ -23,7 +23,9 @@ add_executable(InvoiceCli
   src/Tools.cpp src/Tools.h
   src/CliParametersDefinitions.h
   src/CreateFromLastCommand.cpp src/CreateFromLastCommand.h
+  src/CreatePdfCommand.h src/CreatePdfCommand.cpp
   src/ShowCommand.cpp src/ShowCommand.h
+  src/SelectCliParamHandler.h src/SelectCliParamHandler.cpp
   ${TS_FILES}
 )
 target_link_libraries(InvoiceCli Qt${QT_VERSION_MAJOR}::Core InvoiceLib)
