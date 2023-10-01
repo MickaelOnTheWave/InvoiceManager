@@ -39,7 +39,6 @@ void InvoicePrinter::printSingle(const InvoiceUserData& data)
    cout << "  Template      : " << data.templatePath.toStdString() << endl;
    cout << "  Stylesheet    : " << data.stylesheetPath.toStdString() << endl;
    cout << "|--------------------------------------------------------------------------|" << endl;
-
 }
 
 void InvoicePrinter::printMultiple(const std::vector<InvoiceUserData>& data)

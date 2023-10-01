@@ -21,6 +21,9 @@ add_executable(InvoiceCli
   src/commandlinemanager.cpp src/commandlinemanager.h
   src/InvoicePrinter.cpp src/InvoicePrinter.h
   src/Tools.cpp src/Tools.h
+  src/CliParametersDefinitions.h
+  src/CreateFromLastCommand.cpp src/CreateFromLastCommand.h
+  src/ShowCommand.cpp src/ShowCommand.h
   ${TS_FILES}
 )
 target_link_libraries(InvoiceCli Qt${QT_VERSION_MAJOR}::Core InvoiceLib)

@@ -24,6 +24,10 @@
 #include "InvoiceDbController.h"
 #include "InvoicePrinter.h"
 
+#include "CliParametersDefinitions.h"
+#include "CreateFromLastCommand.h"
+#include "ShowCommand.h"
+
 // TODO Make ToolsLib usable lib and use it here instead of using copied cpp/h
 // TODO use same version in installer, cli, gui and everywhere
 // TODO Next :
@@ -41,11 +45,6 @@ const string showCommand = "show";
 const string pdfCommand = "generatePdf";
 const string createFromLastCommand = "createFromLast";
 
-const string selectParam = "select";
-const string valueParam = "value";
-const string dateParam = "date";
-
-const std::vector<string> selectTypes = {"first", "last", "id"};
 
 void setupCommandLine(CommandLineManager& cli)
 {
@@ -89,38 +88,10 @@ void runListCommand(const InvoiceDbController& controller)
    InvoicePrinter::printMultiple(allData);
 }
 
-void runCreateFromLastCommand(InvoiceDbController& controller, const QDate& date)
+void runCreatePdfCommand(const InvoiceDbController& controller,
+                         const CommandLineManager& cli)
 {
-   InvoiceDbData dbData = controller.getInvoiceDbData(controller.getLastInvoiceId());
-
-   InvoiceUserData userData = controller.toUserData(dbData);
-
-   cout << "Here are is the invoice that will be created :" << endl;
-   ++dbData.id; ++userData.id;
-   dbData.date = userData.date = date;
-   InvoicePrinter::printSingle(userData);
-
-   const bool ok = controller.writeInvoice(dbData);
-   if (!ok)
-      cout << "Error creating new invoice." << endl;
-}
-
-void runShowCommand(const InvoiceDbController& controller, const int invoiceId)
-{
-   if (!controller.invoiceExists(invoiceId))
-   {
-      cout << "There is no invoice with id " << invoiceId << " in the database." << endl;
-      return;
-   }
-
-   const InvoiceUserData data = controller.getInvoiceUserData(invoiceId);
-   InvoicePrinter::printSingle(data);
-}
-
-QDate GetLastDayOfThisMonth()
-{
-   QDate today = QDate::currentDate();
-   return QDate(today.year(), today.month(), today.daysInMonth());
+   // run pdf cmd
 }
 
 void executeCommands(CommandLineManager& cli)
@@ -128,79 +99,32 @@ void executeCommands(CommandLineManager& cli)
    const bool isHelp = cli.HandleHelpCommand();
    const bool isVersion = cli.HandleVersionCommand();
    const bool hasUnknownParams = cli.HandleUnknownParameters();
-   if (!isHelp && !isVersion && !hasUnknownParams)
+   if (isHelp || isVersion || hasUnknownParams)
+      return;
+
+   if (!cli.HasParameter(dbCommand))
    {
-      if (!cli.HasParameter(dbCommand))
-         std::cout << "No Database provided, no data to run commands on." << std::endl;
-      const string dbFile = cli.GetParameterValue(dbCommand);
-
-      InvoiceDbController controller;
-      const bool ok = controller.openDb(QString::fromStdString(dbFile));
-      if (!ok)
-         std::cout << "Error opening database " << dbFile << std::endl;
-
-      if (cli.HasParameter(listCommand))
-         runListCommand(controller);
-      else if (cli.HasParameter(showCommand))
-      {
-         const string selectType = cli.GetParameterValue(selectParam);
-         if (selectType.empty())
-            cout << "Error : No selection type provided." << endl;
-         else if (std::find(selectTypes.begin(), selectTypes.end(), selectType) == selectTypes.end())
-            cout << " Error : unknown selection type " << selectType << endl;
-         else
-         {
-            int invoiceId = -1;
-            if (selectType == "first")
-               invoiceId = controller.getFirstInvoiceId();
-            else if (selectType == "last")
-               invoiceId = controller.getLastInvoiceId();
-            else if (selectType == "id")
-            {
-               const string valueStr = cli.GetParameterValue("value");
-               if (valueStr.empty())
-                  cout << "Error : No value specified. Required for select " << selectType << endl;
-               else
-               {
-                  try {
-                     invoiceId = std::stoi(valueStr);
-                  }  catch (...) {
-                     cout << "Error : " << valueStr << " is not a valid value for an id." << endl;
-                  }
-               }
-            }
-
-            if (invoiceId > -1)
-               runShowCommand(controller, invoiceId);
-         }
-      }
-      else if (cli.HasParameter(pdfCommand))
-         ;// run pdf cmd
-      else if (cli.HasParameter(createFromLastCommand))
-      {
-         QDate selectedDate;
-         const string dateValue = cli.GetParameterValue(dateParam);
-         cout << "Date param : " << dateValue << endl;
-         if (dateValue == "today")
-            selectedDate = QDate::currentDate();
-         else if (dateValue == "lastDayOfThisMonth")
-            selectedDate = GetLastDayOfThisMonth();
-         else
-         {
-            if (dateValue.empty())
-            {
-               cout << "No date provided. Using last day of this month." << endl;
-               selectedDate = GetLastDayOfThisMonth();
-            }
-            else
-               selectedDate = QDate::fromString(QString::fromStdString(dateValue), "DD/MM/yyyy");
-         }
-         if (selectedDate.isValid())
-            runCreateFromLastCommand(controller, selectedDate);
-         else
-            cout << "Error : invalid date specified." << endl;
-      }
+      std::cout << "No Database provided, no data to run commands on." << std::endl;
+      return;
    }
+
+   const string dbFile = cli.GetParameterValue(dbCommand);
+   InvoiceDbController controller;
+   const bool ok = controller.openDb(QString::fromStdString(dbFile));
+   if (!ok)
+   {
+      std::cout << "Error opening database " << dbFile << std::endl;
+      return;
+   }
+
+   if (cli.HasParameter(listCommand))
+      runListCommand(controller);
+   else if (cli.HasParameter(showCommand))
+      ShowCommand::runShow(controller, cli);
+   else if (cli.HasParameter(pdfCommand))
+      runCreatePdfCommand(controller, cli);
+   else if (cli.HasParameter(createFromLastCommand))
+      CreateFromLastCommand::Run(controller, cli);
 }
 
 int main(int argc, char** argv)
