@@ -22,6 +22,8 @@
 #include <QDialog>
 
 #include "InvoiceData.h"
+#include "InvoiceDocument.h"
+
 
 namespace Ui {
 class InvoiceViewDialog;
@@ -45,17 +47,9 @@ private slots:
     void onCreatePdf();
 
 private:
-    // TODO refactor this properly
-    static QString readFileContent(const QString& filename);
-    static QString fillTemplate(const QString& templateModel,
-                                const InvoiceUserData& data);
-
-    static QString buildReplaceAddress(const QString& recordedAddress);
-    static QString buildReplaceDetails(const std::vector<InvoiceDetail>& details);
-    static QString buildInvoiceTotal(const std::vector<InvoiceDetail>& details);
 
     Ui::InvoiceViewDialog *ui;
-    InvoiceUserData invoiceData;
+    InvoiceDocument invoiceDocument;
 };
 
 #endif // INVOICEVIEWDIALOG_H
