@@ -20,7 +20,7 @@
 #include <iostream>
 #include <string>
 
-#include <QCoreApplication>
+#include <QApplication>
 
 #include "commandlinemanager.h"
 #include "InvoiceDbController.h"
@@ -84,7 +84,7 @@ void setupCommandLine(CommandLineManager& cli)
    cli.EnableHelpCommand();
 
    const string appName = "Invoice manager Command line Interface";
-   const string appVersion = "1.0";
+   const string appVersion = "1.01";
    const string author = "Mickaël da Cruz Guimarães";
    const string copyrightInfo = "2023";
    cli.EnableVersionCommand(appName, appVersion, author, copyrightInfo);
@@ -133,7 +133,7 @@ void executeCommands(CommandLineManager& cli)
 
 int main(int argc, char** argv)
 {
-   QCoreApplication application(argc, argv);
+   QApplication application(argc, argv);
    CommandLineManager cliManager(argc, argv);
 
    setupCommandLine(cliManager);
