@@ -30,7 +30,6 @@
 // TODO Not that important :
 // - Add versioning to clients / company
 // - Add template/stylesheet contents to DB
-// - Change InvoiceModule to include files without needing include/ in path
 
 const QString appVersion = "0.9";
 const QString lastDbKey = "lastdbfile";

@@ -25,18 +25,11 @@
 #include "CompanyData.h"
 #include "InvoiceDetail.h"
 
-// TODO : Create cpp with proper implementation
 class InvoiceBaseData
 {
 public:
    InvoiceBaseData() = default;
-
-   InvoiceBaseData(const InvoiceBaseData& other)
-      : notes(other.notes),
-        currency(other.currency), date(other.date),
-        id(other.id)
-   {
-   }
+   InvoiceBaseData(const InvoiceBaseData& other);
 
    QString notes = "";
    QString currency = "€";
@@ -47,7 +40,7 @@ public:
 class InvoiceDbData : public InvoiceBaseData
 {
 public:
-    InvoiceDbData();
+    InvoiceDbData() = default;
 
     std::vector<int> detailsIds;
     int clientId = -1;
@@ -59,11 +52,7 @@ class InvoiceUserData : public InvoiceBaseData
 {
 public:
    InvoiceUserData() = default;
-   InvoiceUserData(const InvoiceBaseData& other)
-      : InvoiceBaseData(other)
-   {
-
-   }
+   InvoiceUserData(const InvoiceBaseData& other);
 
    std::vector<InvoiceDetail> details;
    QString templatePath;

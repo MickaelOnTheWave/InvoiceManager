@@ -18,7 +18,15 @@
 
 #include "InvoiceData.h"
 
-InvoiceDbData::InvoiceDbData()
+InvoiceBaseData::InvoiceBaseData(const InvoiceBaseData& other)
+   : notes(other.notes),
+     currency(other.currency), date(other.date),
+     id(other.id)
+{
+}
+
+InvoiceUserData::InvoiceUserData(const InvoiceBaseData& other)
+   : InvoiceBaseData(other)
 {
 
 }
