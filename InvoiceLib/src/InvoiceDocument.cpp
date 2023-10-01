@@ -38,7 +38,9 @@ void InvoiceDocument::CreatePdfFile(const QString& file)
 {
    QTextDocument *document = new QTextDocument();
    document->setHtml(CreateHtmlContent());
-   document->setDefaultStyleSheet(invoiceData.stylesheetPath);
+
+   const QString cssContent = readFileContent(invoiceData.stylesheetPath);
+   document->setDefaultStyleSheet(cssContent);
 
    QPrinter printer(QPrinter::HighResolution);
    //printer.pageLayout().setPageSize(QPageSize::A4);

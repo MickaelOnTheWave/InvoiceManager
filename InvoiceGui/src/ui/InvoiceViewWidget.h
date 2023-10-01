@@ -39,15 +39,6 @@ public:
    void show(const QString& htmlContent, const QString& stylesheetPath);
 
 private:
-   static QString readFileContent(const QString& filename);
-   static QString fillTemplate(const QString& templateModel,
-                               const InvoiceUserData& data);
-
-   static QString buildReplaceAddress(const QString& recordedAddress);
-   static QString buildReplaceDetails(const std::vector<InvoiceDetail>& details);
-   static QString buildInvoiceTotal(const std::vector<InvoiceDetail>& details);
-
-
    Ui::InvoiceViewWidget *ui;
 };
 
