@@ -22,6 +22,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QSettings>
 #include <QSqlTableModel>
 
 #include "NewInvoicePage.h"

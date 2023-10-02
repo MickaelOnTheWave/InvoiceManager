@@ -11,10 +11,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Core LinguistTools Widgets REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core LinguistTools Widgets REQUIRED)
-
-set(TS_FILES InvoiceCli_en_GB.ts)
+find_package(QT NAMES Qt6 COMPONENTS Core Widgets REQUIRED)
+find_package(Qt6 COMPONENTS Core Widgets REQUIRED)
 
 add_executable(InvoiceCli
   src/main.cpp
@@ -26,12 +24,5 @@ add_executable(InvoiceCli
   src/CreatePdfCommand.h src/CreatePdfCommand.cpp
   src/ShowCommand.cpp src/ShowCommand.h
   src/SelectCliParamHandler.h src/SelectCliParamHandler.cpp
-  ${TS_FILES}
 )
-target_link_libraries(InvoiceCli Qt${QT_VERSION_MAJOR}::Core Qt5::Widgets InvoiceLib)
-
-if(COMMAND qt_create_translation)
-    qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
-else()
-    qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
-endif()
+target_link_libraries(InvoiceCli Qt6::Core Qt6::Widgets InvoiceLib)

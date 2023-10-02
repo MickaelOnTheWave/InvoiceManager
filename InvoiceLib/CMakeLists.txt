@@ -9,10 +9,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Core LinguistTools Sql PrintSupport Gui REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core LinguistTools Sql PrintSupport Gui REQUIRED)
-
-set(TS_FILES InvoiceLib_en_GB.ts)
+find_package(QT NAMES Qt6 COMPONENTS Core Sql Gui REQUIRED)
+find_package(Qt6 REQUIRED COMPONENTS Core Sql Gui REQUIRED)
 
 set(SOURCES
     src/InvoiceDbController.cpp
@@ -33,17 +31,9 @@ set(HEADERS
 add_library(InvoiceLib STATIC
   ${SOURCES}
   ${HEADERS}
-  ${TS_FILES}
 )
 
 target_include_directories(InvoiceLib PUBLIC include/)
-target_link_libraries(InvoiceLib PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Sql
-                                         Qt5::PrintSupport Qt5::Gui)
+target_link_libraries(InvoiceLib PRIVATE Qt6::Core Qt6::Sql Qt6::Gui)
 
 target_compile_definitions(InvoiceLib PRIVATE INVOICELIB_LIBRARY)
-
-if(COMMAND qt_create_translation)
-    qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
-else()
-    qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
-endif()

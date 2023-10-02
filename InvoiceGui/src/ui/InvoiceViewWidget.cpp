@@ -27,6 +27,9 @@ InvoiceViewWidget::InvoiceViewWidget(QWidget *parent) :
    ui(new Ui::InvoiceViewWidget)
 {
    ui->setupUi(this);
+
+   webView = new QWebEngineView(this);
+   layout()->addWidget(webView);
 }
 
 InvoiceViewWidget::~InvoiceViewWidget()
@@ -39,16 +42,18 @@ void InvoiceViewWidget::show(const InvoiceUserData& data)
    InvoiceDocument document;
    document.setData(data);
 
-   const QUrl cssUrl = QUrl::fromLocalFile(data.stylesheetPath);
-   ui->webView->settings()->setUserStyleSheetUrl(cssUrl);
-   ui->webView->setHtml(document.CreateHtmlContent());
-   ui->webView->show();
+   webView->load(QUrl("https://www.mega.io"));
+   //const QUrl cssUrl = QUrl::fromLocalFile(data.stylesheetPath);
+   //webView->settings()->setUserStyleSheetUrl(cssUrl);
+   //webView->setHtml(document.CreateHtmlContent());
+   webView->show();
 }
 
 void InvoiceViewWidget::show(const QString& htmlContent, const QString& stylesheetPath)
 {
-   const QUrl cssUrl = QUrl::fromLocalFile(stylesheetPath);
-   ui->webView->settings()->setUserStyleSheetUrl(cssUrl);
-   ui->webView->setHtml(htmlContent);
-   ui->webView->show();
+   webView->load(QUrl("https://www.mega.io"));
+//   const QUrl cssUrl = QUrl::fromLocalFile(stylesheetPath);
+//   ui->webView->settings()->setUserStyleSheetUrl(cssUrl);
+//   ui->webView->setHtml(htmlContent);
+   webView->show();
 }

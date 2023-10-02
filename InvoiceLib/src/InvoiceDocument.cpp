@@ -19,7 +19,6 @@
 #include "InvoiceDocument.h"
 
 #include <QFile>
-#include <QPrinter>
 #include <QTextDocument>
 #include <QTextStream>
 
@@ -36,19 +35,7 @@ QString InvoiceDocument::CreateHtmlContent()
 
 void InvoiceDocument::CreatePdfFile(const QString& file)
 {
-   QTextDocument *document = new QTextDocument();
-   document->setHtml(CreateHtmlContent());
-
-   const QString cssContent = readFileContent(invoiceData.stylesheetPath);
-   document->setDefaultStyleSheet(cssContent);
-
-   QPrinter printer(QPrinter::HighResolution);
-   //printer.pageLayout().setPageSize(QPageSize::A4);
-   printer.setOutputFormat(QPrinter::PdfFormat);
-
-   printer.setOutputFileName(file);
-
-   document->print(&printer);
+   // Use new WebView code from Qt6
 }
 
 void InvoiceDocument::CreatePdfFileFromPattern(const QString& filenamePattern)
