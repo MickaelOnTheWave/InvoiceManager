@@ -31,6 +31,8 @@ public:
 
    QString CreateHtmlContent();
 
+   QString CreateStyledHtmlContent();
+
    /**
     * @brief CreateFile Creates a PDF file based on the invoice data
     * @param file the path of the file to create

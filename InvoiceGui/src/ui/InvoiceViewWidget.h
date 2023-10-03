@@ -21,7 +21,6 @@
 
 #include <QWidget>
 
-#include <QtWebEngineWidgets/QWebEngineView>
 #include "InvoiceData.h"
 
 namespace Ui {
@@ -41,7 +40,6 @@ public:
 
 private:
    Ui::InvoiceViewWidget *ui;
-   QWebEngineView* webView;
 };
 
 #endif // INVOICEVIEWWIDGET_H

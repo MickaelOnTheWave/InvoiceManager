@@ -33,6 +33,11 @@ QString InvoiceDocument::CreateHtmlContent()
    return fillTemplate(templateContent, invoiceData);
 }
 
+QString InvoiceDocument::CreateStyledHtmlContent()
+{
+
+}
+
 void InvoiceDocument::CreatePdfFile(const QString& file)
 {
    // Use new WebView code from Qt6
