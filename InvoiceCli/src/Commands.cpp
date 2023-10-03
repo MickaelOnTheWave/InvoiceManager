@@ -16,11 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ShowCommand.h"
+#include "Commands.h"
 
 #include <iostream>
 
 #include "CliParametersDefinitions.h"
+#include "InvoiceDocument.h"
 #include "InvoicePrinter.h"
 #include "SelectCliParamHandler.h"
 
@@ -38,3 +39,25 @@ void ShowCommand::Run(const InvoiceDbController& controller, const CommandLineMa
    }
 }
 
+
+void GetHtmlCommand::Run(const InvoiceDbController& controller, const CommandLineManager& cli)
+{
+   const int invoiceId = SelectCliParamHandler::GetId(controller, cli);
+   if (invoiceId > -1)
+   {
+      InvoiceDocument invoiceDoc;
+      invoiceDoc.setData(controller.getInvoiceUserData(invoiceId));
+      const QString htmlContent = invoiceDoc.CreateHtmlContent();
+      cout << htmlContent.toStdString() << endl;
+   }
+}
+
+void GetCssCommand::Run(const InvoiceDbController& controller, const CommandLineManager& cli)
+{
+   const int invoiceId = SelectCliParamHandler::GetId(controller, cli);
+   if (invoiceId > -1)
+   {
+      const InvoiceUserData data = controller.getInvoiceUserData(invoiceId);
+      cout << data.stylesheetPath.toStdString() << endl;
+   }
+}

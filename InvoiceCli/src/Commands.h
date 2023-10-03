@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SHOWCOMMAND_H
-#define SHOWCOMMAND_H
+#ifndef COMMANDS_H
+#define COMMANDS_H
 
 #include "commandlinemanager.h"
 #include "InvoiceDbController.h"
@@ -28,5 +28,20 @@ public:
    static void Run(const InvoiceDbController& controller,
                        const CommandLineManager& cli);
 };
+
+class GetHtmlCommand
+{
+public:
+   static void Run(const InvoiceDbController& controller,
+                       const CommandLineManager& cli);
+};
+
+class GetCssCommand
+{
+public:
+   static void Run(const InvoiceDbController& controller,
+                       const CommandLineManager& cli);
+};
+
 
 #endif

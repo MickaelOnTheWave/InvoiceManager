@@ -30,7 +30,7 @@
 #include "CliParametersDefinitions.h"
 #include "CreateFromLastCommand.h"
 #include "CreatePdfCommand.h"
-#include "ShowCommand.h"
+#include "Commands.h"
 
 // TODO Make ToolsLib usable lib and use it here instead of using copied cpp/h
 // TODO use same version in installer, cli, gui and everywhere
@@ -48,6 +48,8 @@ const string listCommand = "list";
 const string showCommand = "show";
 const string pdfCommand = "generatePdf";
 const string createFromLastCommand = "createFromLast";
+const string getHtmlCommand = "getHtml";
+const string getCssCommand = "getCss";
 
 
 void setupCommandLine(CommandLineManager& cli)
@@ -60,6 +62,8 @@ void setupCommandLine(CommandLineManager& cli)
    cli.AddParameter(pdfCommand, "Generates a PDF file of the selected invoice");
    cli.AddParameter(createFromLastCommand, "Creates a new invoice that is a copy of the last invoice,\n"
                                            "but at the specified date");
+   cli.AddParameter(getHtmlCommand, "Returns the HTML content of the selected invoice.");
+   cli.AddParameter(getCssCommand, "Returns the CSS file path for the selected invoice.");
 
    // Data parameters for actions
    cli.AddParameter(selectParam, "Used to select a single invoice in the database.\n"
@@ -129,6 +133,10 @@ void executeCommands(CommandLineManager& cli)
       CreatePdfCommand::Run(controller, cli);
    else if (cli.HasParameter(createFromLastCommand))
       CreateFromLastCommand::Run(controller, cli);
+   else if (cli.HasParameter(getHtmlCommand))
+      GetHtmlCommand::Run(controller, cli);
+   else if (cli.HasParameter(getCssCommand))
+      GetCssCommand::Run(controller, cli);
 }
 
 int main(int argc, char** argv)
