@@ -24,7 +24,7 @@ add_executable(InvoiceCli
   src/CliParametersDefinitions.h
   src/CreateFromLastCommand.cpp src/CreateFromLastCommand.h
   src/CreatePdfCommand.h src/CreatePdfCommand.cpp
-  src/ShowCommand.cpp src/ShowCommand.h
+  src/Commands.cpp src/Commands.h
   src/SelectCliParamHandler.h src/SelectCliParamHandler.cpp
   ${TS_FILES}
 )
