@@ -49,6 +49,8 @@ private:
    static QString readFileContent(const QString& filename);
    static QString fillTemplate(const QString& templateModel,
                                const InvoiceUserData& data);
+   static QString addInternalCss(const QString& htmlContent,
+                                 const QString& cssContent);
 
    static QString buildReplaceAddress(const QString& recordedAddress);
    static QString buildReplaceDetails(const std::vector<InvoiceDetail>& details);

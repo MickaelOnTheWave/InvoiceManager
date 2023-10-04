@@ -36,11 +36,10 @@ QString InvoiceDocument::CreateHtmlContent()
 
 void InvoiceDocument::CreatePdfFile(const QString& file)
 {
-   QTextDocument *document = new QTextDocument();
-   document->setHtml(CreateHtmlContent());
-
    const QString cssContent = readFileContent(invoiceData.stylesheetPath);
-   document->setDefaultStyleSheet(cssContent);
+   const QString styledHtmlContent = addInternalCss(CreateHtmlContent(), cssContent);
+   QTextDocument *document = new QTextDocument();
+   document->setHtml(styledHtmlContent);
 
    QPrinter printer(QPrinter::HighResolution);
    //printer.pageLayout().setPageSize(QPageSize::A4);
@@ -103,6 +102,20 @@ QString InvoiceDocument::fillTemplate(const QString& templateModel,
    return filledTemplate;
 }
 
+QString InvoiceDocument::addInternalCss(const QString& htmlContent, const QString& cssContent)
+{
+   QString styledContent = htmlContent;
+
+   const auto stylesheetStart = htmlContent.indexOf("<link rel=\"stylesheet\"");
+   if (stylesheetStart > -1)
+   {
+      const auto stylesheetEnd = htmlContent.indexOf(">", stylesheetStart);
+      const QString internalStylesheet = "<style>\n" + cssContent + "\n</style>";
+      styledContent.replace(stylesheetStart, stylesheetEnd-stylesheetStart, internalStylesheet);
+   }
+   return styledContent;
+}
+
 QString InvoiceDocument::buildReplaceAddress(const QString& recordedAddress)
 {
    QString replacedAddress;
@@ -142,10 +155,11 @@ QString InvoiceDocument::buildInvoiceTotal(const std::vector<InvoiceDetail>& det
 
 QString InvoiceDocument::GetFileFromPattern(const QString& pattern) const
 {
+   // TODO Add Invoice ID and update doc
    QString filename = pattern;
    filename.replace("[YYYY]", QString::number(invoiceData.date.year()));
-   filename.replace("[MM]", QString::number(invoiceData.date.month()));
-   filename.replace("[DD]", QString::number(invoiceData.date.day()));
+   filename.replace("[MM]", QString::asprintf("%02d", invoiceData.date.month()));
+   filename.replace("[DD]", QString::asprintf("%02d", invoiceData.date.day()));
    filename.replace("[CLIENT]", invoiceData.clientCompany.name);
    return filename;
 }
