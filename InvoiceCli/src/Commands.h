@@ -43,5 +43,12 @@ public:
                        const CommandLineManager& cli);
 };
 
+class GetStyledHtmlCommand
+{
+public:
+   static void Run(const InvoiceDbController& controller,
+                       const CommandLineManager& cli);
+};
+
 
 #endif

@@ -50,6 +50,7 @@ const string pdfCommand = "generatePdf";
 const string createFromLastCommand = "createFromLast";
 const string getHtmlCommand = "getHtml";
 const string getCssCommand = "getCss";
+const string getStyledHtmlCommand = "getStyledHtml";
 
 
 void setupCommandLine(CommandLineManager& cli)
@@ -64,6 +65,7 @@ void setupCommandLine(CommandLineManager& cli)
                                            "but at the specified date");
    cli.AddParameter(getHtmlCommand, "Returns the HTML content of the selected invoice.");
    cli.AddParameter(getCssCommand, "Returns the CSS file path for the selected invoice.");
+   cli.AddParameter(getStyledHtmlCommand, "Returns the HTML content with embedded CSS of the selected invoice.");
 
    // Data parameters for actions
    cli.AddParameter(selectParam, "Used to select a single invoice in the database.\n"
@@ -137,6 +139,8 @@ void executeCommands(CommandLineManager& cli)
       GetHtmlCommand::Run(controller, cli);
    else if (cli.HasParameter(getCssCommand))
       GetCssCommand::Run(controller, cli);
+   else if (cli.HasParameter(getStyledHtmlCommand))
+      GetStyledHtmlCommand::Run(controller, cli);
 }
 
 int main(int argc, char** argv)

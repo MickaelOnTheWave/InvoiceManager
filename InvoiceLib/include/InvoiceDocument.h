@@ -29,7 +29,9 @@ public:
 
    void setData(const InvoiceUserData& data);
 
-   QString CreateHtmlContent();
+   QString CreateHtmlContent() const;
+
+   QString CreateStyledHtmlContent() const;
 
    /**
     * @brief CreateFile Creates a PDF file based on the invoice data

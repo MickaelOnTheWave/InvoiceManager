@@ -28,18 +28,23 @@ void InvoiceDocument::setData(const InvoiceUserData& data)
    invoiceData = data;
 }
 
-QString InvoiceDocument::CreateHtmlContent()
+QString InvoiceDocument::CreateHtmlContent() const
 {
    const QString templateContent = readFileContent(invoiceData.templatePath);
    return fillTemplate(templateContent, invoiceData);
 }
 
+QString InvoiceDocument::CreateStyledHtmlContent() const
+{
+   const QString htmlContent = CreateHtmlContent();
+   const QString cssContent = readFileContent(invoiceData.stylesheetPath);
+   return addInternalCss(htmlContent, cssContent);
+}
+
 void InvoiceDocument::CreatePdfFile(const QString& file)
 {
-   const QString cssContent = readFileContent(invoiceData.stylesheetPath);
-   const QString styledHtmlContent = addInternalCss(CreateHtmlContent(), cssContent);
    QTextDocument *document = new QTextDocument();
-   document->setHtml(styledHtmlContent);
+   document->setHtml(CreateStyledHtmlContent());
 
    QPrinter printer(QPrinter::HighResolution);
    //printer.pageLayout().setPageSize(QPageSize::A4);

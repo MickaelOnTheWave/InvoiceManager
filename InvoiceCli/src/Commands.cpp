@@ -61,3 +61,16 @@ void GetCssCommand::Run(const InvoiceDbController& controller, const CommandLine
       cout << data.stylesheetPath.toStdString() << endl;
    }
 }
+
+void GetStyledHtmlCommand::Run(const InvoiceDbController& controller, const CommandLineManager& cli)
+{
+   const int invoiceId = SelectCliParamHandler::GetId(controller, cli);
+   if (invoiceId > -1)
+   {
+      InvoiceDocument invoiceDoc;
+      invoiceDoc.setData(controller.getInvoiceUserData(invoiceId));
+      const QString htmlContent = invoiceDoc.CreateStyledHtmlContent();
+      cout << htmlContent.toStdString() << endl;
+   }
+
+}
