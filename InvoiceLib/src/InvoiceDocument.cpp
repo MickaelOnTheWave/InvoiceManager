@@ -87,9 +87,12 @@ QString InvoiceDocument::fillTemplate(const QString& templateModel,
    filledTemplate.replace("{USER-COMPANY-NAME}", data.userCompany.name);
    filledTemplate.replace("<p>{USER-COMPANY-ADDRESS}</p>", buildReplaceAddress(data.userCompany.address));
    filledTemplate.replace("{USER-COMPANY-EMAIL}", data.userCompany.email);
+   filledTemplate.replace("{USER-COMPANY-PHONE}", data.userCompany.phoneNumber);
 
    filledTemplate.replace("{CLIENT-NAME}", data.clientCompany.name);
    filledTemplate.replace("<p>{CLIENT-ADDRESS}</p>", buildReplaceAddress(data.clientCompany.address));
+   filledTemplate.replace("{CLIENT-EMAIL}", data.clientCompany.email);
+   filledTemplate.replace("{CLIENT-PHONE}", data.clientCompany.phoneNumber);
 
    filledTemplate.replace("<tr>{INVOICE-DETAILS}</tr>", buildReplaceDetails(data.details));
    filledTemplate.replace("{INVOICE-TOTAL}", buildInvoiceTotal(data.details));
