@@ -111,10 +111,12 @@ void MainPage::connectViewsToModels(ClientModel *_clientModel, QAbstractItemMode
 
 void MainPage::onOpenInvoice(const QModelIndex &index)
 {
-    auto dialog = new InvoiceViewDialog(this);
-    dialog->setData(createInvoiceTemplateData(index));
-    dialog->show();
-    connect(dialog, &InvoiceViewDialog::deleteConfirmed, this, &MainPage::onRemoveInvoice);
+   auto proxyModel = dynamic_cast<InvoiceSortProxyModel*>(ui->invoiceContentView->model());
+   const QModelIndex originalIndex = proxyModel->mapToSource(index);
+   auto dialog = new InvoiceViewDialog(this);
+   dialog->setData(createInvoiceTemplateData(originalIndex));
+   dialog->show();
+   connect(dialog, &InvoiceViewDialog::deleteConfirmed, this, &MainPage::onRemoveInvoice);
 }
 
 void MainPage::onOpenClient(const QModelIndex& index)
