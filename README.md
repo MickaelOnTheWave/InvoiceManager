@@ -38,3 +38,26 @@ InvoiceManager is built around Qt Framework, and as such should run on all platf
 Please note however that as of today, it has been tested only on Linux.
 
 This program with all its components are released according to the terms of the GNU GPLv3 license. The details about this license are provided in the LICENSE file.
+
+## Creating templates
+
+A template is an HTML file with placeholder fields that will be replaced by the invoice data.
+Here are the fields that are available :
+- {ID}
+- {DATE}
+- {USER-COMPANY-NAME}
+- {USER-COMPANY-ADDRESS}
+- {USER-COMPANY-EMAIL}
+- {USER-COMPANY-PHONE}
+- {CLIENT-NAME}
+- {CLIENT-ADDRESS}
+- {CLIENT-EMAIL}
+- {CLIENT-PHONE}
+- {INVOICE-DETAILS}
+- {INVOICE-TOTAL}
+- {CURRENCY}
+- {NOTES}
+
+Their names are self explanatory. There are, however, some fields that have a special behaviour :
+- {USER-COMPANY-ADDRESS} and {CLIENT-ADDRESS} : The address is a multiline property. In order to allow it to be also represented in a multiline form in the invoice, they need to be enclosed with _<p></p>_ tags. What will be replaced is <p>{ADRESS}</p>, and each line will be enclosed in <p></p> tags.
+- {INVOICE-DETAILS} : Details are meant to be represented in a table structure, they need to be enclosed with _<tr></tr>_ tags. What will be replaced is <tr>{INVOICE-DETAILS}</tr>, with each detail being enclosed in <tr></tr> tags, and each cell in it being in <td></td> tags.
