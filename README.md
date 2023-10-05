@@ -59,5 +59,5 @@ Here are the fields that are available :
 - {NOTES}
 
 Their names are self explanatory. There are, however, some fields that have a special behaviour :
-- {USER-COMPANY-ADDRESS} and {CLIENT-ADDRESS} : The address is a multiline property. In order to allow it to be also represented in a multiline form in the invoice, they need to be enclosed with _<p></p>_ tags. What will be replaced is <p>{ADRESS}</p>, and each line will be enclosed in <p></p> tags.
-- {INVOICE-DETAILS} : Details are meant to be represented in a table structure, they need to be enclosed with _<tr></tr>_ tags. What will be replaced is <tr>{INVOICE-DETAILS}</tr>, with each detail being enclosed in <tr></tr> tags, and each cell in it being in <td></td> tags.
+- {USER-COMPANY-ADDRESS} and {CLIENT-ADDRESS} : The address is a multiline property. In order to allow it to be also represented in a multiline form in the invoice, they need to be enclosed with <p></p> tags. What will be replaced is <p>{ADRESS}</p>, and each line will be enclosed in <p></p> tags.
+- {INVOICE-DETAILS} : Details are meant to be represented in a table structure, they need to be enclosed with <tr></tr> tags. What will be replaced is <tr>{INVOICE-DETAILS}</tr>, with each detail being enclosed in <tr></tr> tags, and each cell in it being in <td></td> tags.
