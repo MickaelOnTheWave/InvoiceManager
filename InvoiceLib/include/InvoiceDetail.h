@@ -29,6 +29,7 @@ public:
 
     QString description;
     double value;
+    double quantity;
 };
 
 #endif // INVOICEDETAIL_H

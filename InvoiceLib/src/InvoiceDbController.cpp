@@ -72,7 +72,7 @@ bool InvoiceDbController::createDb(const QString &filename)
         return false;
     }
 
-    if (!query.exec("CREATE TABLE invoiceelement (id INTEGER primary key, description TEXT, value DOUBLE)"))
+    if (!query.exec("CREATE TABLE invoiceelement (id INTEGER primary key, description TEXT, value DOUBLE, quantity DOUBLE)"))
     {
         lastErrorMessage = query.lastError().text();
         return false;
@@ -146,9 +146,10 @@ std::vector<int> InvoiceDbController::writeInvoiceDetails(const std::vector<Invo
     for (const auto& detail : details)
     {
         QSqlQuery query;
-        query.prepare("INSERT INTO invoiceelement (description, value) VALUES (:description, :value)");
+        query.prepare("INSERT INTO invoiceelement (description, value) VALUES (:description, :value, :quantity)");
         query.bindValue(":description", detail.description);
         query.bindValue(":value", detail.value);
+        query.bindValue(":quantity", detail.quantity);
         if (query.exec())
             insertedIds.push_back(query.lastInsertId().toInt());
     }

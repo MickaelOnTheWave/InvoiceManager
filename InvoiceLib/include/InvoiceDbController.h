@@ -33,7 +33,7 @@ class InvoiceDbController : public QObject
     Q_OBJECT
 
 public:
-    static const int currentDbVersion = 8;
+    static const int currentDbVersion = 9;
 
     InvoiceDbController();
 
