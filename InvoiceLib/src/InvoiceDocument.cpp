@@ -94,7 +94,8 @@ QString InvoiceDocument::fillTemplate(const QString& templateModel,
    filledTemplate.replace("{CLIENT-EMAIL}", data.clientCompany.email);
    filledTemplate.replace("{CLIENT-PHONE}", data.clientCompany.phoneNumber);
 
-   filledTemplate.replace("<tr>{INVOICE-DETAILS}</tr>", buildReplaceDetails(data.details));
+   filledTemplate.replace("<tr>{INVOICE-DETAILS}</tr>", buildReplaceDetailsV8(data.details));
+   replaceNewerDetails(filledTemplate, data.details);
    filledTemplate.replace("{INVOICE-TOTAL}", buildInvoiceTotal(data.details));
 
    filledTemplate.replace("{CURRENCY}", data.currency);
@@ -137,7 +138,7 @@ QString InvoiceDocument::buildReplaceAddress(const QString& recordedAddress)
    return replacedAddress;
 }
 
-QString InvoiceDocument::buildReplaceDetails(const std::vector<InvoiceDetail>& details)
+QString InvoiceDocument::buildReplaceDetailsV8(const std::vector<InvoiceDetail>& details)
 {
    QString replacedStr;
    for (const auto& detailLine : details)
@@ -151,11 +152,53 @@ QString InvoiceDocument::buildReplaceDetails(const std::vector<InvoiceDetail>& d
    return replacedStr;
 }
 
+void InvoiceDocument::replaceNewerDetails(QString& templateData, const std::vector<InvoiceDetail>& details)
+{
+   const QString startSectionTag = "<tr>{INVOICE-DETAILS}";
+   const QString endSectionTag = "</tr>";
+   int startIndex = 0;
+   while (startIndex > -1)
+   {
+      startIndex = templateData.indexOf(startSectionTag);
+      const int endIndex = templateData.indexOf("</tr>", startIndex);
+      if (endIndex < 0)
+         // Malformed template, better to do nothing.
+         break;
+
+      const QString oldDetailsSection = templateData.mid(startIndex, endIndex-startIndex+endSectionTag.length());
+
+      const int innerSectionLength = oldDetailsSection.length() - startSectionTag.length() - endSectionTag.length();
+      const QString innerDetailSection = oldDetailsSection.mid(startSectionTag.length(), innerSectionLength).trimmed();
+
+
+      QString replacedStr;
+      for (const auto& detailLine : details)
+      {
+         const QString descriptionStr = QString("<td>") + detailLine.description + "</td>";
+         const QString valueStr = QString::asprintf("<td>%.2f</td>", detailLine.value);
+         const QString quantityStr = QString::asprintf("<td>%.2f</td>", detailLine.quantity);
+         const QString totalStr = QString::asprintf("<td>%.2f</td>", detailLine.value * detailLine.quantity);
+
+         QString innerSectionInstance = innerDetailSection;
+         innerSectionInstance.replace("<td>{DESCRIPTION}</td>", descriptionStr);
+         innerSectionInstance.replace("<td>{QUANTITY}</td>", quantityStr);
+         innerSectionInstance.replace("<td>{UNITVALUE}</td>", valueStr);
+         innerSectionInstance.replace("<td>{TOTAL}</td>", totalStr);
+
+         replacedStr += "\n\n<tr>\n";
+         replacedStr += innerSectionInstance;
+         replacedStr += "\n\n</tr>\n";
+      }
+
+      templateData.replace(oldDetailsSection, replacedStr);
+   }
+}
+
 QString InvoiceDocument::buildInvoiceTotal(const std::vector<InvoiceDetail>& details)
 {
    auto accumulator = [](const double partialSum, const InvoiceDetail& detail)
    {
-      return partialSum + detail.value;
+      return partialSum + (detail.quantity * detail.value);
    };
    const double totalValue = std::accumulate(details.begin(), details.end(), 0.0, accumulator);
    return QString::asprintf("%.2f", totalValue);

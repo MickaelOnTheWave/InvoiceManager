@@ -24,6 +24,7 @@
 #include <QPushButton>
 #include <QSqlTableModel>
 
+#include "DbMigrator.h"
 #include "NewInvoicePage.h"
 #include "TitleBarWidget.h"
 
@@ -234,21 +235,30 @@ void MainWindow::showError(const QString &title, const QString &details)
 
 bool MainWindow::isDbOpeningConfirmed()
 {
-    bool openDb = true;
-    const int dbVersion = controller.getDatabaseVersion();
-    if (dbVersion != controller.currentDbVersion)
-    {
-        const QString message("DB version mismatch. The app might crash while trying to handle it.\n"
-                              "DB version : %1 - Current version : %2\n"
-                              "Are you sure you want to open this file ?");
-        QMessageBox::StandardButtons buttons = {QMessageBox::Yes, QMessageBox::No};
-        auto button = QMessageBox::warning(this, "Warning",
-                                           message.arg(dbVersion).arg(controller.currentDbVersion),
-                                           buttons,
-                                           QMessageBox::No);
-        openDb = (button == QMessageBox::Yes);
-    }
-    return openDb;
+   const int dbVersion = controller.getDatabaseVersion();
+   if (dbVersion != controller.currentDbVersion)
+   {
+      QMessageBox msgBox;
+     const QString message("DB version mismatch. The app might crash while trying to handle it.\n"
+                           "DB version : %1 - Current version : %2\n"
+                           "What to you want to do ?");
+     auto* buttonMigrate = msgBox.addButton("Migrate", QMessageBox::YesRole);
+     auto* buttonClose = msgBox.addButton("Close", QMessageBox::NoRole);
+     msgBox.setWindowTitle("Warning");
+     msgBox.setText(message.arg(dbVersion).arg(controller.currentDbVersion));
+     msgBox.exec();
+     if (msgBox.clickedButton() == buttonMigrate)
+     {
+        DbMigrator migrator(controller);
+        const bool ok = migrator.Migrate();
+        if (!ok)
+           showError("Database Migration", "Error trying to migrate Database");
+        return ok;
+     }
+     else
+        return false;
+   }
+   return true;
 }
 
 void MainWindow::openDb(const QString& file)

@@ -18,7 +18,10 @@
 
 #include "InvoiceDetail.h"
 
-InvoiceDetail::InvoiceDetail(const QString &_description, const double _value)
-    : description(_description), value(_value)
+InvoiceDetail::InvoiceDetail(const QString &_description,
+                             const double _quantity,
+                             const double _value)
+    : description(_description), quantity(_quantity),
+      value(_value)
 {
 }

@@ -55,7 +55,8 @@ private:
                                  const QString& cssContent);
 
    static QString buildReplaceAddress(const QString& recordedAddress);
-   static QString buildReplaceDetails(const std::vector<InvoiceDetail>& details);
+   static QString buildReplaceDetailsV8(const std::vector<InvoiceDetail>& details);
+   static void replaceNewerDetails(QString& templateData, const std::vector<InvoiceDetail>& details);
    static QString buildInvoiceTotal(const std::vector<InvoiceDetail>& details);
 
    QString GetFileFromPattern(const QString& pattern) const;

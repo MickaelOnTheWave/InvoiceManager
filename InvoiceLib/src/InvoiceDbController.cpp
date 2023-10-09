@@ -72,7 +72,7 @@ bool InvoiceDbController::createDb(const QString &filename)
         return false;
     }
 
-    if (!query.exec("CREATE TABLE invoiceelement (id INTEGER primary key, description TEXT, value DOUBLE)"))
+    if (!query.exec("CREATE TABLE invoiceelement (id INTEGER primary key, description TEXT, value DOUBLE, quantity DOUBLE)"))
     {
         lastErrorMessage = query.lastError().text();
         return false;
@@ -146,9 +146,10 @@ std::vector<int> InvoiceDbController::writeInvoiceDetails(const std::vector<Invo
     for (const auto& detail : details)
     {
         QSqlQuery query;
-        query.prepare("INSERT INTO invoiceelement (description, value) VALUES (:description, :value)");
+        query.prepare("INSERT INTO invoiceelement (description, value) VALUES (:description, :value, :quantity)");
         query.bindValue(":description", detail.description);
         query.bindValue(":value", detail.value);
+        query.bindValue(":quantity", detail.quantity);
         if (query.exec())
             insertedIds.push_back(query.lastInsertId().toInt());
     }
@@ -565,14 +566,15 @@ std::vector<int> InvoiceDbController::getInvoiceElements(const int invoiceId) co
 
 InvoiceDetail InvoiceDbController::getInvoiceDetail(const int detailId) const
 {
-   const QString queryStr = "SELECT description, value FROM invoiceelement WHERE id = %1";
+   const QString queryStr = "SELECT description, value, quantity FROM invoiceelement WHERE id = %1";
    QSqlQuery query;
    const bool ok = query.exec(queryStr.arg(detailId));
    if (ok && query.next())
    {
        const QString service = query.value(0).toString();
        const double value = query.value(1).toDouble();
-       return InvoiceDetail(service, value);
+       const double quantity = query.value(2).toDouble();
+       return InvoiceDetail(service, quantity, value);
    }
    return InvoiceDetail("", 0.0);
 }

@@ -25,10 +25,12 @@ class InvoiceDetail
 {
 public:
     InvoiceDetail(const QString& _description = "",
-                  const double _value = 0.0);
+                  const double _quantity = 1.0,
+                  const double _unitaryValue = 0.0);
 
     QString description;
     double value;
+    double quantity;
 };
 
 #endif // INVOICEDETAIL_H
