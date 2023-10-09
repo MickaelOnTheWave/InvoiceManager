@@ -46,7 +46,14 @@ DataHandlerWidget::DataHandlerWidget(QWidget *parent) :
 
 DataHandlerWidget::~DataHandlerWidget()
 {
-    delete ui;
+   delete ui;
+}
+
+void DataHandlerWidget::setupTotalSpan()
+{
+   auto model = ui->dataView->model();
+   if (model)
+      ui->dataView->setSpan(model->rowCount()-1, 0, 1, 3);
 }
 
 void DataHandlerWidget::hideColumns(const std::vector<int> &columns)
@@ -59,9 +66,7 @@ void DataHandlerWidget::setColumnsResizingMode(const std::vector<QHeaderView::Re
 {
     auto header = ui->dataView->horizontalHeader();
     for (int i=0; i < modes.size(); ++i)
-    {
         header->setSectionResizeMode(i, modes[i]);
-    }
 }
 
 void DataHandlerWidget::setColumnsSizes(const std::vector<int> &sizes)

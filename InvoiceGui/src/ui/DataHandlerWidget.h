@@ -40,6 +40,8 @@ public:
     explicit DataHandlerWidget(QWidget *parent = nullptr);
     ~DataHandlerWidget();
 
+   void setupTotalSpan();
+
     void hideColumns(const std::vector<int>& columns);
     void setColumnsResizingMode(const std::vector<QHeaderView::ResizeMode> &modes);
 

@@ -68,7 +68,7 @@ private slots:
 
 private:
     void insertTotalRow();
-    void computeTotalRow();
+    void computeTotals();
     void resetInputData(const QString &companyName);
     void resetInvoiceData();
 
@@ -83,7 +83,7 @@ private:
      */
     std::vector<int> writeInvoiceElements();
 
-    void addInvoiceDetail(const QString& name, const double value);
+    void addInvoiceDetail(const QString& name, const double value, const double quantity);
 
     int getComboIndex(QComboBox* combobox, const int id) const;
 
@@ -93,6 +93,9 @@ private:
     InvoiceUserData createInvoiceTemplateData() const;
 
     void setError(const QString& description);
+
+    QVariant GetInvoiceDetailData(const int row, const int column) const;
+    void SetInvoiceDetailData(const int row, const int column, const QVariant& data);
 
     Ui::NewInvoicePage *ui;
     ClientModel* clientModel;
