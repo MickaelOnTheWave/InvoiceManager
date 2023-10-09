@@ -165,7 +165,7 @@ void InvoiceDocument::replaceNewerDetails(QString& templateData, const std::vect
          // Malformed template, better to do nothing.
          break;
 
-      const QString oldDetailsSection = templateData.mid(startIndex, endIndex-startIndex);
+      const QString oldDetailsSection = templateData.mid(startIndex, endIndex-startIndex+endSectionTag.length());
 
       const int innerSectionLength = oldDetailsSection.length() - startSectionTag.length() - endSectionTag.length();
       const QString innerDetailSection = oldDetailsSection.mid(startSectionTag.length(), innerSectionLength).trimmed();
@@ -174,10 +174,10 @@ void InvoiceDocument::replaceNewerDetails(QString& templateData, const std::vect
       QString replacedStr;
       for (const auto& detailLine : details)
       {
-         const QString descriptionStr = QString::asprintf("<td>%.2f</td>", detailLine.value);
-         const QString valueStr = QString::asprintf("%.2f", detailLine.value);
-         const QString quantityStr = QString::asprintf("%.2f", detailLine.quantity);
-         const QString totalStr = QString::asprintf("%.2f", detailLine.value * detailLine.quantity);
+         const QString descriptionStr = QString("<td>") + detailLine.description + "</td>";
+         const QString valueStr = QString::asprintf("<td>%.2f</td>", detailLine.value);
+         const QString quantityStr = QString::asprintf("<td>%.2f</td>", detailLine.quantity);
+         const QString totalStr = QString::asprintf("<td>%.2f</td>", detailLine.value * detailLine.quantity);
 
          QString innerSectionInstance = innerDetailSection;
          innerSectionInstance.replace("<td>{DESCRIPTION}</td>", descriptionStr);
@@ -198,7 +198,7 @@ QString InvoiceDocument::buildInvoiceTotal(const std::vector<InvoiceDetail>& det
 {
    auto accumulator = [](const double partialSum, const InvoiceDetail& detail)
    {
-      return partialSum + detail.value;
+      return partialSum + (detail.quantity * detail.value);
    };
    const double totalValue = std::accumulate(details.begin(), details.end(), 0.0, accumulator);
    return QString::asprintf("%.2f", totalValue);

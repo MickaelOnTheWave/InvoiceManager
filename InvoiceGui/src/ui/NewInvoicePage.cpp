@@ -130,7 +130,7 @@ void NewInvoicePage::onClientComboChange(int index)
 
 void NewInvoicePage::onAddInvoiceDetail()
 {
-    addInvoiceDetail("Service", 1.0, 0.00);
+    addInvoiceDetail("Service", 0.0, 1.0);
     computeTotals();
 }
 
