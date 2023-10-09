@@ -566,14 +566,15 @@ std::vector<int> InvoiceDbController::getInvoiceElements(const int invoiceId) co
 
 InvoiceDetail InvoiceDbController::getInvoiceDetail(const int detailId) const
 {
-   const QString queryStr = "SELECT description, value FROM invoiceelement WHERE id = %1";
+   const QString queryStr = "SELECT description, value, quantity FROM invoiceelement WHERE id = %1";
    QSqlQuery query;
    const bool ok = query.exec(queryStr.arg(detailId));
    if (ok && query.next())
    {
        const QString service = query.value(0).toString();
        const double value = query.value(1).toDouble();
-       return InvoiceDetail(service, value);
+       const double quantity = query.value(2).toDouble();
+       return InvoiceDetail(service, quantity, value);
    }
    return InvoiceDetail("", 0.0);
 }
