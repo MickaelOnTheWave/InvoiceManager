@@ -146,7 +146,7 @@ std::vector<int> InvoiceDbController::writeInvoiceDetails(const std::vector<Invo
     for (const auto& detail : details)
     {
         QSqlQuery query;
-        query.prepare("INSERT INTO invoiceelement (description, value) VALUES (:description, :value, :quantity)");
+        query.prepare("INSERT INTO invoiceelement (description, value, quantity) VALUES (:description, :value, :quantity)");
         query.bindValue(":description", detail.description);
         query.bindValue(":value", detail.value);
         query.bindValue(":quantity", detail.quantity);

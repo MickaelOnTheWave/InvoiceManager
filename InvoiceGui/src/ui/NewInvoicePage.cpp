@@ -38,8 +38,8 @@ NewInvoicePage::NewInvoicePage(QWidget *parent) :
     typedModel->setColumnCount(4);
     invoiceDetailsModel = typedModel;
     invoiceDetailsModel->setHeaderData(0, Qt::Horizontal, tr("Service"));
-    invoiceDetailsModel->setHeaderData(1, Qt::Horizontal, tr("Quantity"));
-    invoiceDetailsModel->setHeaderData(2, Qt::Horizontal, tr("Unitary Value"));
+    invoiceDetailsModel->setHeaderData(1, Qt::Horizontal, tr("Unitary Value"));
+    invoiceDetailsModel->setHeaderData(2, Qt::Horizontal, tr("Quantity"));
     invoiceDetailsModel->setHeaderData(3, Qt::Horizontal, tr("Value"));
 
     resetInvoiceData();
@@ -265,9 +265,9 @@ std::vector<InvoiceDetail> NewInvoicePage::createDetailsCollection() const
     const int detailCount = invoiceDetailsModel->rowCount() - 1;
     for (int i=0; i<detailCount; ++i)
     {
-        const QString description = invoiceDetailsModel->data(invoiceDetailsModel->index(i, 0)).toString();
-        const double quantity = invoiceDetailsModel->data(invoiceDetailsModel->index(i, 1)).toDouble();
-        const double unitaryValue = invoiceDetailsModel->data(invoiceDetailsModel->index(i, 2)).toDouble();
+        const QString description = GetInvoiceDetailData(i, 0).toString();
+        const double unitaryValue = GetInvoiceDetailData(i, 1).toDouble();
+        const double quantity = GetInvoiceDetailData(i, 2).toDouble();
         details.emplace_back(description, quantity, unitaryValue);
     }
     return details;
