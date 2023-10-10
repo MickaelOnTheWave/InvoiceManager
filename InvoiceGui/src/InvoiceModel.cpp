@@ -42,7 +42,7 @@ QVariant InvoiceModel::data(const QModelIndex& item, int role) const
 void InvoiceModel::refresh()
 {
     const int myCompanyId = 1;
-    const QString sumQuery = "SELECT SUM(value) as Amount FROM invoiceelement WHERE id IN "
+    const QString sumQuery = "SELECT SUM(value * quantity) as Amount FROM invoiceelement WHERE id IN "
                              "(SELECT idElement FROM invoicedetailmap WHERE idInvoice = invoice.id )";
     const QString queryStr = "SELECT invoice.id,"
                              "company.name AS 'Client',"

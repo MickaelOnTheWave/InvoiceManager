@@ -146,7 +146,7 @@ std::vector<int> InvoiceDbController::writeInvoiceDetails(const std::vector<Invo
     for (const auto& detail : details)
     {
         QSqlQuery query;
-        query.prepare("INSERT INTO invoiceelement (description, value) VALUES (:description, :value, :quantity)");
+        query.prepare("INSERT INTO invoiceelement (description, value, quantity) VALUES (:description, :value, :quantity)");
         query.bindValue(":description", detail.description);
         query.bindValue(":value", detail.value);
         query.bindValue(":quantity", detail.quantity);
@@ -403,12 +403,16 @@ int InvoiceDbController::getInvoiceCountUsingFile(const int id, const QString& f
 
 bool InvoiceDbController::removeInvoice(const int id)
 {
-   const bool result = removeFromInvoiceTable(id);
-   if (!result)
+   bool ok = removeFromInvoiceElements(id);
+   if (!ok)
       return false;
 
-   removeFromInvoiceElements(id);
-   return removeFromInvoiceElements(id);
+   ok = removeFromInvoiceMap(id);
+   if (!ok)
+      return false;
+
+   ok = removeFromInvoiceTable(id);
+   return ok;
 }
 
 QSqlQuery InvoiceDbController::createWriteCompanyQuery(const CompanyData &data, const bool isClient)
