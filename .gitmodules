@@ -1,0 +1,3 @@
+[submodule "InvoiceLib/externals/wkhtmltopdf"]
+	path = InvoiceLib/externals/wkhtmltopdf
+	url = git@github.com:MickaelOnTheWave/wkhtmltopdf.git
