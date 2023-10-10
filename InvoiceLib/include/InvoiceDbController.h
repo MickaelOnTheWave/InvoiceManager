@@ -64,6 +64,7 @@ public:
 
     int getFirstInvoiceId() const;
     int getLastInvoiceId() const;
+    int GetInvoiceId(const QDate target) const;
 
     InvoiceDbData getLastInvoiceData() const;
     InvoiceDbData getInvoiceDbData(const int invoiceId) const;

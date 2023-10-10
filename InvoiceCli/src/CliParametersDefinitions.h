@@ -27,6 +27,6 @@ const std::string valueParam = "value";
 const std::string dateParam = "date";
 const std::string namePatternParam = "namePattern";
 
-const std::vector<std::string> selectTypes = {"first", "last", "id"};
+const std::vector<std::string> selectTypes = {"first", "last", "id", "date"};
 
 #endif
