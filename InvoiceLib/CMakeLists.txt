@@ -12,6 +12,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt5 COMPONENTS Core LinguistTools Sql PrintSupport Gui REQUIRED)
 find_package(Qt5 COMPONENTS Core LinguistTools Sql PrintSupport Gui REQUIRED)
 
+add_subdirectory(externals/wkhtmltopdf)
+
 set(TS_FILES InvoiceLib_en_GB.ts)
 
 set(SOURCES
@@ -39,7 +41,7 @@ add_library(InvoiceLib STATIC
 )
 
 target_include_directories(InvoiceLib PUBLIC include/)
-target_link_libraries(InvoiceLib PRIVATE Qt5::Core Qt5::Sql Qt5::PrintSupport Qt5::Gui)
+target_link_libraries(InvoiceLib PRIVATE Qt5::Core Qt5::Sql Qt5::PrintSupport Qt5::Gui wkhtmltopdf)
 
 target_compile_definitions(InvoiceLib PRIVATE INVOICELIB_LIBRARY)
 
