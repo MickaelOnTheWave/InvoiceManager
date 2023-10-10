@@ -52,7 +52,7 @@ void InvoicePrinter::printMultiple(const std::vector<InvoiceUserData>& data)
 double InvoicePrinter::getTotalValue(const std::vector<InvoiceDetail> details)
 {
    auto operation = [] (double sum, const InvoiceDetail& detail) {
-      return sum + detail.value;
+      return sum + (detail.value * detail.quantity);
    };
    return std::accumulate(details.begin(), details.end(), 0.0, operation);
 }
