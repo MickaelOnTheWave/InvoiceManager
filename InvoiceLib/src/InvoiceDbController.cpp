@@ -403,12 +403,16 @@ int InvoiceDbController::getInvoiceCountUsingFile(const int id, const QString& f
 
 bool InvoiceDbController::removeInvoice(const int id)
 {
-   const bool result = removeFromInvoiceTable(id);
-   if (!result)
+   bool ok = removeFromInvoiceElements(id);
+   if (!ok)
       return false;
 
-   removeFromInvoiceElements(id);
-   return removeFromInvoiceElements(id);
+   ok = removeFromInvoiceMap(id);
+   if (!ok)
+      return false;
+
+   ok = removeFromInvoiceTable(id);
+   return ok;
 }
 
 QSqlQuery InvoiceDbController::createWriteCompanyQuery(const CompanyData &data, const bool isClient)
