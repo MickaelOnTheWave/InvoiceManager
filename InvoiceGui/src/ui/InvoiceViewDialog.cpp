@@ -20,6 +20,7 @@
 #include "ui_InvoiceViewDialog.h"
 
 #include <QFile>
+#include <QFileDialog>
 #include <QMessageBox>
 
 InvoiceViewDialog::InvoiceViewDialog(QWidget *parent) :
@@ -57,6 +58,10 @@ void InvoiceViewDialog::onDeleteClicked()
 
 void InvoiceViewDialog::onCreatePdf()
 {
-   invoiceDocument.CreatePdfFile("/home/mickael/2023-09 Consulting Invoice.pdf");
+   const QString defaultDir = "";
+   const QString filter = tr("PDF File (*.pdf)");
+   const QString pdfFile = QFileDialog::getSaveFileName(this, "PDF File to save", defaultDir, filter);
+   if (!pdfFile.isEmpty())
+      invoiceDocument.CreatePdfFile(pdfFile);
 }
 

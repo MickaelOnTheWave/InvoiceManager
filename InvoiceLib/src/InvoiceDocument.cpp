@@ -41,23 +41,21 @@ QString InvoiceDocument::CreateStyledHtmlContent() const
    return addInternalCss(htmlContent, cssContent);
 }
 
-void InvoiceDocument::CreatePdfFile(const QString& file)
+bool InvoiceDocument::CreatePdfFile(const QString& filename)
 {
-   QTextDocument *document = new QTextDocument();
-   document->setHtml(CreateStyledHtmlContent());
+   const QString styledHtmlContent = CreateStyledHtmlContent();
+   QFile f(filename);
+   if (!f.open(QIODevice::ReadWrite))
+       return false;
 
-   QPrinter printer(QPrinter::HighResolution);
-   //printer.pageLayout().setPageSize(QPageSize::A4);
-   printer.setOutputFormat(QPrinter::PdfFormat);
-
-   printer.setOutputFileName(file);
-
-   document->print(&printer);
+   QTextStream stream(&f);
+   stream << toPdfContent(styledHtmlContent) << endl;
+   return true;
 }
 
 void InvoiceDocument::CreatePdfFileFromPattern(const QString& filenamePattern)
 {
-   return CreatePdfFile(GetFileFromPattern(filenamePattern));
+   CreatePdfFile(GetFileFromPattern(filenamePattern));
 }
 
 int InvoiceDocument::GetInvoiceId() const
@@ -202,6 +200,12 @@ QString InvoiceDocument::buildInvoiceTotal(const std::vector<InvoiceDetail>& det
    };
    const double totalValue = std::accumulate(details.begin(), details.end(), 0.0, accumulator);
    return QString::asprintf("%.2f", totalValue);
+}
+
+QString InvoiceDocument::toPdfContent(const QString& htmlContent)
+{
+   // TODO implement using wkHtml
+   return htmlContent;
 }
 
 QString InvoiceDocument::GetFileFromPattern(const QString& pattern) const

@@ -37,7 +37,7 @@ public:
     * @brief CreateFile Creates a PDF file based on the invoice data
     * @param file the path of the file to create
     */
-   void CreatePdfFile(const QString& file);
+   bool CreatePdfFile(const QString& file);
 
    /**
     * @brief CreateFile Creates a PDF file based on the invoice data
@@ -59,6 +59,7 @@ private:
    static void replaceNewerDetails(QString& templateData, const std::vector<InvoiceDetail>& details);
    static QString buildInvoiceTotal(const std::vector<InvoiceDetail>& details);
 
+   static QString toPdfContent(const QString& htmlContent);
    QString GetFileFromPattern(const QString& pattern) const;
 
    InvoiceUserData invoiceData;
