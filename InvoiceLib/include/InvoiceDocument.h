@@ -59,7 +59,6 @@ private:
    static void replaceNewerDetails(QString& templateData, const std::vector<InvoiceDetail>& details);
    static QString buildInvoiceTotal(const std::vector<InvoiceDetail>& details);
 
-   static QString toPdfContent(const QString& htmlContent);
    QString GetFileFromPattern(const QString& pattern) const;
 
    InvoiceUserData invoiceData;

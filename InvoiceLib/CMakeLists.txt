@@ -23,6 +23,7 @@ set(SOURCES
     src/InvoiceData.cpp
     src/InvoiceDocument.cpp
     src/DbMigrator.cpp
+    src/PdfConverter.cpp
 )
 
 set(HEADERS
@@ -32,6 +33,7 @@ set(HEADERS
     include/InvoiceData.h
     include/InvoiceDocument.h
     include/DbMigrator.h
+    include/PdfConverter.h
 )
 
 add_library(InvoiceLib STATIC

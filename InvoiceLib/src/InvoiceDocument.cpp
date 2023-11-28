@@ -23,6 +23,8 @@
 #include <QTextDocument>
 #include <QTextStream>
 
+#include "PdfConverter.h"
+
 void InvoiceDocument::setData(const InvoiceUserData& data)
 {
    invoiceData = data;
@@ -48,8 +50,14 @@ bool InvoiceDocument::CreatePdfFile(const QString& filename)
    if (!f.open(QIODevice::ReadWrite))
        return false;
 
+   WkPdfConverter converter;
+   const bool ok = converter.ConvertHtml(styledHtmlContent);
+   if (!ok)
+      return false;
+
+
    QTextStream stream(&f);
-   stream << toPdfContent(styledHtmlContent) << endl;
+   stream << converter.GetOutput() << endl;
    return true;
 }
 
@@ -200,12 +208,6 @@ QString InvoiceDocument::buildInvoiceTotal(const std::vector<InvoiceDetail>& det
    };
    const double totalValue = std::accumulate(details.begin(), details.end(), 0.0, accumulator);
    return QString::asprintf("%.2f", totalValue);
-}
-
-QString InvoiceDocument::toPdfContent(const QString& htmlContent)
-{
-   // TODO implement using wkHtml
-   return htmlContent;
 }
 
 QString InvoiceDocument::GetFileFromPattern(const QString& pattern) const
