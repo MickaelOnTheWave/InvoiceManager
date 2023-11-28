@@ -43,7 +43,7 @@ public:
     * @brief CreateFile Creates a PDF file based on the invoice data
     * @param file The name pattern of the file to create
     */
-   void CreatePdfFileFromPattern(const QString& filenamePattern);
+   bool CreatePdfFileFromPattern(const QString& filenamePattern);
 
    int GetInvoiceId() const;
 

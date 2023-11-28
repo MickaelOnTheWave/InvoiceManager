@@ -82,6 +82,7 @@ void setupCommandLine(CommandLineManager& cli)
                                       "  [MM]   : the month number\n"
                                       "  [DD]   : the day of month number\n"
                                       "  [CLIENT] : the client name\n"
+                                      "  [ID]   : the invoice Id\n"
                                       "All other characters are literal.");
    cli.AddParameter(dateParam, "Date of the new invoice. Values can be :\n"
                                "  today : uses today as the date of the new invoice.\n"

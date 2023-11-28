@@ -61,9 +61,10 @@ bool InvoiceDocument::CreatePdfFile(const QString& filename)
    return true;
 }
 
-void InvoiceDocument::CreatePdfFileFromPattern(const QString& filenamePattern)
+bool InvoiceDocument::CreatePdfFileFromPattern(const QString& filenamePattern)
 {
-   CreatePdfFile(GetFileFromPattern(filenamePattern));
+   const bool ok = CreatePdfFile(GetFileFromPattern(filenamePattern));
+   return ok;
 }
 
 int InvoiceDocument::GetInvoiceId() const
@@ -212,11 +213,11 @@ QString InvoiceDocument::buildInvoiceTotal(const std::vector<InvoiceDetail>& det
 
 QString InvoiceDocument::GetFileFromPattern(const QString& pattern) const
 {
-   // TODO Add Invoice ID and update doc
    QString filename = pattern;
    filename.replace("[YYYY]", QString::number(invoiceData.date.year()));
    filename.replace("[MM]", QString::asprintf("%02d", invoiceData.date.month()));
    filename.replace("[DD]", QString::asprintf("%02d", invoiceData.date.day()));
    filename.replace("[CLIENT]", invoiceData.clientCompany.name);
+   filename.replace("[ID]", QString::number(invoiceData.id));
    return filename;
 }
