@@ -23,7 +23,7 @@
 #include <QTextDocument>
 #include <QTextStream>
 
-#include "PdfConverter.h"
+#include "WkPdfConverter.h"
 
 void InvoiceDocument::setData(const InvoiceUserData& data)
 {

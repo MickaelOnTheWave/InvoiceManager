@@ -1,5 +1,5 @@
-#ifndef PDFCONVERTER_H
-#define PDFCONVERTER_H
+#ifndef WKPDFCONVERTER_H
+#define WKPDFCONVERTER_H
 
 #include <QString>
 
