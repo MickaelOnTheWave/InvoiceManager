@@ -1,5 +1,8 @@
 #include "WkPdfConverter.h"
 
+#include <QDir>
+#include <QTextStream>
+
 #include <pdfconverter.h>
 #include <pdfsettings.hh>
 #include <utilities.h>
@@ -10,48 +13,22 @@ using namespace wkhtmltopdf;
 
 WkPdfConverter::WkPdfConverter()
 {
-   const int successCode = 1;
-   const int unused = 1;
-//   const int retValue = wkhtmltopdf_init(unused);
-//   initialized = (retValue == successCode);
 }
 
 WkPdfConverter::~WkPdfConverter()
 {
-//   if (initialized)
-//      wkhtmltopdf_deinit();
 }
 
-bool WkPdfConverter::ConvertHtml(const QString& content)
+bool WkPdfConverter::ConvertHtmlToFile(const QString& content, const QString& filename)
 {
-   if (!initialized)
+   const bool ok = writeToTempFile(content);
+   if (!ok)
       return false;
 
-/*   wkhtmltopdf_global_settings* pdfSettings = wkhtmltopdf_create_global_settings();
-   wkhtmltopdf_converter* pdfConverter =  wkhtmltopdf_create_converter(pdfSettings);
-
-   wkhtmltopdf_object_settings* docSettings = wkhtmltopdf_create_object_settings();
-   //int result = wkhtmltopdf_set_object_setting(docSettings, name, value);
-   wkhtmltopdf_add_object(pdfConverter, docSettings, content.toUtf8().constData());
-
-   QByteArray data;
-   auto finishCallback = [](wkhtmltopdf_converter* converter, const int val) {
-
-   };
-   wkhtmltopdf_set_finished_callback(pdfConverter, finishCallback);
-
-   wkhtmltopdf_convert(pdfConverter);
-
-   wkhtmltopdf_destroy_object_settings(docSettings);
-   wkhtmltopdf_destroy_converter(pdfConverter);
-   wkhtmltopdf_destroy_global_settings(pdfSettings);*/
-
-
-
    PdfGlobal globalSettings;
-   globalSettings.out = "hardcoded.pdf";
+   globalSettings.out = filename;
    PdfObject def;
-   def.page = "https://www.free.fr";
+   def.page = tempFile;
 
    bool use_graphics=true;
    MyLooksStyle * style = new MyLooksStyle();
@@ -68,12 +45,30 @@ bool WkPdfConverter::ConvertHtml(const QString& content)
    ProgressFeedback feedback(globalSettings.logLevel, converter);
    converter.addResource(def);
 
-   bool success = converter.convert();
-   return handleError(success, converter.httpErrorCode());
-
+   const bool success = converter.convert();
+   const int errorCode = handleError(success, converter.httpErrorCode());
+   removeTempFile();
+   return errorCode == EXIT_SUCCESS;
 }
 
-QByteArray WkPdfConverter::GetOutput() const
+bool WkPdfConverter::writeToTempFile(const QString& content)
 {
+   QFile f(getTempFilePath());
+   if (!f.open(QIODevice::ReadWrite))
+      return false;
 
+   QTextStream stream(&f);
+   stream << content << Qt::endl;
+   return true;
+}
+
+bool WkPdfConverter::removeTempFile()
+{
+   QFile f(getTempFilePath());
+   return f.remove();
+}
+
+QString WkPdfConverter::getTempFilePath() const
+{
+   return QDir::tempPath() + "/" + tempFile;
 }

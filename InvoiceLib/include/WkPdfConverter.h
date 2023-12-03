@@ -9,12 +9,16 @@ public:
    WkPdfConverter();
    virtual ~WkPdfConverter();
 
-   bool ConvertHtml(const QString& content);
-
-   QByteArray GetOutput() const;
+   bool ConvertHtmlToFile(const QString& content, const QString& filename);
 
 private:
-   bool initialized;
+   bool writeToTempFile(const QString& content);
+   bool removeTempFile();
+
+   QString getTempFilePath() const;
+
+
+   const QString tempFile = "tempFile.html";
 };
 
 #endif

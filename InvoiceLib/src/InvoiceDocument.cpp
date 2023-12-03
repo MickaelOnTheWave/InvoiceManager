@@ -51,14 +51,8 @@ bool InvoiceDocument::CreatePdfFile(const QString& filename)
        return false;
 
    WkPdfConverter converter;
-   const bool ok = converter.ConvertHtml(styledHtmlContent);
-   if (!ok)
-      return false;
-
-
-   QTextStream stream(&f);
-   stream << converter.GetOutput() << endl;
-   return true;
+   const bool ok = converter.ConvertHtmlToFile(styledHtmlContent, filename);
+   return ok;
 }
 
 bool InvoiceDocument::CreatePdfFileFromPattern(const QString& filenamePattern)
