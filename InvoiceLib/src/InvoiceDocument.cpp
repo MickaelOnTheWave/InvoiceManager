@@ -43,13 +43,21 @@ QString InvoiceDocument::CreateStyledHtmlContent() const
    return addInternalCss(htmlContent, cssContent);
 }
 
-bool InvoiceDocument::CreatePdfFile(const QString& filename)
+bool InvoiceDocument::CreateHtmlFile(const QString& filename)
 {
    const QString styledHtmlContent = CreateStyledHtmlContent();
    QFile f(filename);
    if (!f.open(QIODevice::ReadWrite))
        return false;
 
+   QTextStream stream(&f);
+   stream << styledHtmlContent << Qt::endl;
+   return true;
+}
+
+bool InvoiceDocument::CreatePdfFile(const QString& filename)
+{
+   const QString styledHtmlContent = CreateStyledHtmlContent();
    WkPdfConverter converter;
    const bool ok = converter.ConvertHtmlToFile(styledHtmlContent, filename);
    return ok;

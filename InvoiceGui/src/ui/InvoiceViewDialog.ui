@@ -68,6 +68,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="createHtmlButton">
+         <property name="text">
+          <string>Create HTML</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="sendEmailButton">
          <property name="enabled">
           <bool>false</bool>

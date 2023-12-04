@@ -31,6 +31,7 @@ InvoiceViewDialog::InvoiceViewDialog(QWidget *parent) :
     connect(ui->deleteButton, &QAbstractButton::clicked, this, &InvoiceViewDialog::onDeleteClicked);
     connect(ui->closeButton, &QAbstractButton::clicked, this, &QDialog::close);
     connect(ui->createPdfButton, &QAbstractButton::clicked, this, &InvoiceViewDialog::onCreatePdf);
+    connect(ui->createHtmlButton, &QAbstractButton::clicked, this, &InvoiceViewDialog::onCreateHtml);
 }
 
 InvoiceViewDialog::~InvoiceViewDialog()
@@ -63,5 +64,14 @@ void InvoiceViewDialog::onCreatePdf()
    const QString pdfFile = QFileDialog::getSaveFileName(this, "PDF File to save", defaultDir, filter);
    if (!pdfFile.isEmpty())
       invoiceDocument.CreatePdfFile(pdfFile);
+}
+
+void InvoiceViewDialog::onCreateHtml()
+{
+   const QString defaultDir = "";
+   const QString filter = tr("HTML File (*.html)");
+   const QString htmlFile = QFileDialog::getSaveFileName(this, "Html File to save", defaultDir, filter);
+   if (!htmlFile.isEmpty())
+      invoiceDocument.CreateHtmlFile(htmlFile);
 }
 

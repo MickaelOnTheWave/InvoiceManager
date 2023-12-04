@@ -28,7 +28,7 @@ bool WkPdfConverter::ConvertHtmlToFile(const QString& content, const QString& fi
    PdfGlobal globalSettings;
    globalSettings.out = filename;
    PdfObject def;
-   def.page = tempFile;
+   def.page = getTempFilePath();
 
    bool use_graphics=true;
    MyLooksStyle * style = new MyLooksStyle();
