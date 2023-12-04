@@ -23,6 +23,8 @@
 #include <QTextDocument>
 #include <QTextStream>
 
+#include "WkPdfConverter.h"
+
 void InvoiceDocument::setData(const InvoiceUserData& data)
 {
    invoiceData = data;
@@ -41,23 +43,30 @@ QString InvoiceDocument::CreateStyledHtmlContent() const
    return addInternalCss(htmlContent, cssContent);
 }
 
-void InvoiceDocument::CreatePdfFile(const QString& file)
+bool InvoiceDocument::CreateHtmlFile(const QString& filename)
 {
-   QTextDocument *document = new QTextDocument();
-   document->setHtml(CreateStyledHtmlContent());
+   const QString styledHtmlContent = CreateStyledHtmlContent();
+   QFile f(filename);
+   if (!f.open(QIODevice::ReadWrite))
+       return false;
 
-   QPrinter printer(QPrinter::HighResolution);
-   //printer.pageLayout().setPageSize(QPageSize::A4);
-   printer.setOutputFormat(QPrinter::PdfFormat);
-
-   printer.setOutputFileName(file);
-
-   document->print(&printer);
+   QTextStream stream(&f);
+   stream << styledHtmlContent << Qt::endl;
+   return true;
 }
 
-void InvoiceDocument::CreatePdfFileFromPattern(const QString& filenamePattern)
+bool InvoiceDocument::CreatePdfFile(const QString& filename)
 {
-   return CreatePdfFile(GetFileFromPattern(filenamePattern));
+   const QString styledHtmlContent = CreateStyledHtmlContent();
+   WkPdfConverter converter;
+   const bool ok = converter.ConvertHtmlToFile(styledHtmlContent, filename);
+   return ok;
+}
+
+bool InvoiceDocument::CreatePdfFileFromPattern(const QString& filenamePattern)
+{
+   const bool ok = CreatePdfFile(GetFileFromPattern(filenamePattern));
+   return ok;
 }
 
 int InvoiceDocument::GetInvoiceId() const
@@ -206,11 +215,11 @@ QString InvoiceDocument::buildInvoiceTotal(const std::vector<InvoiceDetail>& det
 
 QString InvoiceDocument::GetFileFromPattern(const QString& pattern) const
 {
-   // TODO Add Invoice ID and update doc
    QString filename = pattern;
    filename.replace("[YYYY]", QString::number(invoiceData.date.year()));
    filename.replace("[MM]", QString::asprintf("%02d", invoiceData.date.month()));
    filename.replace("[DD]", QString::asprintf("%02d", invoiceData.date.day()));
    filename.replace("[CLIENT]", invoiceData.clientCompany.name);
+   filename.replace("[ID]", QString::number(invoiceData.id));
    return filename;
 }

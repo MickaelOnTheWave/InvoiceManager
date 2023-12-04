@@ -72,7 +72,8 @@ void setupCommandLine(CommandLineManager& cli)
                                  "Used by show and generatePdf commands. Values can be :\n"
                                  "  first : selects the first invoice in the Dababase (by ID)\n"
                                  "  last : selects the last invoice in the Dababase (by ID)\n"
-                                 "  id : selects the invoice in the Dababase with the specified ID");
+                                 "  id : selects the invoice in the Dababase with the specified ID"
+                                 "  date : selects the first invoice in the Dababase that has the specified date");
    cli.AddParameter(valueParam, "Value to use for the select type. Can be Id, Name... whatever was\n"
                                 "specified in by the type parameter.");
    cli.AddParameter(namePatternParam, "Filename template to use when generating a PDF file\n"
@@ -81,6 +82,7 @@ void setupCommandLine(CommandLineManager& cli)
                                       "  [MM]   : the month number\n"
                                       "  [DD]   : the day of month number\n"
                                       "  [CLIENT] : the client name\n"
+                                      "  [ID]   : the invoice Id\n"
                                       "All other characters are literal.");
    cli.AddParameter(dateParam, "Date of the new invoice. Values can be :\n"
                                "  today : uses today as the date of the new invoice.\n"

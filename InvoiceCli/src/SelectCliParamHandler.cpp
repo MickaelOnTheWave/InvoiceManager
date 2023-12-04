@@ -19,6 +19,8 @@
 #include "SelectCliParamHandler.h"
 
 #include <iostream>
+#include <QDate>
+
 #include "CliParametersDefinitions.h"
 
 using std::cout;
@@ -74,6 +76,12 @@ int SelectCliParamHandler::GetInvoiceIdFromCli(const std::string& selectType)
       }  catch (...) {
          cout << "Error : " << valueStr << " is not a valid value for an id." << endl;
       }
+   }
+   else if (selectType == "date")
+   {
+      const string valueStr = cli.GetParameterValue("value");
+      const QDate targetDate = QDate::fromString(QString::fromStdString(valueStr), "yyyy-MM-dd");
+      return controller.GetInvoiceId(targetDate);
    }
    return -1;
 }

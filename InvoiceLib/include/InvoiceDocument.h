@@ -34,16 +34,22 @@ public:
    QString CreateStyledHtmlContent() const;
 
    /**
-    * @brief CreateFile Creates a PDF file based on the invoice data
+    * @brief CreateHtmlFile Creates an HTML file based on the invoice data
     * @param file the path of the file to create
     */
-   void CreatePdfFile(const QString& file);
+   bool CreateHtmlFile(const QString& file);
+
+   /**
+    * @brief CreatePdfFile Creates a PDF file based on the invoice data
+    * @param file the path of the file to create
+    */
+   bool CreatePdfFile(const QString& file);
 
    /**
     * @brief CreateFile Creates a PDF file based on the invoice data
     * @param file The name pattern of the file to create
     */
-   void CreatePdfFileFromPattern(const QString& filenamePattern);
+   bool CreatePdfFileFromPattern(const QString& filenamePattern);
 
    int GetInvoiceId() const;
 

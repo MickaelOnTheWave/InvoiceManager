@@ -242,6 +242,16 @@ int InvoiceDbController::getLastInvoiceId() const
    return getSingleInvoiceId("DESC");
 }
 
+int InvoiceDbController::GetInvoiceId(const QDate target) const
+{
+   const QString queryStr = "SELECT id FROM invoice WHERE date = \"%1\"";
+   auto finalStr = queryStr.arg(target.toString("dd MMM yyyy"));
+   QSqlQuery query(finalStr);
+   if (query.first())
+      return query.value(0).toInt();
+   return -1;
+}
+
 // TODO : Remove duplication between here and getInvoiceTemplateData()
 InvoiceDbData InvoiceDbController::getLastInvoiceData() const
 {

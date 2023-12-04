@@ -45,6 +45,7 @@ signals:
 private slots:
     void onDeleteClicked();
     void onCreatePdf();
+    void onCreateHtml();
 
 private:
 
