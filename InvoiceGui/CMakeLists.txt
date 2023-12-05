@@ -66,6 +66,7 @@ else()
     endif()
 endif()
 
+target_compile_definitions(InvoiceGui PRIVATE APP_VERSION="${APP_VERSION}")
 target_include_directories(InvoiceGui PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(InvoiceGui PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Sql Qt${QT_VERSION_MAJOR}::WebKitWidgets

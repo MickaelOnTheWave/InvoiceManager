@@ -32,7 +32,6 @@
 // - Add versioning to clients / company
 // - Add template/stylesheet contents to DB
 
-const QString appVersion = "0.9";
 const QString lastDbKey = "lastdbfile";
 
 MainWindow::MainWindow(QWidget *parent)
@@ -71,7 +70,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->aboutPage, &AboutPage::backClicked, this, &MainWindow::onBackToPreviousPage);
 
     initializeOpenLastDb();
-    ui->aboutPage->setVersions(appVersion, InvoiceDbController::currentDbVersion);
+    ui->aboutPage->setVersions(APP_VERSION, InvoiceDbController::currentDbVersion);
 
     ui->stackedWidget->setCurrentWidget(ui->startPage);
 }
