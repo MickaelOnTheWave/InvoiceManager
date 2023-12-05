@@ -92,7 +92,7 @@ void setupCommandLine(CommandLineManager& cli)
    cli.EnableHelpCommand();
 
    const string appName = "Invoice manager Command line Interface";
-   const string appVersion = "1.01";
+   const string appVersion = "1.02";
    const string author = "Mickaël da Cruz Guimarães";
    const string copyrightInfo = "2023";
    cli.EnableVersionCommand(appName, appVersion, author, copyrightInfo);

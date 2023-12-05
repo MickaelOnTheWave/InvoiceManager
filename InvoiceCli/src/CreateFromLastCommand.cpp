@@ -63,7 +63,7 @@ QDate CreateFromLastCommand::GetDateFromCli(const string& dateValue)
       return GetLastDayOfThisMonth();
    }
 
-   return QDate::fromString(QString::fromStdString(dateValue), "DD/MM/yyyy");
+   return QDate::fromString(QString::fromStdString(dateValue), "dd/MM/yyyy");
 }
 
 QDate CreateFromLastCommand::GetLastDayOfThisMonth()
