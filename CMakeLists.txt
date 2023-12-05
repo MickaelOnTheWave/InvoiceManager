@@ -11,6 +11,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+file (STRINGS "VERSION" APP_VERSION)
+
 add_subdirectory(InvoiceLib)
 add_subdirectory(InvoiceGui)
 add_subdirectory(InvoiceCli)

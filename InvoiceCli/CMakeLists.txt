@@ -28,6 +28,7 @@ add_executable(InvoiceCli
   src/SelectCliParamHandler.h src/SelectCliParamHandler.cpp
   ${TS_FILES}
 )
+target_compile_definitions(InvoiceCli PRIVATE APP_VERSION="${APP_VERSION}")
 target_link_libraries(InvoiceCli Qt5::Core Qt5::Widgets Qt5::PrintSupport InvoiceLib)
 
 if(COMMAND qt_create_translation)
