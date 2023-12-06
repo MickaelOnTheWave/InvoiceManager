@@ -33,6 +33,10 @@ jobs:
             cpp_compiler: g++
 
     steps:
+    - name: List Qt moduless
+      run: |
+        aqt list-qt ubuntu desktop --modules 5.15.2
+    
     - name: Install Qt
       uses: jurplel/install-qt-action@v3.3.0
       with:
