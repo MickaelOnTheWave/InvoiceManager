@@ -1,0 +1,36 @@
+# This starter workflow is for a CMake project running on multiple platforms. There is a different starter workflow if you just want a single platform.
+# See: https://github.com/actions/starter-workflows/blob/main/ci/cmake-single-platform.yml
+name: Simplest build of all targets
+
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  SOURCE_DIR:   ${{ github.workspace }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 1 - Install Qt
+      uses: jurplel/install-qt-action@v3.3.0
+      with:
+        version: '5.15.2'
+        host: 'linux'
+        target: 'desktop'
+        install-deps: 'true'
+
+    - name: 2 - Create build dir
+      run: |
+        mkdir build
+
+    - name: 3 - Compile
+      working-directory: build
+      run: |
+        cmake CMakeLists.txt
+
