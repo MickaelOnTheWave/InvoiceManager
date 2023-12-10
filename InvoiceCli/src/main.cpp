@@ -33,10 +33,6 @@
 #include "Commands.h"
 
 // TODO Make ToolsLib usable lib and use it here instead of using copied cpp/h
-// TODO use same version in installer, cli, gui and everywhere
-// TODO Next :
-// - Implement Generate PDF command
-// - Implement file template command
 // TODO Refactor all this, there should be some classes for command / printing etc
 
 using std::string;
