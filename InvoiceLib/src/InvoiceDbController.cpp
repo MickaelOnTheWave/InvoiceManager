@@ -283,7 +283,7 @@ InvoiceDbData InvoiceDbController::getInvoiceDbData(const int invoiceId) const
    QSqlQuery query(queryStr.arg(invoiceId));
    if (query.first())
    {
-      const int companyId = query.value(0).toInt();
+      //const int companyId = query.value(0).toInt();
       const int clientId = query.value(1).toInt();
       const int templateId = query.value(2).toInt();
       const int stylesheetId = query.value(3).toInt();
@@ -313,22 +313,8 @@ InvoiceUserData InvoiceDbController::getInvoiceUserData(const int invoiceId) con
    QSqlQuery query(queryStr.arg(invoiceId));
    if (query.first())
    {
-      const int companyId = query.value(0).toInt();
-      const int clientId = query.value(1).toInt();
-      const int templateId = query.value(2).toInt();
-      const int stylesheetId = query.value(3).toInt();
-      const QString dateStr = query.value(4).toString();
-      const QString notes = query.value(5).toString();
-      const QString currency = query.value(6).toString();
-
-      data.date = QDate::fromString(dateStr, dateFormatStr);
-      data.notes = notes;
-      data.currency = currency;
-      data.templateData = getTemplateData(templateId);
-      data.stylesheetData = getStylesheetData(stylesheetId);
-      data.userCompany = getCompanyData(companyId);
-      data.clientCompany = getCompanyData(clientId);
-      data.details = createInvoiceDetails(invoiceId);
+      const int startingIndex = 0;
+      fillInvoiceUserData(data, query, startingIndex);
    }
 
    return data;
@@ -344,27 +330,16 @@ std::vector<InvoiceUserData> InvoiceDbController::getAllInvoiceTemplateData() co
    const bool result = query.exec(queryStr);
    if (result)
    {
+      const int startingIndex = 1;
       while (query.next())
       {
          InvoiceUserData invoiceData;
-         const int invoiceId = query.value(0).toInt();
-         const int companyId = query.value(1).toInt();
-         const int clientId = query.value(2).toInt();
-         const int templateId = query.value(3).toInt();
-         const int stylesheetId = query.value(4).toInt();
-         const QString dateStr = query.value(5).toString();
-         const QString notes = query.value(6).toString();
-         const QString currency = query.value(7).toString();
 
+         const int invoiceId = query.value(0).toInt();
          invoiceData.id = invoiceId;
-         invoiceData.date = QDate::fromString(dateStr, dateFormatStr);
-         invoiceData.notes = notes;
-         invoiceData.currency = currency;
-         invoiceData.templateData = getTemplateData(templateId);
-         invoiceData.stylesheetData = getStylesheetData(stylesheetId);
-         invoiceData.userCompany = getCompanyData(companyId);
-         invoiceData.clientCompany = getCompanyData(clientId);
-         invoiceData.details = createInvoiceDetails(invoiceId);
+
+         fillInvoiceUserData(invoiceData, query, startingIndex);
+
          data.push_back(invoiceData);
       }
    }
@@ -647,4 +622,26 @@ int InvoiceDbController::getSingleInvoiceId(const QString& sortOrder) const
        return query.value(0).toInt();
    return -1;
 
+}
+
+void InvoiceDbController::fillInvoiceUserData(InvoiceUserData& data, QSqlQuery& query, const int startingIndex) const
+{
+   const int companyId = query.value(startingIndex).toInt();
+   const int clientId = query.value(startingIndex+1).toInt();
+   const int templateId = query.value(startingIndex+2).toInt();
+   const int stylesheetId = query.value(startingIndex+3).toInt();
+   const QString dateStr = query.value(startingIndex+4).toString();
+   const QString notes = query.value(startingIndex+5).toString();
+   const QString currency = query.value(startingIndex+6).toString();
+
+   data.date = QDate::fromString(dateStr, dateFormatStr);
+   data.notes = notes;
+   data.currency = currency;
+   data.templateName = getTemplateName(templateId);
+   data.templateData = getTemplateData(templateId);
+   data.stylesheetName = getStylesheetName(stylesheetId);
+   data.stylesheetData = getStylesheetData(stylesheetId);
+   data.userCompany = getCompanyData(companyId);
+   data.clientCompany = getCompanyData(clientId);
+   data.details = createInvoiceDetails(data.id);
 }

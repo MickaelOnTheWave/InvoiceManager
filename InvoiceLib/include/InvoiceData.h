@@ -58,7 +58,9 @@ public:
    InvoiceUserData(const InvoiceBaseData& other);
 
    std::vector<InvoiceDetail> details;
+   QString templateName;
    QString templateData;
+   QString stylesheetName;
    QString stylesheetData;
 
    CompanyData userCompany;

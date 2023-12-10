@@ -113,6 +113,8 @@ private:
 
     int getSingleInvoiceId(const QString& sortOrder) const;
 
+    void fillInvoiceUserData(InvoiceUserData& data, QSqlQuery& query, const int startingIndex) const;
+
     QString dbFilename;
     QSqlDatabase db; // TODO : remove this. See tip from Qt documentation.
     QString lastErrorMessage;

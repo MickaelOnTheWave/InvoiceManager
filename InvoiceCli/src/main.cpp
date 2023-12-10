@@ -34,6 +34,7 @@
 
 // TODO Make ToolsLib usable lib and use it here instead of using copied cpp/h
 // TODO Refactor all this, there should be some classes for command / printing etc
+// TODO Add db migration here too
 
 using std::string;
 using std::cout;
