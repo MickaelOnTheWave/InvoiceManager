@@ -22,7 +22,6 @@
 #include <QPrinter>
 #include <QTextDocument>
 #include <QTextStream>
-
 #include "WkPdfConverter.h"
 
 void InvoiceDocument::setData(const InvoiceUserData& data)
@@ -32,15 +31,13 @@ void InvoiceDocument::setData(const InvoiceUserData& data)
 
 QString InvoiceDocument::CreateHtmlContent() const
 {
-   const QString templateContent = readFileContent(invoiceData.templatePath);
-   return fillTemplate(templateContent, invoiceData);
+   return fillTemplate(invoiceData.templateData, invoiceData);
 }
 
 QString InvoiceDocument::CreateStyledHtmlContent() const
 {
    const QString htmlContent = CreateHtmlContent();
-   const QString cssContent = readFileContent(invoiceData.stylesheetPath);
-   return addInternalCss(htmlContent, cssContent);
+   return addInternalCss(htmlContent, invoiceData.stylesheetData);
 }
 
 bool InvoiceDocument::CreateHtmlFile(const QString& filename)
@@ -72,15 +69,6 @@ bool InvoiceDocument::CreatePdfFileFromPattern(const QString& filenamePattern)
 int InvoiceDocument::GetInvoiceId() const
 {
    return invoiceData.id;
-}
-
-QString InvoiceDocument::readFileContent(const QString &filename)
-{
-    QFile f(filename);
-    if (!f.open(QFile::ReadOnly | QFile::Text))
-        return QString();
-    QTextStream in(&f);
-    return in.readAll();
 }
 
 QString InvoiceDocument::fillTemplate(const QString& templateModel,

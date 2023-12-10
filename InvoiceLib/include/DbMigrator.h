@@ -12,6 +12,9 @@ public:
 
 private:
    void addToMap(const int targetVersion, std::function<bool()> migrationFunc);
+   bool changeTableToContents(const QString tableName);
+
+   static QString readFileContent(const QString& filename);
 
    std::map<int, std::function<bool()>> migrationFunctions;
    InvoiceDbController& controller;

@@ -58,7 +58,7 @@ void GetCssCommand::Run(const InvoiceDbController& controller, const CommandLine
    if (invoiceId > -1)
    {
       const InvoiceUserData data = controller.getInvoiceUserData(invoiceId);
-      cout << data.stylesheetPath.toStdString() << endl;
+      cout << data.stylesheetData.toStdString() << endl;
    }
 }
 

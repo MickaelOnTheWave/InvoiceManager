@@ -38,17 +38,11 @@ void InvoiceViewWidget::show(const InvoiceUserData& data)
 {
    InvoiceDocument document;
    document.setData(data);
-
-   const QUrl cssUrl = QUrl::fromLocalFile(data.stylesheetPath);
-   ui->webView->settings()->setUserStyleSheetUrl(cssUrl);
-   ui->webView->setHtml(document.CreateHtmlContent());
-   ui->webView->show();
+   show(document.CreateStyledHtmlContent());
 }
 
-void InvoiceViewWidget::show(const QString& htmlContent, const QString& stylesheetPath)
+void InvoiceViewWidget::show(const QString& htmlContent)
 {
-   const QUrl cssUrl = QUrl::fromLocalFile(stylesheetPath);
-   ui->webView->settings()->setUserStyleSheetUrl(cssUrl);
    ui->webView->setHtml(htmlContent);
    ui->webView->show();
 }

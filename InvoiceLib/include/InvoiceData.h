@@ -48,6 +48,9 @@ public:
     int stylesheetId = -1;
 };
 
+// TODO there is a lot of data duplication with
+// stylesheet/template datas.
+// Maybe use a pointer to another collection?
 class InvoiceUserData : public InvoiceBaseData
 {
 public:
@@ -55,8 +58,8 @@ public:
    InvoiceUserData(const InvoiceBaseData& other);
 
    std::vector<InvoiceDetail> details;
-   QString templatePath;
-   QString stylesheetPath;
+   QString templateData;
+   QString stylesheetData;
 
    CompanyData userCompany;
    CompanyData clientCompany;

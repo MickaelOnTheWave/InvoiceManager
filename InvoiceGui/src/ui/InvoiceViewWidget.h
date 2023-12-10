@@ -36,7 +36,7 @@ public:
    ~InvoiceViewWidget();
 
    void show(const InvoiceUserData& data);
-   void show(const QString& htmlContent, const QString& stylesheetPath);
+   void show(const QString& htmlContent);
 
 private:
    Ui::InvoiceViewWidget *ui;

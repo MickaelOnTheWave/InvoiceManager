@@ -21,6 +21,8 @@
 #include "InvoiceData.h"
 #include "InvoiceDocument.h"
 
+// TODO Add test to check that sum of details is OK
+
 InvoiceUserData createDefaultInvoiceData()
 {
    InvoiceUserData data;
@@ -28,8 +30,8 @@ InvoiceUserData createDefaultInvoiceData()
    data.currency = "$";
    data.date = QDate(2023, 12, 10);
    data.id = 123;
-   data.templatePath = "template/path.html";
-   data.stylesheetPath = "stylesheet/path.css";
+   data.templateData = "template/path.html";
+   data.stylesheetData = "stylesheet/path.css";
 
    data.userCompany.name = "My Company Inc.";
    data.userCompany.address = "432 Somewhere Street.\n784-456 SOME CITY\nCOUNTRY";

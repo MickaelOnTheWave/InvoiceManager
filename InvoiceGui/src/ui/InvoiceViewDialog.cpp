@@ -42,7 +42,7 @@ InvoiceViewDialog::~InvoiceViewDialog()
 void InvoiceViewDialog::setData(const InvoiceUserData& data)
 {
    invoiceDocument.setData(data);
-   ui->viewWidget->show(invoiceDocument.CreateHtmlContent(), data.stylesheetPath);
+   ui->viewWidget->show(invoiceDocument.CreateStyledHtmlContent());
 }
 
 void InvoiceViewDialog::onDeleteClicked()
