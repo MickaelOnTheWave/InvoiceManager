@@ -16,5 +16,6 @@ file (STRINGS "VERSION" APP_VERSION)
 add_subdirectory(InvoiceLib)
 add_subdirectory(InvoiceGui)
 add_subdirectory(InvoiceCli)
+add_subdirectory(InvoiceTests)
 
 add_custom_target(Other SOURCES VERSION LICENSE)
