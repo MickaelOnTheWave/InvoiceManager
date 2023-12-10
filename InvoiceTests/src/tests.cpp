@@ -18,15 +18,40 @@
 
 #include <catch2/catch.hpp>
 
-unsigned int Factorial( unsigned int number )
+#include "InvoiceData.h"
+#include "InvoiceDocument.h"
+
+InvoiceUserData createDefaultInvoiceData()
 {
-    return number <= 1 ? number : Factorial(number-1)*number;
+   InvoiceUserData data;
+   data.notes = "Some description notes about the invoice";
+   data.currency = "$";
+   data.date = QDate(2023, 12, 10);
+   data.id = 123;
+   data.templatePath = "template/path.html";
+   data.stylesheetPath = "stylesheet/path.css";
+
+   data.userCompany.name = "My Company Inc.";
+   data.userCompany.address = "432 Somewhere Street.\n784-456 SOME CITY\nCOUNTRY";
+   data.userCompany.email = "myself@mycompany.com";
+   data.userCompany.phoneNumber = "+99 123-456";
+
+   data.clientCompany.name = "Client Company SA";
+   data.clientCompany.address = "12 Big Avenue.\n123-456 ANOTHER CITY\nCOUNTRY";
+   data.clientCompany.email = "client@company.com";
+   data.clientCompany.phoneNumber = "+99 442-456";
+
+   data.details.push_back(InvoiceDetail("Consulting Service", 1.0, 8000.0));
+   data.details.push_back(InvoiceDetail("Support Service", 3.0, 500.0));
+   data.details.push_back(InvoiceDetail("Some Crazy Service", 1.5, 1500.0));
+
+   return data;
 }
 
-TEST_CASE( "Factorials are computed", "[factorial]" )
+TEST_CASE( "InvoiceDocument", "First test" )
 {
-    REQUIRE( Factorial(1) == 1 );
-    REQUIRE( Factorial(2) == 2 );
-    REQUIRE( Factorial(3) == 6 );
-    REQUIRE( Factorial(10) == 3628800 );
+   InvoiceDocument invoiceDoc;
+   invoiceDoc.setData(createDefaultInvoiceData());
+
+   REQUIRE( invoiceDoc.GetInvoiceId() == 123 );
 }
