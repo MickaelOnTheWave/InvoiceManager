@@ -4,6 +4,8 @@
 #include <QSqlQuery>
 #include <QTextStream>
 
+#include "Utils.h"
+
 
 DbMigrator::DbMigrator(InvoiceDbController& _controller)
    : controller(_controller)
@@ -76,7 +78,7 @@ bool DbMigrator::changeTableToContents(const QString tableName)
    {
       const QString stylesheetId = query.value(0).toString();
       const QString stylesheetFile = query.value(1).toString();
-      const QString stylesheetContent = readFileContent(stylesheetFile);
+      const QString stylesheetContent = Utils::readFileContent(stylesheetFile);
 
       QSqlQuery updateQuery;
       queryStr = "UPDATE %1 SET content = :content WHERE id = :idStylesheet";
@@ -92,13 +94,4 @@ bool DbMigrator::changeTableToContents(const QString tableName)
          return false;
 
    return true;
-}
-
-QString DbMigrator::readFileContent(const QString &filename)
-{
-    QFile f(filename);
-    if (!f.open(QFile::ReadOnly | QFile::Text))
-        return QString();
-    QTextStream in(&f);
-    return in.readAll();
 }

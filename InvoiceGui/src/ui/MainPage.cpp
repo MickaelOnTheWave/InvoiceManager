@@ -76,37 +76,37 @@ void MainPage::setController(InvoiceDbController* _controller)
 void MainPage::connectViewsToModels(ClientModel *_clientModel, QAbstractItemModel *_templateModel,
                                     QAbstractItemModel *_stylesheetModel, InvoiceModel* _invoiceModel)
 {
-    clientModel = _clientModel;
-    templateModel = _templateModel;
-    stylesheetModel = _stylesheetModel;
-    invoiceModel = _invoiceModel;
+   clientModel = _clientModel;
+   templateModel = _templateModel;
+   stylesheetModel = _stylesheetModel;
+   invoiceModel = _invoiceModel;
 
-    ui->clientsView->setModel(clientModel);
-    ui->templatesView->setModel(templateModel);
-    ui->stylesheetsView->setModel(stylesheetModel);
+   ui->clientsView->setModel(clientModel);
+   ui->templatesView->setModel(templateModel);
+   ui->stylesheetsView->setModel(stylesheetModel);
 
    auto proxyModel = new InvoiceSortProxyModel(this);
    proxyModel->setSourceModel(invoiceModel);
    ui->invoiceContentView->setModel(proxyModel);
    ui->invoiceContentView->setSortingEnabled(true);
 
-    ui->clientsView->hideColumn(0); // Id
-    ui->clientsView->hideColumn(2); // Address
-    ui->clientsView->hideColumn(5); // isClient
-    ui->clientsView->hideColumn(6); // idChild
-    ui->invoiceContentView->hideColumn(0);
+   ui->clientsView->hideColumn(0); // Id
+   ui->clientsView->hideColumn(2); // Address
+   ui->clientsView->hideColumn(5); // isClient
+   ui->clientsView->hideColumn(6); // idChild
+   ui->invoiceContentView->hideColumn(0);
 
-    initializeFileResourceView(ui->templatesView);
-    initializeFileResourceView(ui->stylesheetsView);
+   initializeFileResourceView(ui->templatesView);
+   initializeFileResourceView(ui->stylesheetsView);
 
-    ui->clientsView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
-    ui->clientsView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+   ui->clientsView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+   ui->clientsView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
 
-    ui->invoiceContentView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
-    ui->invoiceContentView->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
+   ui->invoiceContentView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+   ui->invoiceContentView->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
 
-    auto header = ui->invoiceContentView->horizontalHeader();
-    connect(header, &QHeaderView::sectionClicked, this, &MainPage::onInvoiceHeaderClicked);
+   auto header = ui->invoiceContentView->horizontalHeader();
+   connect(header, &QHeaderView::sectionClicked, this, &MainPage::onInvoiceHeaderClicked);
 }
 
 void MainPage::onOpenInvoice(const QModelIndex &index)
@@ -148,6 +148,7 @@ void MainPage::onInvoiceHeaderClicked(int logicalIndex)
 void MainPage::initializeFileResourceView(QTableView *viewControl)
 {
     viewControl->hideColumn(0);
+    viewControl->hideColumn(2);
     viewControl->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
     viewControl->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
     viewControl->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
