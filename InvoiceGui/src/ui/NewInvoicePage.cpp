@@ -49,6 +49,7 @@ NewInvoicePage::NewInvoicePage(QWidget *parent) :
     ui->invoiceDetailsWidget->setColumnsSizes({-1, 50, 70});
 
     connect(ui->invoiceDetailsWidget, &DataHandlerWidget::addClicked, this, &NewInvoicePage::onAddInvoiceDetail);
+    connect(ui->invoiceDetailsWidget, &DataHandlerWidget::removeClicked, this, &NewInvoicePage::onRemoveInvoiceDetail);
     connect(ui->invoiceDetailsWidget, &DataHandlerWidget::editingFinished, this, &NewInvoicePage::computeTotals);
     connect(ui->todayButton, &QAbstractButton::clicked, this, &NewInvoicePage::onTodayClicked);
     connect(ui->lastDayOfMonthButton, &QAbstractButton::clicked, this, &NewInvoicePage::onLastDayOfMonthClicked);
@@ -132,6 +133,12 @@ void NewInvoicePage::onAddInvoiceDetail()
 {
     addInvoiceDetail("Service", 0.0, 1.0);
     computeTotals();
+}
+
+void NewInvoicePage::onRemoveInvoiceDetail(const QModelIndex index)
+{
+   invoiceDetailsModel->removeRow(index.row());
+   computeTotals();
 }
 
 void NewInvoicePage::onCreateInvoice()

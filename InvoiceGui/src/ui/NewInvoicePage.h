@@ -57,6 +57,7 @@ signals:
 private slots:
     void onClientComboChange(int index);
     void onAddInvoiceDetail();
+    void onRemoveInvoiceDetail(const QModelIndex index);
     void onCreateInvoice();
     void onCancel();
 
