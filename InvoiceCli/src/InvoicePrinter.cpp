@@ -36,8 +36,8 @@ void InvoicePrinter::printSingle(const InvoiceUserData& data)
    cout << "  Client        : " << data.clientCompany.name.toStdString() << endl;
    cout << "  Total Value   : " << totalValue.toStdString() << " " << data.currency.toStdString() << endl;
    cout << "  Date          : " << data.date.toString().toStdString() << endl;
-   cout << "  Template      : " << data.templatePath.toStdString() << endl;
-   cout << "  Stylesheet    : " << data.stylesheetPath.toStdString() << endl;
+   cout << "  Template      : " << data.templateName.toStdString() << endl;
+   cout << "  Stylesheet    : " << data.stylesheetName.toStdString() << endl;
    cout << "|--------------------------------------------------------------------------|" << endl;
 }
 

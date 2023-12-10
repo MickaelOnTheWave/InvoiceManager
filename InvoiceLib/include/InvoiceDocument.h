@@ -54,7 +54,6 @@ public:
    int GetInvoiceId() const;
 
 private:
-   static QString readFileContent(const QString& filename);
    static QString fillTemplate(const QString& templateModel,
                                const InvoiceUserData& data);
    static QString addInternalCss(const QString& htmlContent,

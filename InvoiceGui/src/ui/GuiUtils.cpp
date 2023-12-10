@@ -19,8 +19,10 @@
 #include "GuiUtils.h"
 
 #include <QMessageBox>
+
 #include "NewDataDialog.h"
 #include "FileResourceAddWidget.h"
+#include "Utils.h"
 
 void GuiUtils::OnAddTemplate(FileResourceModel *model)
 {
@@ -48,9 +50,9 @@ void GuiUtils::addDataToModel(QWidget *dataWidget, const QString& dialogTitle,
 
 void GuiUtils::OnAddFileResource(FileResourceModel *model, const QString& fileFilter, const QString& dialogTitle)
 {
-    auto contentWidget = new FileResourceAddWidget(fileFilter);
-    addDataToModel(contentWidget, dialogTitle, [model, contentWidget] () {
-        return model->insertAtEnd(contentWidget->getName(),
-                                  contentWidget->getPath());
-    });
+   auto contentWidget = new FileResourceAddWidget(fileFilter);
+   addDataToModel(contentWidget, dialogTitle, [model, contentWidget] () {
+      const QString fileContent = Utils::readFileContent(contentWidget->getPath());
+      return model->insertAtEnd(contentWidget->getName(), fileContent);
+   });
 }

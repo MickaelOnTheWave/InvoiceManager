@@ -300,23 +300,23 @@ int NewInvoicePage::getComboIndex(QComboBox *combobox, const int id) const
     return -1;
 }
 
-QString NewInvoicePage::getTemplateFile() const
+QString NewInvoicePage::getTemplateContent() const
 {
     const int id = ui->templateCombo->currentIndex() + 1;
-    return controller->getTemplateFilename(id);
+    return controller->getTemplateData(id);
 }
 
-QString NewInvoicePage::getCssFile() const
+QString NewInvoicePage::getCssContent() const
 {
     const int stylesheetId = ui->stylesheetCombo->currentIndex() + 1;
-    return controller->getStylesheetFilename(stylesheetId);
+    return controller->getStylesheetData(stylesheetId);
 }
 
 InvoiceUserData NewInvoicePage::createInvoiceTemplateData() const
 {
    InvoiceUserData data;
-   data.templatePath = getTemplateFile();
-   data.stylesheetPath = getCssFile();
+   data.templateData = getTemplateContent();
+   data.stylesheetData = getCssContent();
    data.id = ui->invoiceIdBox->value();
    data.date = ui->dateEdit->date();
    data.userCompany = controller->getUserCompanyData();

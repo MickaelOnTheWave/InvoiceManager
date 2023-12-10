@@ -87,8 +87,8 @@ private:
 
     int getComboIndex(QComboBox* combobox, const int id) const;
 
-    QString getTemplateFile() const;
-    QString getCssFile() const;
+    QString getTemplateContent() const;
+    QString getCssContent() const;
 
     InvoiceUserData createInvoiceTemplateData() const;
 

@@ -51,6 +51,7 @@ set(SOURCES
     src/InvoiceDocument.cpp
     src/DbMigrator.cpp
     src/WkPdfConverter.cpp
+    src/Utils.cpp
 )
 
 set(WKHTMLTOPDF_HEADERS
@@ -84,6 +85,7 @@ set(HEADERS
     include/InvoiceDocument.h
     include/DbMigrator.h
     include/WkPdfConverter.h
+    include/Utils.h
 )
 
 add_library(InvoiceLib STATIC

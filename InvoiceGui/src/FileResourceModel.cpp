@@ -27,7 +27,7 @@ FileResourceModel::FileResourceModel(const QString &tableName, QObject *parent, 
 
     setHeaderData(0, Qt::Horizontal, tr("Id"));
     setHeaderData(1, Qt::Horizontal, tr("Name"));
-    setHeaderData(2, Qt::Horizontal, tr("File"));
+    setHeaderData(2, Qt::Horizontal, tr("Content"));
 }
 
 int FileResourceModel::getId(const int i) const

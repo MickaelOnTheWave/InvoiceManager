@@ -33,7 +33,7 @@ class InvoiceDbController : public QObject
     Q_OBJECT
 
 public:
-    static const int currentDbVersion = 9;
+    static const int currentDbVersion = 10;
 
     InvoiceDbController();
 
@@ -74,8 +74,10 @@ public:
     QString getDatabaseFile() const;
     int getDatabaseVersion() const;
 
-    QString getTemplateFilename(const int id) const;
-    QString getStylesheetFilename(const int id) const;
+    QString getTemplateName(const int id) const;
+    QString getStylesheetName(const int id) const;
+    QString getTemplateData(const int id) const;
+    QString getStylesheetData(const int id) const;
 
     int getInvoiceCountUsingFile(const int id, const QString& fieldName) const;
 
@@ -98,7 +100,7 @@ private:
                             const QDate& date, const QString &notes, const QString &currency);
     bool writeToInvoiceMapTable(const int invoiceId, const std::vector<int>& detailsIds);
 
-    QString getFilenameFromId(const QString& table, const int id) const;
+    QString getFromId(const QString& field, const QString& table, const int id) const;
 
     CompanyData getCompanyData(const int id) const;
 
@@ -110,6 +112,8 @@ private:
     bool removeFromInvoiceMap(const int id);
 
     int getSingleInvoiceId(const QString& sortOrder) const;
+
+    void fillInvoiceUserData(InvoiceUserData& data, QSqlQuery& query, const int startingIndex) const;
 
     QString dbFilename;
     QSqlDatabase db; // TODO : remove this. See tip from Qt documentation.

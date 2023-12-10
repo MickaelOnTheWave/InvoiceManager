@@ -53,13 +53,13 @@ bool InvoiceDbController::createDb(const QString &filename)
 
     // TODO : Move template and stylesheet to a single table with a type column
 
-    if (!query.exec("CREATE TABLE template (id INTEGER primary key, name TEXT, file TEXT)"))
+    if (!query.exec("CREATE TABLE template (id INTEGER primary key, name TEXT, content TEXT)"))
     {
         lastErrorMessage = query.lastError().text();
         return false;
     }
 
-    if (!query.exec("CREATE TABLE stylesheet (id INTEGER primary key, name TEXT, file TEXT)"))
+    if (!query.exec("CREATE TABLE stylesheet (id INTEGER primary key, name TEXT, content TEXT)"))
     {
        lastErrorMessage = query.lastError().text();
         return false;
@@ -184,8 +184,8 @@ bool InvoiceDbController::invoiceExists(const int id) const
 InvoiceUserData InvoiceDbController::toUserData(const InvoiceDbData& dbData) const
 {
    InvoiceUserData userData(dbData);
-   userData.templatePath = getTemplateFilename(dbData.templateId);
-   userData.stylesheetPath = getStylesheetFilename(dbData.stylesheetId);
+   userData.templateData = getTemplateData(dbData.templateId);
+   userData.stylesheetData = getStylesheetData(dbData.stylesheetId);
    userData.userCompany = getCompanyData(dbData.clientId);
    userData.clientCompany = getCompanyData(dbData.clientId);
 
@@ -283,7 +283,7 @@ InvoiceDbData InvoiceDbController::getInvoiceDbData(const int invoiceId) const
    QSqlQuery query(queryStr.arg(invoiceId));
    if (query.first())
    {
-      const int companyId = query.value(0).toInt();
+      //const int companyId = query.value(0).toInt();
       const int clientId = query.value(1).toInt();
       const int templateId = query.value(2).toInt();
       const int stylesheetId = query.value(3).toInt();
@@ -313,22 +313,8 @@ InvoiceUserData InvoiceDbController::getInvoiceUserData(const int invoiceId) con
    QSqlQuery query(queryStr.arg(invoiceId));
    if (query.first())
    {
-      const int companyId = query.value(0).toInt();
-      const int clientId = query.value(1).toInt();
-      const int templateId = query.value(2).toInt();
-      const int stylesheetId = query.value(3).toInt();
-      const QString dateStr = query.value(4).toString();
-      const QString notes = query.value(5).toString();
-      const QString currency = query.value(6).toString();
-
-      data.date = QDate::fromString(dateStr, dateFormatStr);
-      data.notes = notes;
-      data.currency = currency;
-      data.templatePath = getTemplateFilename(templateId);
-      data.stylesheetPath = getStylesheetFilename(stylesheetId);
-      data.userCompany = getCompanyData(companyId);
-      data.clientCompany = getCompanyData(clientId);
-      data.details = createInvoiceDetails(invoiceId);
+      const int startingIndex = 0;
+      fillInvoiceUserData(data, query, startingIndex);
    }
 
    return data;
@@ -344,27 +330,16 @@ std::vector<InvoiceUserData> InvoiceDbController::getAllInvoiceTemplateData() co
    const bool result = query.exec(queryStr);
    if (result)
    {
+      const int startingIndex = 1;
       while (query.next())
       {
          InvoiceUserData invoiceData;
-         const int invoiceId = query.value(0).toInt();
-         const int companyId = query.value(1).toInt();
-         const int clientId = query.value(2).toInt();
-         const int templateId = query.value(3).toInt();
-         const int stylesheetId = query.value(4).toInt();
-         const QString dateStr = query.value(5).toString();
-         const QString notes = query.value(6).toString();
-         const QString currency = query.value(7).toString();
 
+         const int invoiceId = query.value(0).toInt();
          invoiceData.id = invoiceId;
-         invoiceData.date = QDate::fromString(dateStr, dateFormatStr);
-         invoiceData.notes = notes;
-         invoiceData.currency = currency;
-         invoiceData.templatePath = getTemplateFilename(templateId);
-         invoiceData.stylesheetPath = getStylesheetFilename(stylesheetId);
-         invoiceData.userCompany = getCompanyData(companyId);
-         invoiceData.clientCompany = getCompanyData(clientId);
-         invoiceData.details = createInvoiceDetails(invoiceId);
+
+         fillInvoiceUserData(invoiceData, query, startingIndex);
+
          data.push_back(invoiceData);
       }
    }
@@ -389,14 +364,24 @@ int InvoiceDbController::getDatabaseVersion() const
     return -1;
 }
 
-QString InvoiceDbController::getTemplateFilename(const int id) const
+QString InvoiceDbController::getTemplateName(const int id) const
 {
-    return getFilenameFromId("template", id);
+   return getFromId("name", "template", id);
 }
 
-QString InvoiceDbController::getStylesheetFilename(const int id) const
+QString InvoiceDbController::getStylesheetName(const int id) const
 {
-   return getFilenameFromId("stylesheet", id);
+   return getFromId("name", "stylesheet", id);
+}
+
+QString InvoiceDbController::getTemplateData(const int id) const
+{
+   return getFromId("content", "template", id);
+}
+
+QString InvoiceDbController::getStylesheetData(const int id) const
+{
+   return getFromId("content", "stylesheet", id);
 }
 
 int InvoiceDbController::getInvoiceCountUsingFile(const int id, const QString& fieldName) const
@@ -522,15 +507,15 @@ bool InvoiceDbController::writeToInvoiceMapTable(const int invoiceId, const std:
     return true;
 }
 
-QString InvoiceDbController::getFilenameFromId(const QString &table, const int id) const
+QString InvoiceDbController::getFromId(const QString& field, const QString& table, const int id) const
 {
-    QSqlQuery query;
-    query.prepare(QString("SELECT file FROM %1 WHERE id = :id").arg(table));
-    query.bindValue(":id", id);
-    const bool ok = query.exec();
-    if (ok && query.next())
-        return query.value(0).toString();
-    return QString();
+   QSqlQuery query;
+   query.prepare(QString("SELECT %1 FROM %2 WHERE id = :id").arg(field, table));
+   query.bindValue(":id", id);
+   const bool ok = query.exec();
+   if (ok && query.next())
+       return query.value(0).toString();
+   return QString();
 }
 
 CompanyData InvoiceDbController::getCompanyData(const int id) const
@@ -637,4 +622,26 @@ int InvoiceDbController::getSingleInvoiceId(const QString& sortOrder) const
        return query.value(0).toInt();
    return -1;
 
+}
+
+void InvoiceDbController::fillInvoiceUserData(InvoiceUserData& data, QSqlQuery& query, const int startingIndex) const
+{
+   const int companyId = query.value(startingIndex).toInt();
+   const int clientId = query.value(startingIndex+1).toInt();
+   const int templateId = query.value(startingIndex+2).toInt();
+   const int stylesheetId = query.value(startingIndex+3).toInt();
+   const QString dateStr = query.value(startingIndex+4).toString();
+   const QString notes = query.value(startingIndex+5).toString();
+   const QString currency = query.value(startingIndex+6).toString();
+
+   data.date = QDate::fromString(dateStr, dateFormatStr);
+   data.notes = notes;
+   data.currency = currency;
+   data.templateName = getTemplateName(templateId);
+   data.templateData = getTemplateData(templateId);
+   data.stylesheetName = getStylesheetName(stylesheetId);
+   data.stylesheetData = getStylesheetData(stylesheetId);
+   data.userCompany = getCompanyData(companyId);
+   data.clientCompany = getCompanyData(clientId);
+   data.details = createInvoiceDetails(data.id);
 }
