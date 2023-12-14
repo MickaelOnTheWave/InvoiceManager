@@ -50,7 +50,7 @@ NewInvoicePage::NewInvoicePage(QWidget *parent) :
 
     connect(ui->invoiceDetailsWidget, &DataHandlerWidget::addClicked, this, &NewInvoicePage::onAddInvoiceDetail);
     connect(ui->invoiceDetailsWidget, &DataHandlerWidget::removeClicked, this, &NewInvoicePage::onRemoveInvoiceDetail);
-    connect(ui->invoiceDetailsWidget, &DataHandlerWidget::editingFinished, this, &NewInvoicePage::computeTotals);
+    connect(ui->invoiceDetailsWidget, &DataHandlerWidget::editingFinished, this, &NewInvoicePage::refreshInvoice);
     connect(ui->todayButton, &QAbstractButton::clicked, this, &NewInvoicePage::onTodayClicked);
     connect(ui->lastDayOfMonthButton, &QAbstractButton::clicked, this, &NewInvoicePage::onLastDayOfMonthClicked);
     connect(ui->customButton, &QAbstractButton::clicked, this, &NewInvoicePage::onCustomDateClicked);
@@ -118,9 +118,8 @@ void NewInvoicePage::resetFromLast()
        const InvoiceDetail detail = controller->getInvoiceDetail(detailId);
         addInvoiceDetail(detail.description, detail.quantity, detail.value);
     }
-    computeTotals();
 
-    onGeneratePreviewClicked();
+    refreshInvoice();
 }
 
 void NewInvoicePage::onClientComboChange(int index)
@@ -132,13 +131,13 @@ void NewInvoicePage::onClientComboChange(int index)
 void NewInvoicePage::onAddInvoiceDetail()
 {
     addInvoiceDetail("Service", 0.0, 1.0);
-    computeTotals();
+    refreshInvoice();
 }
 
 void NewInvoicePage::onRemoveInvoiceDetail(const QModelIndex index)
 {
    invoiceDetailsModel->removeRow(index.row());
-   computeTotals();
+   refreshInvoice();
 }
 
 void NewInvoicePage::onCreateInvoice()
@@ -218,6 +217,12 @@ void NewInvoicePage::insertTotalRow()
     ui->invoiceDetailsWidget->setupTotalSpan();
 }
 
+void NewInvoicePage::refreshInvoice()
+{
+   computeTotals();
+   onGeneratePreviewClicked();
+}
+
 void NewInvoicePage::computeTotals()
 {
     double total = 0.0;
@@ -246,7 +251,7 @@ void NewInvoicePage::resetInvoiceData()
     ui->errorLabel->hide();
     invoiceDetailsModel->removeRows(0, invoiceDetailsModel->rowCount());
     insertTotalRow();
-    onAddInvoiceDetail();
+    addInvoiceDetail("Service", 0.0, 1.0);
 }
 
 void NewInvoicePage::resetComboData(QComboBox *combobox, QAbstractItemModel *model)

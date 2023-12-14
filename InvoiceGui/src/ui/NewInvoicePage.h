@@ -69,6 +69,7 @@ private slots:
 
 private:
     void insertTotalRow();
+    void refreshInvoice();
     void computeTotals();
     void resetInputData(const QString &companyName);
     void resetInvoiceData();
