@@ -21,6 +21,7 @@
 
 
 #include "CompanyDetailsDialog.h"
+#include "FileResourceDialog.h"
 #include "InvoiceSortProxyModel.h"
 #include "InvoiceViewDialog.h"
 
@@ -38,6 +39,8 @@ MainPage::MainPage(QWidget *parent) :
 
     connect(ui->invoiceContentView, &QTableView::doubleClicked, this, &MainPage::onOpenInvoice);
     connect(ui->clientsView, &QTableView::doubleClicked, this, &MainPage::onOpenClient);
+    connect(ui->templatesView, &QTableView::doubleClicked, this, &MainPage::onOpenTemplate);
+    connect(ui->stylesheetsView, &QTableView::doubleClicked, this, &MainPage::onOpenStylesheet);
 
     connect(ui->titleBarWidget, &TitleBarWidget::settingsClicked, this, &MainPage::settingsClicked);
     connect(ui->titleBarWidget, &TitleBarWidget::aboutClicked, this, &MainPage::aboutClicked);
@@ -126,6 +129,18 @@ void MainPage::onOpenClient(const QModelIndex& index)
    dialog->setData(createCompanyData(index), companyId);
    dialog->show();
    connect(dialog, &CompanyDetailsDialog::createdUpdatedCompany, this, &MainPage::onCompanyUpdateCreated);
+}
+
+void MainPage::onOpenTemplate(const QModelIndex& index)
+{
+   auto dialog = new FileResourceDialog(templateModel, index, this);
+   dialog->show();
+}
+
+void MainPage::onOpenStylesheet(const QModelIndex& index)
+{
+   auto dialog = new FileResourceDialog(stylesheetModel, index, this);
+   dialog->show();
 }
 
 void MainPage::onRemoveInvoice(const int id)
