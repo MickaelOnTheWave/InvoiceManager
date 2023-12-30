@@ -49,9 +49,10 @@ set(SOURCES
     src/InvoiceDetail.cpp
     src/InvoiceData.cpp
     src/InvoiceDocument.cpp
+    src/InvoiceDetailsModel.cpp
     src/DbMigrator.cpp
     src/WkPdfConverter.cpp
-    src/Utils.cpp
+    src/Utils.cpp    
 )
 
 set(WKHTMLTOPDF_HEADERS
@@ -83,6 +84,7 @@ set(HEADERS
     include/InvoiceDetail.h
     include/InvoiceData.h
     include/InvoiceDocument.h
+    include/InvoiceDetailsModel.h
     include/DbMigrator.h
     include/WkPdfConverter.h
     include/Utils.h

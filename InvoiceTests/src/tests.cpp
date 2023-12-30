@@ -19,7 +19,9 @@
 #include <catch2/catch.hpp>
 
 #include "InvoiceData.h"
+#include "InvoiceDetailsModel.h"
 #include "InvoiceDocument.h"
+#include "Utils.h"
 
 // TODO Add test to check that sum of details is OK
 
@@ -56,4 +58,21 @@ TEST_CASE( "InvoiceDocument", "First test" )
    invoiceDoc.setData(createDefaultInvoiceData());
 
    REQUIRE( invoiceDoc.GetInvoiceId() == 123 );
+}
+
+/*******************/
+
+void populateInvoiceModel(InvoiceDetailsModel* model)
+{
+   model->addDetail("Some Service", 2, 123.4);
+   model->addDetail("Other Service", 4.5, 765.2);
+}
+
+TEST_CASE( "InvoiceDetailsModel", "computeTotals" )
+{
+   auto model = new InvoiceDetailsModel();
+   populateInvoiceModel(model);
+   model->computeTotals();
+
+   //REQUIRE( invoiceDoc.GetInvoiceId() == 123 );
 }

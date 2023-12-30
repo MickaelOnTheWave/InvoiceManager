@@ -34,13 +34,7 @@ NewInvoicePage::NewInvoicePage(QWidget *parent) :
     connect(ui->clientCombo, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &NewInvoicePage::onClientComboChange);
 
-    auto typedModel = new QStandardItemModel(this);
-    typedModel->setColumnCount(4);
-    invoiceDetailsModel = typedModel;
-    invoiceDetailsModel->setHeaderData(0, Qt::Horizontal, tr("Service"));
-    invoiceDetailsModel->setHeaderData(1, Qt::Horizontal, tr("Unitary Value"));
-    invoiceDetailsModel->setHeaderData(2, Qt::Horizontal, tr("Quantity"));
-    invoiceDetailsModel->setHeaderData(3, Qt::Horizontal, tr("Value"));
+    invoiceDetailsModel = new InvoiceDetailsModel();
 
     resetInvoiceData();
 
@@ -116,7 +110,7 @@ void NewInvoicePage::resetFromLast()
     for (const int detailId : data.detailsIds)
     {
        const InvoiceDetail detail = controller->getInvoiceDetail(detailId);
-        addInvoiceDetail(detail.description, detail.quantity, detail.value);
+       invoiceDetailsModel->addDetail(detail.description, detail.quantity, detail.value);
     }
 
     refreshInvoice();
@@ -130,7 +124,7 @@ void NewInvoicePage::onClientComboChange(int index)
 
 void NewInvoicePage::onAddInvoiceDetail()
 {
-    addInvoiceDetail("Service", 0.0, 1.0);
+    invoiceDetailsModel->addDetail("Service", 0.0, 1.0);
     refreshInvoice();
 }
 
@@ -219,23 +213,8 @@ void NewInvoicePage::insertTotalRow()
 
 void NewInvoicePage::refreshInvoice()
 {
-   computeTotals();
+   invoiceDetailsModel->computeTotals();
    onGeneratePreviewClicked();
-}
-
-void NewInvoicePage::computeTotals()
-{
-    double total = 0.0;
-    for (int i=0; i<invoiceDetailsModel->rowCount()-1; ++i)
-    {
-      const double quantity = GetInvoiceDetailData(i, 1).toDouble();
-      const double unitaryValue = GetInvoiceDetailData(i, 2).toDouble();
-      const int rowTotal = quantity * unitaryValue;
-      SetInvoiceDetailData(i, 3, rowTotal);
-      invoiceDetailsModel->setData(invoiceDetailsModel->index(invoiceDetailsModel->rowCount()-1, 3), total);
-      total += invoiceDetailsModel->data(invoiceDetailsModel->index(i, 3)).toDouble();
-    }
-    SetInvoiceDetailData(invoiceDetailsModel->rowCount()-1, 3, total);
 }
 
 void NewInvoicePage::resetInputData(const QString &companyName)
@@ -251,7 +230,7 @@ void NewInvoicePage::resetInvoiceData()
     ui->errorLabel->hide();
     invoiceDetailsModel->removeRows(0, invoiceDetailsModel->rowCount());
     insertTotalRow();
-    addInvoiceDetail("Service", 0.0, 1.0);
+    invoiceDetailsModel->addDetail("Service", 0.0, 1.0);
 }
 
 void NewInvoicePage::resetComboData(QComboBox *combobox, QAbstractItemModel *model)
@@ -271,34 +250,10 @@ void NewInvoicePage::updateDateEdit(const QDate &date)
     ui->dateLabel->setText(date.toString());
 }
 
-std::vector<InvoiceDetail> NewInvoicePage::createDetailsCollection() const
-{
-    std::vector<InvoiceDetail> details;
-    const int detailCount = invoiceDetailsModel->rowCount() - 1;
-    for (int i=0; i<detailCount; ++i)
-    {
-        const QString description = GetInvoiceDetailData(i, 0).toString();
-        const double unitaryValue = GetInvoiceDetailData(i, 1).toDouble();
-        const double quantity = GetInvoiceDetailData(i, 2).toDouble();
-        details.emplace_back(description, quantity, unitaryValue);
-    }
-    return details;
-}
-
 std::vector<int> NewInvoicePage::writeInvoiceElements()
 {
-    const std::vector<InvoiceDetail> invoiceDetails = createDetailsCollection();
+    const std::vector<InvoiceDetail> invoiceDetails = invoiceDetailsModel->toDetailsCollection();
     return controller->writeInvoiceDetails(invoiceDetails);
-}
-
-void NewInvoicePage::addInvoiceDetail(const QString &name, const double value, const double quantity)
-{
-    const int newRowIndex = invoiceDetailsModel->rowCount()-1;
-    invoiceDetailsModel->insertRow(newRowIndex);
-    SetInvoiceDetailData(newRowIndex, 0, name);
-    SetInvoiceDetailData(newRowIndex, 1, quantity);
-    SetInvoiceDetailData(newRowIndex, 2, value);
-    SetInvoiceDetailData(newRowIndex, 3, quantity * value);
 }
 
 int NewInvoicePage::getComboIndex(QComboBox *combobox, const int id) const
@@ -333,7 +288,7 @@ InvoiceUserData NewInvoicePage::createInvoiceTemplateData() const
    data.date = ui->dateEdit->date();
    data.userCompany = controller->getUserCompanyData();
    data.clientCompany = ui->clientDetailsWidget->getData();
-   data.details = createDetailsCollection();
+   data.details = invoiceDetailsModel->toDetailsCollection();
    data.currency = ui->currencyEdit->text();
    data.notes = ui->notesEdit->text();
    return data;
@@ -343,14 +298,4 @@ void NewInvoicePage::setError(const QString& description)
 {
    ui->errorLabel->setText(description);
    ui->errorLabel->show();
-}
-
-QVariant NewInvoicePage::GetInvoiceDetailData(const int row, const int column) const
-{
-   return invoiceDetailsModel->data(invoiceDetailsModel->index(row, column));
-}
-
-void NewInvoicePage::SetInvoiceDetailData(const int row, const int column, const QVariant& data)
-{
-   invoiceDetailsModel->setData(invoiceDetailsModel->index(row, column), data);
 }

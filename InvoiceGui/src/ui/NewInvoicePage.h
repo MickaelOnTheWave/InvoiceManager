@@ -24,6 +24,7 @@
 #include <QComboBox>
 
 #include "ClientModel.h"
+#include "InvoiceDetailsModel.h"
 #include "InvoiceDbController.h"
 #include <QtWebKit>
 #include "FileResourceModel.h"
@@ -70,22 +71,17 @@ private slots:
 private:
     void insertTotalRow();
     void refreshInvoice();
-    void computeTotals();
     void resetInputData(const QString &companyName);
     void resetInvoiceData();
 
     void resetComboData(QComboBox* combobox, QAbstractItemModel* model);
     void updateDateEdit(const QDate& date);
 
-    std::vector<InvoiceDetail> createDetailsCollection() const;
-
     /**
      * @brief writeInvoiceElements
      * @return list of element ids that have been written
      */
     std::vector<int> writeInvoiceElements();
-
-    void addInvoiceDetail(const QString& name, const double value, const double quantity);
 
     int getComboIndex(QComboBox* combobox, const int id) const;
 
@@ -96,14 +92,11 @@ private:
 
     void setError(const QString& description);
 
-    QVariant GetInvoiceDetailData(const int row, const int column) const;
-    void SetInvoiceDetailData(const int row, const int column, const QVariant& data);
-
     Ui::NewInvoicePage *ui;
     ClientModel* clientModel;
     FileResourceModel* templateModel;
     FileResourceModel* stylesheetModel;
-    QAbstractItemModel* invoiceDetailsModel;
+    InvoiceDetailsModel* invoiceDetailsModel;
     InvoiceDbController* controller;
 };
 

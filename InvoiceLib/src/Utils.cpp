@@ -11,5 +11,3 @@ QString Utils::readFileContent(const QString &filename)
     QTextStream in(&f);
     return in.readAll();
 }
-
-
