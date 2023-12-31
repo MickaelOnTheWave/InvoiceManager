@@ -23,7 +23,6 @@
 #include "InvoiceDocument.h"
 #include "Utils.h"
 
-// TODO Add test to check that sum of details is OK
 
 InvoiceUserData createDefaultInvoiceData()
 {
@@ -64,8 +63,14 @@ TEST_CASE( "InvoiceDocument", "First test" )
 
 void populateInvoiceModel(InvoiceDetailsModel* model)
 {
-   model->addDetail("Some Service", 2, 123.4);
-   model->addDetail("Other Service", 4.5, 765.2);
+   model->addTotalRow();
+   model->addDetail("Some Service", 123.4, 2);
+   model->addDetail("Other Service", 765.2, 4.5);
+}
+
+double getModelValue(InvoiceDetailsModel* model, const int row, const int column)
+{
+   return model->data(model->index(row, column)).toDouble();
 }
 
 TEST_CASE( "InvoiceDetailsModel", "computeTotals" )
@@ -74,5 +79,9 @@ TEST_CASE( "InvoiceDetailsModel", "computeTotals" )
    populateInvoiceModel(model);
    model->computeTotals();
 
-   //REQUIRE( invoiceDoc.GetInvoiceId() == 123 );
+   REQUIRE_THAT( getModelValue(model, 0, 3), Catch::Matchers::WithinAbs(246.8, 0.00001) );
+   REQUIRE_THAT( getModelValue(model, 1, 3), Catch::Matchers::WithinAbs(3443.4, 0.00001) );
+   REQUIRE_THAT( getModelValue(model, 2, 1), Catch::Matchers::WithinAbs(0.0, 0.00001) );
+   REQUIRE_THAT( getModelValue(model, 2, 2), Catch::Matchers::WithinAbs(0.0, 0.00001) );
+   REQUIRE_THAT( getModelValue(model, 2, 3), Catch::Matchers::WithinAbs(3690.2, 0.00001) );
 }

@@ -13,6 +13,7 @@ public:
 
    void computeTotals();
    void addDetail(const QString &name, const double value, const double quantity);
+   void addTotalRow();
    std::vector<InvoiceDetail> toDetailsCollection() const;
 
 

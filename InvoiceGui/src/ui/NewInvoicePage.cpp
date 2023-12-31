@@ -203,11 +203,7 @@ void NewInvoicePage::onGeneratePreviewClicked()
 
 void NewInvoicePage::insertTotalRow()
 {
-    invoiceDetailsModel->insertRow(0);
-    invoiceDetailsModel->setData(invoiceDetailsModel->index(0, 0), "Total");
-    invoiceDetailsModel->setData(invoiceDetailsModel->index(0, 1), 0);
-    invoiceDetailsModel->setData(invoiceDetailsModel->index(0, 2), 0.00);
-    invoiceDetailsModel->setData(invoiceDetailsModel->index(0, 3), 0.00);
+    invoiceDetailsModel->addTotalRow();
     ui->invoiceDetailsWidget->setupTotalSpan();
 }
 

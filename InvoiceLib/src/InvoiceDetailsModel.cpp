@@ -16,7 +16,7 @@ void InvoiceDetailsModel::computeTotals()
    {
      const double quantity = GetInvoiceDetailData(i, 1).toDouble();
      const double unitaryValue = GetInvoiceDetailData(i, 2).toDouble();
-     const int rowTotal = quantity * unitaryValue;
+     const double rowTotal = quantity * unitaryValue;
      SetInvoiceDetailData(i, 3, rowTotal);
      setData(index(rowCount()-1, 3), total);
      total += data(index(i, 3)).toDouble();
@@ -32,6 +32,15 @@ void InvoiceDetailsModel::addDetail(const QString &name, const double value, con
     SetInvoiceDetailData(newRowIndex, 1, quantity);
     SetInvoiceDetailData(newRowIndex, 2, value);
     SetInvoiceDetailData(newRowIndex, 3, quantity * value);
+}
+
+void InvoiceDetailsModel::addTotalRow()
+{
+   insertRow(0);
+   setData(index(0, 0), "Total");
+   setData(index(0, 1), 0);
+   setData(index(0, 2), 0.00);
+   setData(index(0, 3), 0.00);
 }
 
 std::vector<InvoiceDetail> InvoiceDetailsModel::toDetailsCollection() const
