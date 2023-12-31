@@ -30,7 +30,6 @@
 
 // TODO Not that important :
 // - Add versioning to clients / company
-// - Add template/stylesheet contents to DB
 
 const QString lastDbKey = "lastdbfile";
 

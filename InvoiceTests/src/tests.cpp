@@ -85,3 +85,8 @@ TEST_CASE( "InvoiceDetailsModel", "computeTotals" )
    REQUIRE_THAT( getModelValue(model, 2, 2), Catch::Matchers::WithinAbs(0.0, 0.00001) );
    REQUIRE_THAT( getModelValue(model, 2, 3), Catch::Matchers::WithinAbs(3690.2, 0.00001) );
 }
+
+TEST_CASE("CommandLineManager", "")
+{
+
+}
