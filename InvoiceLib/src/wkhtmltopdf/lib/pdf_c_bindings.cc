@@ -63,11 +63,8 @@
  *      it is actually printed. E.g. "1200". We will wait this amount of time or until, javascript
  *      calls window.print().
  * - \b load.zoomFactor How much should we zoom in on the content? E.g. "2.2".
- * - \b load.customHeaders TODO
  * - \b load.repertCustomHeaders Should the custom headers be sent all elements loaded instead of
  *       only the main page? Must be either "true" or "false".
- * - \b load.cookies TODO
- * - \b load.post TODO
  * - \b load.blockLocalFileAccess Disallow local and piped files to access other local files. Must
  *      be either "true" or "false".
  * - \b load.stopSlowScript Stop slow running javascript. Must be either "true" or "false".
@@ -79,7 +76,6 @@
  *      - "skip" Do not add the object to the final output
  *      - "ignore" Try to add the object to the final output.
  * - \b load.proxy String describing what proxy to use when loading the object.
- * - \b load.runScript TODO
  * - \b load.printMediaType Should the content be printed using the print media type instead
  *      of the screen media type. Must be either "true" or "false". Has no effect for wkhtmltoimage.
  *
@@ -142,7 +138,6 @@
  *      external pdf links? Must be either "true" or "false.
  * - \b useLocalLinks Should internal links in the HTML document be converted into pdf
  *      references? Must be either "true" or "false"
- * - \b replacements TODO
  * - \b produceForms Should we turn HTML forms into PDF forms? Must be either "true" or file".
  * - \b load.* Page specific settings related to loading content, see \ref pageLoad.
  * - \b web.* See \ref pageWeb.
