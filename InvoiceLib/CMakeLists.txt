@@ -90,6 +90,12 @@ set(HEADERS
     include/Utils.h
 )
 
+set_source_files_properties(
+  ${WKHTMLTOPDF_SOURCES} ${WKHTMLTOPDF_HEADERS}
+  PROPERTIES
+  COMPILE_FLAGS "-w -Wattributes"
+)
+
 add_library(InvoiceLib STATIC
   ${SOURCES} ${WKHTMLTOPDF_SOURCES}
   ${HEADERS} ${WKHTMLTOPDF_HEADERS}

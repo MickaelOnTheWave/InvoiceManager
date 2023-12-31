@@ -106,6 +106,9 @@ public:
 
 };
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wattributes"
+
 class PdfConverterPrivate: public ConverterPrivate {
 	Q_OBJECT
 public:
@@ -197,7 +200,7 @@ public slots:
 
 	virtual Converter & outer();
 };
-
+#pragma GCC diagnostic pop
 }
 #include "dllend.inc"
 #endif //__PDFCONVERTER_P_HH__
