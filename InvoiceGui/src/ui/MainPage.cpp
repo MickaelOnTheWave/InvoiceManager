@@ -118,8 +118,10 @@ void MainPage::onOpenInvoice(const QModelIndex &index)
    const QModelIndex originalIndex = proxyModel->mapToSource(index);
    auto dialog = new InvoiceViewDialog(this);
    dialog->setData(createInvoiceTemplateData(originalIndex));
-   dialog->show();
    connect(dialog, &InvoiceViewDialog::deleteConfirmed, this, &MainPage::onRemoveInvoice);
+   dialog->setAttribute(Qt::WA_DeleteOnClose);
+
+   dialog->show();
 }
 
 void MainPage::onOpenClient(const QModelIndex& index)
@@ -127,19 +129,23 @@ void MainPage::onOpenClient(const QModelIndex& index)
    auto dialog = new CompanyDetailsDialog(controller, this);
    const int companyId = clientModel->getId(index.row());
    dialog->setData(createCompanyData(index), companyId);
-   dialog->show();
    connect(dialog, &CompanyDetailsDialog::createdUpdatedCompany, this, &MainPage::onCompanyUpdateCreated);
+   dialog->setAttribute(Qt::WA_DeleteOnClose);
+
+   dialog->show();
 }
 
 void MainPage::onOpenTemplate(const QModelIndex& index)
 {
    auto dialog = new FileResourceDialog(templateModel, index, this);
+   dialog->setAttribute(Qt::WA_DeleteOnClose);
    dialog->show();
 }
 
 void MainPage::onOpenStylesheet(const QModelIndex& index)
 {
    auto dialog = new FileResourceDialog(stylesheetModel, index, this);
+   dialog->setAttribute(Qt::WA_DeleteOnClose);
    dialog->show();
 }
 
