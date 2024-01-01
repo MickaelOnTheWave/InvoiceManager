@@ -49,6 +49,11 @@ void CommandLineManager::AddParameter(const string &name, const string &descript
    knownParameters.push_back(parameter);
 }
 
+void CommandLineManager::AddOptionalParameter(const std::string& name, const std::string& description)
+{
+   AddParameter(name, description, false);
+}
+
 bool CommandLineManager::HasParameter(const string &parameter) const
 {
     return options.count(parameter) > 0;
@@ -164,22 +169,21 @@ bool CommandLineManager::IsInKnownList(const string &parameter) const
 
 void CommandLineManager::ShowUsageInformation()
 {
-    // TODO make a description based on mandatory/optional params.
-    cout << "Available options :" << endl;
+   const bool showMandatoryTag = ParamsHaveDifferentTypes();
+   cout << "Available options :" << endl;
 
-    UpdateParameterColumnSize(knownParameters);
+   UpdateParameterColumnSize(knownParameters);
 
-    ParameterList::const_iterator it=knownParameters.begin();
-    ParameterList::const_iterator end=knownParameters.end();
-    for(; it!=end; ++it)
-       // TODO add mandatory usage
-        ShowParamUsage(it->name, it->description);
+   ParameterList::const_iterator it=knownParameters.begin();
+   ParameterList::const_iterator end=knownParameters.end();
+   for(; it!=end; ++it)
+      ShowParamUsage(*it, showMandatoryTag);
 
-    if (usingHelpCommand)
-        ShowParamUsage("help", "Shows this usage information");
+   if (usingHelpCommand)
+      ShowParamUsage("help", "Shows this usage information");
 
-    if (usingVersionCommand)
-        ShowParamUsage("version", "Shows program version information");
+   if (usingVersionCommand)
+      ShowParamUsage("version", "Shows program version information");
 }
 
 void CommandLineManager::EnableHelpCommand()
@@ -218,10 +222,36 @@ void CommandLineManager::UpdateParameterColumnSize(const CommandLineManager::Par
     parameterColumnSize += minimumSpacing;
 }
 
+void CommandLineManager::ShowParamUsage(const CommandLineParameter& param, const bool displayMandatoryTag)
+{
+   const bool displayParamAsMandatory = displayMandatoryTag && param.mandatory;
+   ShowParamUsage(param.name, param.description, displayParamAsMandatory);
+}
+
 void CommandLineManager::ShowParamUsage(const string &param, const string &description)
 {
-    const size_t spacesToInsert = parameterColumnSize - param.length();
-    cout << "\t--" << param << Spaces(static_cast<int>(spacesToInsert)) << description << endl;
+   ShowParamUsage(param, description, false);
+}
+
+void CommandLineManager::ShowParamUsage(const std::string& param, const std::string& description, const bool displayMandatoryTag)
+{
+   const size_t spacesToInsert = parameterColumnSize - param.length();
+   cout << "\t--" << param << Spaces(static_cast<int>(spacesToInsert));
+   if (displayMandatoryTag)
+      cout << "[MANDATORY] ";
+   cout << description << endl;
+}
+
+bool CommandLineManager::ParamsHaveDifferentTypes() const
+{
+   auto isMandatory = [](const CommandLineParameter& parameter)
+   {
+      return parameter.mandatory;
+
+   };
+   const bool allOptional = std::none_of(knownParameters.begin(), knownParameters.end(), isMandatory);
+   const bool allMandatory = std::all_of(knownParameters.begin(), knownParameters.end(), isMandatory);
+   return !allOptional && !allMandatory;
 }
 
 string CommandLineManager::Spaces(const int spaceCount)

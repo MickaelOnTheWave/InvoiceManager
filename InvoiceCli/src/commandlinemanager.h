@@ -42,6 +42,7 @@ public:
 
     // TODO Put a field just for param value.
     void AddParameter(const std::string& name, const std::string& description, const bool mandatory = true);
+    void AddOptionalParameter(const std::string& name, const std::string& description);
 
     bool HasParameter(const std::string& parameter) const;
 
@@ -89,7 +90,13 @@ private:
 
     void UpdateParameterColumnSize(const ParameterList& parameters);
 
+    void ShowParamUsage(const CommandLineParameter& param, const bool displayMandatoryTag);
+
     void ShowParamUsage(const std::string& param, const std::string& description);
+
+    void ShowParamUsage(const std::string& param, const std::string& description, const bool displayMandatoryTag);
+
+    bool ParamsHaveDifferentTypes() const;
 
     static std::string Spaces(const int spaceCount);
 
