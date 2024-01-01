@@ -33,6 +33,7 @@ set(UI_SOURCES
     src/ui/TitleBarWidget.h src/ui/TitleBarWidget.cpp src/ui/TitleBarWidget.ui
     src/ui/InvoiceSortProxyModel.h src/ui/InvoiceSortProxyModel.cpp
     src/ui/GuiUtils.h src/ui/GuiUtils.cpp
+    src/ui/FileResourceDialog.h src/ui/FileResourceDialog.cpp src/ui/FileResourceDialog.ui
 )
 
 set(OTHER_SOURCES

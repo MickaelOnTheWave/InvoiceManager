@@ -1,6 +1,7 @@
 #include "DbMigrator.h"
 
 #include <QFile>
+#include <QSqlError>
 #include <QSqlQuery>
 #include <QTextStream>
 
@@ -69,11 +70,11 @@ bool DbMigrator::changeTableToContents(const QString tableName)
    QSqlQuery query;
    QString queryStr = "ALTER TABLE %1 ADD content TEXT";
    if (!query.exec(queryStr.arg(tableName)))
-         return false;
+      return false;
 
    queryStr = "SELECT id, file FROM %1";
    if (!query.exec(queryStr.arg(tableName)))
-         return false;
+      return false;
    while (query.next())
    {
       const QString stylesheetId = query.value(0).toString();

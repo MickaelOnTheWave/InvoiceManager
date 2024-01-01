@@ -483,7 +483,6 @@ void ResourceObject::load() {
 	if (hasFiles) {
 		boundary = QUuid::createUuid().toString().remove('-').remove('{').remove('}');
 		foreach (const settings::PostItem & pi, settings.post) {
-			//TODO escape values here
 			postData.append("--");
 			postData.append(boundary);
 			postData.append("\ncontent-disposition: form-data; name=\"");
@@ -499,7 +498,6 @@ void ResourceObject::load() {
 				postData.append( QFileInfo(pi.value).fileName());
 				postData.append("\"\n\n");
 				postData.append( f.readAll() );
-				//TODO ADD MIME TYPE
 			} else {
 				postData.append("\n\n");
 				postData.append(pi.value);
@@ -592,7 +590,6 @@ void MultiPageLoaderPrivate::loadDone() {
  * \param dst The destination to copy to
  */
 bool MultiPageLoader::copyFile(QFile & src, QFile & dst) {
-//      TODO enable again when
 //      http://bugreports.qt.nokia.com/browse/QTBUG-6894
 //      is fixed
 //      QByteArray buf(1024*1024*5,0);

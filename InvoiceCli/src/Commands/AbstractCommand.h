@@ -16,18 +16,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CREATEPDFCOMMAND_H
-#define CREATEPDFCOMMAND_H
+#ifndef ABSTRACTCOMMAND_H
+#define ABSTRACTCOMMAND_H
 
+#include <string>
 #include "commandlinemanager.h"
 #include "InvoiceDbController.h"
 
-class CreatePdfCommand
+class AbstractCommand
 {
 public:
-   static void Run(const InvoiceDbController& controller,
-                   const CommandLineManager& cli);
+   AbstractCommand(const std::string& _cliParamName);
 
+   std::string GetCliParamName() const;
+
+   virtual void Run(InvoiceDbController& controller,
+                    const CommandLineManager& cli) = 0;
+
+private:
+   std::string cliParamName;
 };
 
 #endif

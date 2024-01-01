@@ -19,9 +19,19 @@
 #ifndef COMMANDLINEMANAGER_H
 #define COMMANDLINEMANAGER_H
 
-#include <list>
+#include <vector>
 #include <map>
 #include <string>
+
+class CommandLineParameter
+{
+public:
+   CommandLineParameter(const std::string& _name, const std::string& _description, const bool _mandatory);
+
+   std::string name;
+   std::string description;
+   bool mandatory;
+};
 
 /// TODO Manage short commands, unix-style
 class CommandLineManager
@@ -30,9 +40,9 @@ public:
     CommandLineManager(int argc, char* argv[]);
     CommandLineManager(const std::map<std::string, std::string>& parameters);
 
-    // TODO Put a "mandatory" value for each param
     // TODO Put a field just for param value.
-    void AddParameter(const std::string& parameter, const std::string& description);
+    void AddParameter(const std::string& name, const std::string& description, const bool mandatory = true);
+    void AddOptionalParameter(const std::string& name, const std::string& description);
 
     bool HasParameter(const std::string& parameter) const;
 
@@ -68,7 +78,7 @@ public:
 
 
 private:
-    typedef std::list<std::pair<std::string, std::string> > ParameterList;
+    using ParameterList = std::vector<CommandLineParameter> ;
 
     void BuildParametersMap(const int argc, char* argv[]);
 
@@ -80,7 +90,13 @@ private:
 
     void UpdateParameterColumnSize(const ParameterList& parameters);
 
+    void ShowParamUsage(const CommandLineParameter& param, const bool displayMandatoryTag);
+
     void ShowParamUsage(const std::string& param, const std::string& description);
+
+    void ShowParamUsage(const std::string& param, const std::string& description, const bool displayMandatoryTag);
+
+    bool ParamsHaveDifferentTypes() const;
 
     static std::string Spaces(const int spaceCount);
 

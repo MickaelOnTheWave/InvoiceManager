@@ -140,7 +140,7 @@ QString InvoiceDocument::buildReplaceDetailsV8(const std::vector<InvoiceDetail>&
    QString replacedStr;
    for (const auto& detailLine : details)
    {
-       QString valueStr = QString::asprintf("%.2f", detailLine.value);
+       QString valueStr = QString::asprintf("%.2f", detailLine.value * detailLine.quantity);
 
        const QString nameCell = QString("\t\t\t<td>%1</td>").arg(detailLine.description);
        const QString valueCell = QString("\t\t\t<td>%1</td>").arg(valueStr);

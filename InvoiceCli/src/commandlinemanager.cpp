@@ -24,6 +24,12 @@
 
 using namespace std;
 
+CommandLineParameter::CommandLineParameter(const std::string& _name, const std::string& _description, const bool _mandatory)
+   : name(_name), description(_description), mandatory(_mandatory)
+{
+}
+
+
 CommandLineManager::CommandLineManager(int argc,char* argv[]) :
     usingHelpCommand(false), usingVersionCommand(false),
     applicationName(""), applicationVersion(""), authorName(""), copyrightInfo(""),
@@ -37,9 +43,15 @@ CommandLineManager::CommandLineManager(const std::map<string, string> &parameter
 {
 }
 
-void CommandLineManager::AddParameter(const string &parameter, const string &description)
+void CommandLineManager::AddParameter(const string &name, const string &description, const bool mandatory)
 {
-    knownParameters.push_back(make_pair(parameter, description));
+   CommandLineParameter parameter(name, description, mandatory);
+   knownParameters.push_back(parameter);
+}
+
+void CommandLineManager::AddOptionalParameter(const std::string& name, const std::string& description)
+{
+   AddParameter(name, description, false);
 }
 
 bool CommandLineManager::HasParameter(const string &parameter) const
@@ -144,11 +156,11 @@ void CommandLineManager::BuildParametersMap(const int argc, char* argv[])
 
 bool CommandLineManager::IsInKnownList(const string &parameter) const
 {
-    list<pair<string, string> >::const_iterator it=knownParameters.begin();
-    list<pair<string, string> >::const_iterator end=knownParameters.end();
+    ParameterList::const_iterator it=knownParameters.begin();
+    ParameterList::const_iterator end=knownParameters.end();
     for(; it!=end; ++it)
     {
-        if (it->first == parameter)
+        if (it->name == parameter)
             return true;
     }
 
@@ -157,21 +169,21 @@ bool CommandLineManager::IsInKnownList(const string &parameter) const
 
 void CommandLineManager::ShowUsageInformation()
 {
-    // TODO make a description based on mandatory/optional params.
-    cout << "Available options :" << endl;
+   const bool showMandatoryTag = ParamsHaveDifferentTypes();
+   cout << "Available options :" << endl;
 
-    UpdateParameterColumnSize(knownParameters);
+   UpdateParameterColumnSize(knownParameters);
 
-    list<pair<string, string> >::const_iterator it=knownParameters.begin();
-    list<pair<string, string> >::const_iterator end=knownParameters.end();
-    for(; it!=end; ++it)
-        ShowParamUsage(it->first, it->second);
+   ParameterList::const_iterator it=knownParameters.begin();
+   ParameterList::const_iterator end=knownParameters.end();
+   for(; it!=end; ++it)
+      ShowParamUsage(*it, showMandatoryTag);
 
-    if (usingHelpCommand)
-        ShowParamUsage("help", "Shows this usage information");
+   if (usingHelpCommand)
+      ShowParamUsage("help", "Shows this usage information");
 
-    if (usingVersionCommand)
-        ShowParamUsage("version", "Shows program version information");
+   if (usingVersionCommand)
+      ShowParamUsage("version", "Shows program version information");
 }
 
 void CommandLineManager::EnableHelpCommand()
@@ -201,7 +213,7 @@ void CommandLineManager::UpdateParameterColumnSize(const CommandLineManager::Par
     parameterColumnSize = 0;
     for (ParameterList::const_iterator it = parameters.begin(); it!=parameters.end(); ++it)
     {
-        const size_t currentLength = it->first.length();
+        const size_t currentLength = it->name.length();
         if (currentLength > parameterColumnSize)
             parameterColumnSize = currentLength;
     }
@@ -210,10 +222,36 @@ void CommandLineManager::UpdateParameterColumnSize(const CommandLineManager::Par
     parameterColumnSize += minimumSpacing;
 }
 
+void CommandLineManager::ShowParamUsage(const CommandLineParameter& param, const bool displayMandatoryTag)
+{
+   const bool displayParamAsMandatory = displayMandatoryTag && param.mandatory;
+   ShowParamUsage(param.name, param.description, displayParamAsMandatory);
+}
+
 void CommandLineManager::ShowParamUsage(const string &param, const string &description)
 {
-    const size_t spacesToInsert = parameterColumnSize - param.length();
-    cout << "\t--" << param << Spaces(static_cast<int>(spacesToInsert)) << description << endl;
+   ShowParamUsage(param, description, false);
+}
+
+void CommandLineManager::ShowParamUsage(const std::string& param, const std::string& description, const bool displayMandatoryTag)
+{
+   const size_t spacesToInsert = parameterColumnSize - param.length();
+   cout << "\t--" << param << Spaces(static_cast<int>(spacesToInsert));
+   if (displayMandatoryTag)
+      cout << "[MANDATORY] ";
+   cout << description << endl;
+}
+
+bool CommandLineManager::ParamsHaveDifferentTypes() const
+{
+   auto isMandatory = [](const CommandLineParameter& parameter)
+   {
+      return parameter.mandatory;
+
+   };
+   const bool allOptional = std::none_of(knownParameters.begin(), knownParameters.end(), isMandatory);
+   const bool allMandatory = std::all_of(knownParameters.begin(), knownParameters.end(), isMandatory);
+   return !allOptional && !allMandatory;
 }
 
 string CommandLineManager::Spaces(const int spaceCount)
@@ -223,3 +261,4 @@ string CommandLineManager::Spaces(const int spaceCount)
       spaceStr += " ";
    return spaceStr;
 }
+
