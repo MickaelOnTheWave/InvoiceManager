@@ -16,39 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMANDS_H
-#define COMMANDS_H
+#ifndef CREATEPDFCOMMAND_H
+#define CREATEPDFCOMMAND_H
 
-#include "commandlinemanager.h"
-#include "InvoiceDbController.h"
+#include "AbstractCommand.h"
 
-class ShowCommand
+class CreatePdfCommand : public AbstractCommand
 {
 public:
-   static void Run(const InvoiceDbController& controller,
-                       const CommandLineManager& cli);
-};
+   CreatePdfCommand(const std::string& cliParamName);
 
-class GetHtmlCommand
-{
-public:
-   static void Run(const InvoiceDbController& controller,
-                       const CommandLineManager& cli);
-};
+   void Run(InvoiceDbController& controller,
+            const CommandLineManager& cli) override;
 
-class GetCssCommand
-{
-public:
-   static void Run(const InvoiceDbController& controller,
-                       const CommandLineManager& cli);
 };
-
-class GetStyledHtmlCommand
-{
-public:
-   static void Run(const InvoiceDbController& controller,
-                       const CommandLineManager& cli);
-};
-
 
 #endif

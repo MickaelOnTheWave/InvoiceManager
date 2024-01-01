@@ -26,6 +26,11 @@ using std::cout;
 using std::endl;
 using std::string;
 
+CreateFromLastCommand::CreateFromLastCommand(const std::string& cliParamName)
+   : AbstractCommand(cliParamName)
+{
+}
+
 void CreateFromLastCommand::Run(InvoiceDbController& controller, const CommandLineManager& cli)
 {
    const QDate selectedDate = GetDateFromCli(cli.GetParameterValue(dateParam));

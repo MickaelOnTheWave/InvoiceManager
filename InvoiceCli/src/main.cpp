@@ -28,19 +28,20 @@
 #include "InvoicePrinter.h"
 
 #include "CliParametersDefinitions.h"
-#include "CreateFromLastCommand.h"
-#include "CreatePdfCommand.h"
-#include "Commands.h"
+#include "Commands/CreateFromLastCommand.h"
+#include "Commands/CreatePdfCommand.h"
+#include "Commands/InvoiceCommands.h"
+#include "Commands/ListCommand.h"
 
 // TODO Make ToolsLib usable lib and use it here instead of using copied cpp/h
-// TODO Refactor all this, there should be some classes for command / printing etc
 // TODO Add db migration here too
 
 using std::string;
 using std::cout;
 using std::endl;
+using std::vector;
 
-const string dbCommand = "db";
+const string dbParam = "db";
 const string listCommand = "list";
 const string showCommand = "show";
 const string pdfCommand = "generatePdf";
@@ -52,7 +53,7 @@ const string getStyledHtmlCommand = "getStyledHtml";
 
 void setupCommandLine(CommandLineManager& cli)
 {
-   cli.AddParameter(dbCommand, "Invoice Database to use");
+   cli.AddParameter(dbParam, "Invoice Database to use");
 
    // Actions
    cli.AddParameter(listCommand, "List all invoices in the database");
@@ -94,12 +95,26 @@ void setupCommandLine(CommandLineManager& cli)
    cli.EnableVersionCommand(appName, APP_VERSION, author, copyrightInfo);
 }
 
-void runListCommand(const InvoiceDbController& controller)
+void executeKnownCommands(CommandLineManager& cli, InvoiceDbController& controller)
 {
-   const std::vector<InvoiceUserData> allData = controller.getAllInvoiceTemplateData();
+   const vector<AbstractCommand*> knownCommands = {
+      new ListCommand(listCommand),
+      new CreatePdfCommand(pdfCommand),
+      new CreateFromLastCommand(createFromLastCommand),
+      new ShowCommand(showCommand),
+      new GetHtmlCommand(getHtmlCommand),
+      new GetCssCommand(getCssCommand),
+      new GetStyledHtmlCommand(getStyledHtmlCommand)
+   };
 
-   cout << allData.size() << " invoices in database." << endl;
-   InvoicePrinter::printMultiple(allData);
+   for (auto command : knownCommands)
+   {
+      if (cli.HasParameter(command->GetCliParamName()))
+      {
+         command->Run(controller, cli);
+         break;
+      }
+   }
 }
 
 void executeCommands(CommandLineManager& cli)
@@ -110,13 +125,13 @@ void executeCommands(CommandLineManager& cli)
    if (isHelp || isVersion || hasUnknownParams)
       return;
 
-   if (!cli.HasParameter(dbCommand))
+   if (!cli.HasParameter(dbParam))
    {
       std::cout << "No Database provided, no data to run commands on." << std::endl;
       return;
    }
 
-   const string dbFile = cli.GetParameterValue(dbCommand);
+   const string dbFile = cli.GetParameterValue(dbParam);
    InvoiceDbController controller;
    const bool ok = controller.openDb(QString::fromStdString(dbFile));
    if (!ok)
@@ -125,20 +140,7 @@ void executeCommands(CommandLineManager& cli)
       return;
    }
 
-   if (cli.HasParameter(listCommand))
-      runListCommand(controller);
-   else if (cli.HasParameter(showCommand))
-      ShowCommand::Run(controller, cli);
-   else if (cli.HasParameter(pdfCommand))
-      CreatePdfCommand::Run(controller, cli);
-   else if (cli.HasParameter(createFromLastCommand))
-      CreateFromLastCommand::Run(controller, cli);
-   else if (cli.HasParameter(getHtmlCommand))
-      GetHtmlCommand::Run(controller, cli);
-   else if (cli.HasParameter(getCssCommand))
-      GetCssCommand::Run(controller, cli);
-   else if (cli.HasParameter(getStyledHtmlCommand))
-      GetStyledHtmlCommand::Run(controller, cli);
+   executeKnownCommands(cli, controller);
 }
 
 int main(int argc, char** argv)

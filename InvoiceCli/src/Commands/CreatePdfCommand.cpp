@@ -27,7 +27,12 @@
 using std::cout;
 using std::endl;
 
-void CreatePdfCommand::Run(const InvoiceDbController& controller, const CommandLineManager& cli)
+CreatePdfCommand::CreatePdfCommand(const std::string& cliParamName)
+   : AbstractCommand(cliParamName)
+{
+}
+
+void CreatePdfCommand::Run(InvoiceDbController& controller, const CommandLineManager& cli)
 {
    std::string namePattern = cli.GetParameterValue(namePatternParam);
    if (namePattern.empty())

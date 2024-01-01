@@ -20,14 +20,15 @@
 #define CREATEFROMLASTCOMMAND_H
 
 #include <QDate>
-#include "commandlinemanager.h"
-#include "InvoiceDbController.h"
+#include "AbstractCommand.h"
 
-class CreateFromLastCommand
+class CreateFromLastCommand : public AbstractCommand
 {
 public:
-   static void Run(InvoiceDbController& controller,
-                   const CommandLineManager& cli);
+   CreateFromLastCommand(const std::string& cliParamName);
+
+   void Run(InvoiceDbController& controller,
+            const CommandLineManager& cli) override;
 
 private:
    static void RunCreateFromLastCommand(InvoiceDbController& controller, const QDate& date);

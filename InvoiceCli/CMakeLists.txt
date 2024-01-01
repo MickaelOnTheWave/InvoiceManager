@@ -14,7 +14,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt5 COMPONENTS Core LinguistTools Widgets PrintSupport REQUIRED)
 find_package(Qt5 COMPONENTS Core LinguistTools Widgets PrintSupport REQUIRED)
 
-set(TS_FILES InvoiceCli_en_GB.ts)
+include_directories(src/)
+
+set(COMMANDS_SRC
+    src/Commands/AbstractCommand.cpp src/Commands/AbstractCommand.h
+    src/Commands/InvoiceCommands.cpp src/Commands/InvoiceCommands.h
+    src/Commands/CreateFromLastCommand.cpp src/Commands/CreateFromLastCommand.h
+    src/Commands/CreatePdfCommand.cpp src/Commands/CreatePdfCommand.h
+    src/Commands/ListCommand.cpp src/Commands/ListCommand.h
+)
 
 add_executable(InvoiceCli
   src/main.cpp
@@ -22,17 +30,8 @@ add_executable(InvoiceCli
   src/InvoicePrinter.cpp src/InvoicePrinter.h
   src/Tools.cpp src/Tools.h
   src/CliParametersDefinitions.h
-  src/CreateFromLastCommand.cpp src/CreateFromLastCommand.h
-  src/CreatePdfCommand.h src/CreatePdfCommand.cpp
-  src/Commands.cpp src/Commands.h
   src/SelectCliParamHandler.h src/SelectCliParamHandler.cpp
-  ${TS_FILES}
+  ${COMMANDS_SRC}
 )
 target_compile_definitions(InvoiceCli PRIVATE APP_VERSION="${APP_VERSION}")
 target_link_libraries(InvoiceCli Qt5::Core Qt5::Widgets Qt5::PrintSupport InvoiceLib)
-
-if(COMMAND qt_create_translation)
-    qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
-else()
-    qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
-endif()
