@@ -241,7 +241,7 @@ bool MainWindow::isDbOpeningConfirmed()
                            "DB version : %1 - Current version : %2\n"
                            "What to you want to do ?");
      auto* buttonMigrate = msgBox.addButton("Migrate", QMessageBox::YesRole);
-     auto* buttonClose = msgBox.addButton("Close", QMessageBox::NoRole);
+     msgBox.addButton("Close", QMessageBox::NoRole);
      msgBox.setWindowTitle("Warning");
      msgBox.setText(message.arg(dbVersion).arg(controller.currentDbVersion));
      msgBox.exec();

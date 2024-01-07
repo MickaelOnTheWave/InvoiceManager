@@ -32,9 +32,9 @@
 #include "Commands/CreatePdfCommand.h"
 #include "Commands/InvoiceCommands.h"
 #include "Commands/ListCommand.h"
+#include "DbMigrator.h"
 
 // TODO Make ToolsLib usable lib and use it here instead of using copied cpp/h
-// TODO Add db migration here too
 
 using std::string;
 using std::cout;
@@ -117,6 +117,18 @@ void executeKnownCommands(CommandLineManager& cli, InvoiceDbController& controll
    }
 }
 
+bool askUserForDbMigration(InvoiceDbController& controller)
+{
+   std::cout << "DB version mismatch. DB version : %1 - Current version : %2" << std::endl;
+   std::cout << "No action can be performed on this DB until it is migrated." << std::endl;
+   std::cout << "Do you want to migrate the DB file ? (type y for Yes, n for No)" << std::endl;
+
+   std::string userAnswer;
+   std::cin >> userAnswer;
+   return (userAnswer == "y" || userAnswer == "Y" || userAnswer == "YES" ||
+           userAnswer == "yes" || userAnswer == "Yes" || userAnswer == "YES");
+}
+
 void executeCommands(CommandLineManager& cli)
 {
    const bool isHelp = cli.HandleHelpCommand();
@@ -138,6 +150,27 @@ void executeCommands(CommandLineManager& cli)
    {
       std::cout << "Error opening database " << dbFile << std::endl;
       return;
+   }
+
+   const int dbVersion = controller.getDatabaseVersion();
+   if (dbVersion != controller.currentDbVersion)
+   {
+      const bool shouldMigrateDb = askUserForDbMigration(controller);
+      if (shouldMigrateDb)
+      {
+         DbMigrator migrator(controller);
+         const bool ok = migrator.Migrate();
+         if (!ok)
+         {
+            std::cout << "Error trying to migrate the DB. Closing." << std::endl;
+            return ;
+         }
+      }
+      else
+      {
+         std::cout << "Ok. Exiting." << std::endl;
+         return;
+      }
    }
 
    executeKnownCommands(cli, controller);
