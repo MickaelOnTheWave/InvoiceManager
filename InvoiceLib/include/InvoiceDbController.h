@@ -33,7 +33,10 @@ class InvoiceDbController : public QObject
     Q_OBJECT
 
 public:
-    static const int currentDbVersion = 10;
+    static const int currentDbVersion = 11;
+
+    static const int stylesheetTypeId = 1;
+    static const int templateTypeId = 2;
 
     InvoiceDbController();
 
@@ -41,6 +44,7 @@ public:
     bool openDb(const QString& filename);
     void closeDb();
 
+    static bool createResourceTypeData(QString* errorMessage = nullptr);
     QString getLastError() const;
 
     bool writeUserCompany(const CompanyData& company);
@@ -100,7 +104,7 @@ private:
                             const QDate& date, const QString &notes, const QString &currency);
     bool writeToInvoiceMapTable(const int invoiceId, const std::vector<int>& detailsIds);
 
-    QString getFromId(const QString& field, const QString& table, const int id) const;
+    QString getFromId(const QString& field, const int id, const int typeId) const;
 
     CompanyData getCompanyData(const int id) const;
 

@@ -18,16 +18,18 @@
 
 #include "FileResourceModel.h"
 
-FileResourceModel::FileResourceModel(const QString &tableName, QObject *parent, QSqlDatabase db)
+FileResourceModel::FileResourceModel(const int typeId, QObject *parent, QSqlDatabase db)
     : QSqlTableModel(parent, db)
 {
-    setTable(tableName);
+    setTable("fileresource");
+    setFilter(QString("typeId = %1").arg(typeId));
     setEditStrategy(QSqlTableModel::OnManualSubmit);
     select();
 
     setHeaderData(0, Qt::Horizontal, tr("Id"));
     setHeaderData(1, Qt::Horizontal, tr("Name"));
     setHeaderData(2, Qt::Horizontal, tr("Content"));
+    setHeaderData(3, Qt::Horizontal, tr("Type Id"));
 }
 
 int FileResourceModel::getId(const int i) const

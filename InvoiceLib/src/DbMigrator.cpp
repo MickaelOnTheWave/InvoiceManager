@@ -5,6 +5,7 @@
 #include <QSqlQuery>
 #include <QTextStream>
 
+#include "InvoiceDbController.h"
 #include "Utils.h"
 
 
@@ -15,8 +16,7 @@ DbMigrator::DbMigrator(InvoiceDbController& _controller)
       QSqlQuery query;
       if (!query.exec("ALTER TABLE invoiceelement ADD quantity DOUBLE DEFAULT 1.0"))
             return false;
-      if (!query.exec("UPDATE version SET value = 9"))
-            return false;
+
       return true;
    });
 
@@ -29,12 +29,29 @@ DbMigrator::DbMigrator(InvoiceDbController& _controller)
       if (!ok)
          return false;
 
-      QSqlQuery query;
-      if (!query.exec("UPDATE version SET value = 10"))
-            return false;
       return true;
    });
 
+   addToMap(11, [this]() {
+
+      bool ok = InvoiceDbController::createResourceTypeData();
+      if (!ok)
+         return false;
+
+      ok = changeStylesheetToFileResource();
+      if (!ok)
+         return false;
+
+      ok = moveTemplatesToFileResource();
+      if (!ok)
+         return false;
+
+      QSqlQuery query;
+      if (!query.exec("DROP TABLE template"))
+            return false;
+
+      return true;
+   });
 
 }
 
@@ -61,7 +78,20 @@ bool DbMigrator::Migrate()
 
 void DbMigrator::addToMap(const int targetVersion, std::function<bool ()> migrationFunc)
 {
-   const auto dataToInsert = std::make_pair(targetVersion, migrationFunc);
+   auto completeMigrationFunction = [migrationFunc, targetVersion]() {
+      const bool ok = migrationFunc();
+      if (!ok)
+         return false;
+
+      QSqlQuery query;
+      query.prepare("UPDATE version SET value = :newVersion");
+      query.bindValue(":newVersion", targetVersion);
+      if (!query.exec())
+         return false;
+
+      return true;
+   };
+   const auto dataToInsert = std::make_pair(targetVersion, completeMigrationFunction);
    migrationFunctions.insert(dataToInsert);
 }
 
@@ -93,6 +123,55 @@ bool DbMigrator::changeTableToContents(const QString tableName)
    queryStr = "ALTER TABLE %1 DROP COLUMN file";
    if (!query.exec(queryStr.arg(tableName)))
          return false;
+
+   return true;
+}
+
+bool DbMigrator::changeStylesheetToFileResource()
+{
+   QSqlQuery query;
+   if (!query.exec("ALTER TABLE stylesheet RENAME TO fileresource"))
+         return false;
+
+   if (!query.exec("ALTER TABLE fileresource ADD typeId INTEGER"))
+         return false;
+
+   if (!query.exec("UPDATE fileresource SET typeId = 1"))
+         return false;
+
+   return true;
+}
+
+bool DbMigrator::moveTemplatesToFileResource()
+{
+   QSqlQuery query;
+   if (!query.exec("SELECT id, name, content FROM template"))
+   {
+      return false;
+   }
+
+   while (query.next())
+   {
+      const int oldTemplateId = query.value(0).toInt();
+      const QString name = query.value(1).toString();
+      const QString content = query.value(2).toString();
+
+      QSqlQuery insertQuery;
+      insertQuery.prepare("INSERT INTO fileresource (name, content, typeId) VALUES (:name, :content, :type)");
+      insertQuery.bindValue(":name", name);
+      insertQuery.bindValue(":content", content);
+      insertQuery.bindValue(":type", 2);
+      if (!insertQuery.exec())
+         return false;
+
+      const int newTemplateId = insertQuery.lastInsertId().toInt();
+      QSqlQuery updateQuery;
+      updateQuery.prepare("UPDATE invoice SET templateId = :templateId WHERE templateId = :oldId");
+      updateQuery.bindValue(":templateId", newTemplateId);
+      updateQuery.bindValue(":oldId", oldTemplateId);
+      if (!updateQuery.exec())
+         return false;
+   }
 
    return true;
 }

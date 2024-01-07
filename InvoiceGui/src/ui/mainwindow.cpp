@@ -201,8 +201,8 @@ void MainWindow::onGoToMore()
 
 void MainWindow::createModels()
 {
-    templateModel = new FileResourceModel("template", this, controller.getDatabase());
-    stylesheetModel = new FileResourceModel("stylesheet", this, controller.getDatabase());
+    templateModel = new FileResourceModel(InvoiceDbController::templateTypeId, this, controller.getDatabase());
+    stylesheetModel = new FileResourceModel(InvoiceDbController::stylesheetTypeId, this, controller.getDatabase());
     clientModel = new ClientModel(&controller, this);
     invoiceModel = new InvoiceModel(this);
 

@@ -168,8 +168,9 @@ void MainPage::onInvoiceHeaderClicked(int logicalIndex)
 
 void MainPage::initializeFileResourceView(QTableView *viewControl)
 {
-    viewControl->hideColumn(0);
-    viewControl->hideColumn(2);
+    viewControl->hideColumn(0); // Id
+    viewControl->hideColumn(2); // Content
+    viewControl->hideColumn(3); // Type Id
     viewControl->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
     viewControl->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
     viewControl->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);

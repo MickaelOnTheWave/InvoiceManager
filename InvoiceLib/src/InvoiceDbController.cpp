@@ -51,19 +51,13 @@ bool InvoiceDbController::createDb(const QString &filename)
         return false;
     }
 
-    // TODO : Move template and stylesheet to a single table with a type column
-
-    if (!query.exec("CREATE TABLE template (id INTEGER primary key, name TEXT, content TEXT)"))
+    if (!query.exec("CREATE TABLE fileresource (id INTEGER primary key, name TEXT, content TEXT, typeId INTEGER)"))
     {
         lastErrorMessage = query.lastError().text();
         return false;
     }
 
-    if (!query.exec("CREATE TABLE stylesheet (id INTEGER primary key, name TEXT, content TEXT)"))
-    {
-       lastErrorMessage = query.lastError().text();
-        return false;
-    }
+    createResourceTypeData(&lastErrorMessage);
 
     if (!query.exec("CREATE TABLE invoice (id INTEGER primary key, companyId INTEGER, clientId INTEGER, "
                "templateId INTEGER, stylesheetId INTEGER, date TEXT, notes TEXT, currency TEXT)"))
@@ -366,22 +360,22 @@ int InvoiceDbController::getDatabaseVersion() const
 
 QString InvoiceDbController::getTemplateName(const int id) const
 {
-   return getFromId("name", "template", id);
+   return getFromId("name", id, templateTypeId);
 }
 
 QString InvoiceDbController::getStylesheetName(const int id) const
 {
-   return getFromId("name", "stylesheet", id);
+   return getFromId("name", id, stylesheetTypeId);
 }
 
 QString InvoiceDbController::getTemplateData(const int id) const
 {
-   return getFromId("content", "template", id);
+   return getFromId("content", id, templateTypeId);
 }
 
 QString InvoiceDbController::getStylesheetData(const int id) const
 {
-   return getFromId("content", "stylesheet", id);
+   return getFromId("content", id, stylesheetTypeId);
 }
 
 int InvoiceDbController::getInvoiceCountUsingFile(const int id, const QString& fieldName) const
@@ -449,6 +443,38 @@ bool InvoiceDbController::createDbConnection(const QString &filename)
     return db.open();
 }
 
+bool InvoiceDbController::createResourceTypeData(QString* errorMessage)
+{
+   QSqlQuery query;
+   if (!query.exec("CREATE TABLE resourceType (id INTEGER primary key, name TEXT)"))
+   {
+      if (errorMessage)
+         *errorMessage = query.lastError().text();
+       return false;
+   }
+
+   query.prepare("INSERT INTO resourceType (id, name) VALUES (:id, :name)");
+   query.bindValue(":id", stylesheetTypeId);
+   query.bindValue(":name", "Stylesheet");
+   if (!query.exec())
+   {
+      if (errorMessage)
+         *errorMessage = query.lastError().text();
+       return false;
+   }
+
+   query.bindValue(":id", templateTypeId);
+   query.bindValue(":name", "Template");
+   if (!query.exec())
+   {
+      if (errorMessage)
+         *errorMessage = query.lastError().text();
+       return false;
+   }
+
+   return true;
+}
+
 QString InvoiceDbController::createUserCompanyRequest(const QString &field)
 {
     return QString("SELECT %1 FROM company WHERE isClient = FALSE ORDER BY id DESC LIMIT 1").arg(field);
@@ -507,11 +533,12 @@ bool InvoiceDbController::writeToInvoiceMapTable(const int invoiceId, const std:
     return true;
 }
 
-QString InvoiceDbController::getFromId(const QString& field, const QString& table, const int id) const
+QString InvoiceDbController::getFromId(const QString& field, const int id, const int typeId) const
 {
    QSqlQuery query;
-   query.prepare(QString("SELECT %1 FROM %2 WHERE id = :id").arg(field, table));
+   query.prepare(QString("SELECT %1 FROM fileresource WHERE id = :id AND typeId = :typeId").arg(field));
    query.bindValue(":id", id);
+   query.bindValue(":typeId", typeId);
    const bool ok = query.exec();
    if (ok && query.next())
        return query.value(0).toString();

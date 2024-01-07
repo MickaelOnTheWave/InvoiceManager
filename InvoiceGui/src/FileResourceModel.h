@@ -26,7 +26,7 @@ class FileResourceModel : public QSqlTableModel
     Q_OBJECT
 
 public:
-    explicit FileResourceModel(const QString& tableName,
+    explicit FileResourceModel(const int typeId,
                                QObject *parent = nullptr,
                                QSqlDatabase db = QSqlDatabase());
 

@@ -13,6 +13,8 @@ public:
 private:
    void addToMap(const int targetVersion, std::function<bool()> migrationFunc);
    bool changeTableToContents(const QString tableName);
+   bool changeStylesheetToFileResource();
+   bool moveTemplatesToFileResource();
 
    std::map<int, std::function<bool()>> migrationFunctions;
    InvoiceDbController& controller;

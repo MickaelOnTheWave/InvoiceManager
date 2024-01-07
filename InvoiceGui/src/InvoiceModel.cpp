@@ -47,11 +47,11 @@ void InvoiceModel::refresh()
     const QString queryStr = "SELECT invoice.id,"
                              "company.name AS 'Client',"
                              "(%1) AS 'Amount',"
-                             "stylesheet.name AS 'Stylesheet',"
+                             "fileresource.name AS 'Stylesheet',"
                              "invoice.date as 'Date' "
-                             "FROM invoice, company, stylesheet "
+                             "FROM invoice, company, fileresource "
                              "WHERE invoice.clientId = company.id "
-                             "AND invoice.stylesheetId = stylesheet.id "
+                             "AND invoice.stylesheetId = fileresource.id "
                              "AND invoice.companyId = %2 "
                              "ORDER BY invoice.date";
     setQuery(queryStr.arg(sumQuery).arg(myCompanyId));
