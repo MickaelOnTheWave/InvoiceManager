@@ -28,6 +28,26 @@
 #include "InvoiceData.h"
 #include "InvoiceDetail.h"
 
+class IncomeHistory
+{
+public:
+   using ClientIncomeHistory = std::pair<QString, std::vector<double>>;
+
+   double getMaxValue() const;
+
+   void push_back(const ClientIncomeHistory& newData);
+
+   std::vector<ClientIncomeHistory>::iterator begin();
+   std::vector<ClientIncomeHistory>::iterator end();
+   std::vector<ClientIncomeHistory>::const_iterator begin() const;
+   std::vector<ClientIncomeHistory>::const_iterator end() const;
+
+
+private:
+
+   std::vector<ClientIncomeHistory> data;
+};
+
 class InvoiceDbController : public QObject
 {
     Q_OBJECT
@@ -37,6 +57,9 @@ public:
 
     static const int stylesheetTypeId = 1;
     static const int templateTypeId = 2;
+
+    using IncomePerClientVec = std::vector<std::pair<QString, double>>;
+    using IncomeData = std::vector<std::pair<QDate, double>>;
 
     InvoiceDbController();
 
@@ -94,6 +117,17 @@ public:
 
     static QSqlQuery createWriteCompanyQuery(const CompanyData& data, const bool isClient);
 
+    /** For Charts Page - Used for statistics **/
+    int getTotalInvoiceCount() const;
+    int getTotalClientCount() const;
+    double getTotalInvoicedAmount() const;
+    int getMonthCount() const;
+
+    IncomePerClientVec getIncomePerClient() const;
+    IncomeHistory getIncomeHistory() const;
+    std::pair<QDate, QDate> getBoundaryMonths() const;
+
+
 private:
     bool createDbConnection(const QString& filename);
 
@@ -118,6 +152,14 @@ private:
     int getSingleInvoiceId(const QString& sortOrder) const;
 
     void fillInvoiceUserData(InvoiceUserData& data, QSqlQuery& query, const int startingIndex) const;
+
+    IncomeData getClientInvoicedValues(const int clientId) const;
+
+    std::vector<QDate> createDateSpans() const;
+
+    static std::vector<double> toValuesByTimespan(const IncomeData& data, const std::vector<QDate> dateSpans);
+
+    static std::vector<QDate> toSortedDates(QSqlQuery& query);
 
     QString dbFilename;
     QSqlDatabase db; // TODO : remove this. See tip from Qt documentation.

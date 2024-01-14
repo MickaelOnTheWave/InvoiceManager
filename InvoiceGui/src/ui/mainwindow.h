@@ -54,6 +54,7 @@ private slots:
 
     void onGoToCreateNewInvoice();
     void onGoToCreateNewInvoiceFromLast();
+    void onGoToCharts();
     void onGoToMore();
     void onCreateNewInvoice();
     void onBackToMainPage();

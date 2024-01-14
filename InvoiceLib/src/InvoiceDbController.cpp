@@ -23,6 +23,57 @@
 #include <QtSql/QSqlQuery>
 #include <qsqlerror.h>
 
+#include <algorithm>
+
+using namespace std;
+
+double IncomeHistory::getMaxValue() const
+{
+   std::vector<double> totalsByDateSpan;
+   for (int i=0; i<data.front().second.size(); ++i)
+      totalsByDateSpan.push_back(0.0);
+
+   for(const auto& clientIncome : data)
+   {
+      auto itTotals = totalsByDateSpan.begin();
+      for (const auto& incomeData : clientIncome.second)
+      {
+         *itTotals += incomeData;
+         ++itTotals;
+      }
+   }
+
+   auto itMaxElement = max_element(totalsByDateSpan.begin(), totalsByDateSpan.end());
+   return *itMaxElement;
+}
+
+void IncomeHistory::push_back(const ClientIncomeHistory& newData)
+{
+   data.push_back(newData);
+}
+
+vector<IncomeHistory::ClientIncomeHistory>::iterator IncomeHistory::begin()
+{
+   return data.begin();
+}
+
+vector<IncomeHistory::ClientIncomeHistory>::iterator IncomeHistory::end()
+{
+   return data.end();
+}
+
+vector<IncomeHistory::ClientIncomeHistory>::const_iterator IncomeHistory::begin() const
+{
+   return data.begin();
+}
+
+vector<IncomeHistory::ClientIncomeHistory>::const_iterator IncomeHistory::end() const
+{
+   return data.end();
+}
+
+
+
 InvoiceDbController::InvoiceDbController()
 {
 }
@@ -418,6 +469,140 @@ QSqlQuery InvoiceDbController::createWriteCompanyQuery(const CompanyData &data, 
     return query;
 }
 
+int InvoiceDbController::getTotalInvoiceCount() const
+{
+   QSqlQuery query;
+   const bool ok = query.exec("SELECT COUNT(id) FROM invoice");
+   if (ok && query.next())
+      return query.value(0).toInt();
+   return -1;
+}
+
+int InvoiceDbController::getTotalClientCount() const
+{
+   QSqlQuery query;
+   const bool ok = query.exec("SELECT COUNT(id) FROM company WHERE isClient = 1");
+   if (ok && query.next())
+      return query.value(0).toInt();
+   return -1;
+
+}
+
+double InvoiceDbController::getTotalInvoicedAmount() const
+{
+   const QString queryInvoiceValue = "SELECT SUM(value * quantity) FROM invoiceelement WHERE id = %1";
+   const QString queryInvoiceIds = "SELECT id FROM invoice";
+   const QString queryInvoiceElts = "SELECT idElement FROM invoicedetailmap WHERE "
+                                    "invoicedetailmap.idInvoice IN (%1)";
+
+   QSqlQuery query;
+   const bool ok = query.exec(queryInvoiceElts.arg(queryInvoiceIds));
+   if (!ok)
+      return -1.0;
+
+   double sum = 0.0;
+   while (query.next())
+   {
+      QSqlQuery subquery;
+      const bool ok2 = subquery.exec(queryInvoiceValue.arg(query.value(0).toInt()));
+      if (ok2 && subquery.next())
+         sum += subquery.value(0).toDouble();
+   }
+   return sum;
+}
+
+int InvoiceDbController::getMonthCount() const
+{
+   QSqlQuery query;
+   const bool ok = query.exec("SELECT date FROM invoice");
+   if (!ok)
+      return -1;
+
+   const std::vector<QDate> dates = toSortedDates(query);;
+   switch (dates.size())
+   {
+      case 0 : return 0;
+      case 1 : return 1;
+      default :
+      {
+         const QDate firstDate = dates.front();
+         const QDate lastDate = dates.back();
+         const int dayCount = firstDate.daysTo(lastDate);
+         const int daysInMonth = 30;
+         return dayCount / daysInMonth;
+      };
+   }
+}
+
+InvoiceDbController::IncomePerClientVec InvoiceDbController::getIncomePerClient() const
+{
+   IncomePerClientVec data;
+
+   QSqlQuery clientQuery;
+   bool ok = clientQuery.exec("SELECT company.name, company.id FROM company WHERE isClient = 1");
+   if (!ok)
+      return IncomePerClientVec();
+
+   while (clientQuery.next())
+   {
+      const QString companyName = clientQuery.value(0).toString();
+      const int companyId = clientQuery.value(1).toInt();
+      const IncomeData clientIncomeData = getClientInvoicedValues(companyId);
+
+      auto sumFunc = [](double total, const std::pair<QDate, double>& value)
+      {
+         return total + value.second;
+      };
+      const double clientTotal = std::accumulate(clientIncomeData.begin(), clientIncomeData.end(), 0.0, sumFunc);
+
+      data.push_back(std::make_pair(companyName, clientTotal));
+   }
+
+   return data;
+}
+
+IncomeHistory InvoiceDbController::getIncomeHistory() const
+{
+   IncomeHistory history;
+
+   QSqlQuery clientQuery;
+   bool ok = clientQuery.exec("SELECT company.name, company.id FROM company WHERE isClient = 1");
+   if (!ok)
+      return IncomeHistory();
+
+   const vector<QDate> datespans = createDateSpans();
+   while (clientQuery.next())
+   {
+      const QString companyName = clientQuery.value(0).toString();
+      const int companyId = clientQuery.value(1).toInt();
+      const IncomeData clientIncomeData = getClientInvoicedValues(companyId);
+
+      const std::vector<double> valuesByTimespan = toValuesByTimespan(clientIncomeData, datespans);
+
+      history.push_back(std::make_pair(companyName, valuesByTimespan));
+   }
+
+   return history;
+}
+
+std::pair<QDate, QDate> InvoiceDbController::getBoundaryMonths() const
+{
+   QSqlQuery query;
+   bool ok = query.exec("SELECT date FROM invoice");
+   if (!ok)
+      return std::pair<QDate, QDate>();
+
+   std::vector<QDate> dates;
+   while (query.next())
+   {
+      const QString dateStr = query.value(0).toString();
+      dates.push_back(QDate::fromString(dateStr, dateFormatStr));
+   }
+
+   std::sort(dates.begin(), dates.end());
+   return std::make_pair(dates.front(), dates.back());
+}
+
 QSqlDatabase InvoiceDbController::getDatabase()
 {
    return db;
@@ -429,9 +614,7 @@ int InvoiceDbController::getParentCompanyId(const int id)
    QSqlQuery query;
    const bool ok = query.exec(queryStr.arg(id));
    if (ok && query.next())
-   {
       return query.value(0).toInt();
-   }
    return -1;
 }
 
@@ -671,4 +854,95 @@ void InvoiceDbController::fillInvoiceUserData(InvoiceUserData& data, QSqlQuery& 
    data.userCompany = getCompanyData(companyId);
    data.clientCompany = getCompanyData(clientId);
    data.details = createInvoiceDetails(data.id);
+}
+
+InvoiceDbController::IncomeData InvoiceDbController::getClientInvoicedValues(const int clientId) const
+{
+   IncomeData incomes;
+
+   const QString invoiceQueryStr = "SELECT id, date FROM invoice WHERE clientId = %1";
+   QSqlQuery invoiceQuery;
+   bool ok = invoiceQuery.exec(invoiceQueryStr.arg(clientId));
+   if (!ok)
+      return IncomeData();
+
+   while (invoiceQuery.next())
+   {
+      const int invoiceId = invoiceQuery.value(0).toInt();
+      const QString invoiceDateStr = invoiceQuery.value(1).toString();
+      const QDate invoiceDate = QDate::fromString(invoiceDateStr, dateFormatStr);
+
+      const QString detailQueryStr = "SELECT idElement FROM invoicedetailmap WHERE idInvoice = %1";
+      QSqlQuery detailQuery;
+      ok = detailQuery.exec(detailQueryStr.arg(invoiceId));
+      if (!ok)
+         return IncomeData();
+
+      double invoiceTotal = 0.0;
+      while (detailQuery.next())
+      {
+         const int detailId = detailQuery.value(0).toInt();
+
+         const QString amountQueryStr = "SELECT value * quantity FROM invoiceelement WHERE id = %1";
+         QSqlQuery amountQuery;
+         ok = amountQuery.exec(amountQueryStr.arg(detailId));
+         if (!ok || !amountQuery.next())
+            return IncomeData();
+
+         double t = amountQuery.value(0).toDouble();;
+         invoiceTotal += t;
+      }
+
+      incomes.push_back(std::make_pair(invoiceDate, invoiceTotal));
+   }
+
+   return incomes;
+}
+
+vector<QDate> InvoiceDbController::createDateSpans() const
+{
+   const pair<QDate, QDate> dateBoundaries = getBoundaryMonths();
+
+   QDate firstDate(dateBoundaries.first.year(), dateBoundaries.first.month(), 1);
+   QDate lastDate(dateBoundaries.second.year(), dateBoundaries.first.month(), 31);
+
+   vector<QDate> dateSpans;
+   QDate currentDate = firstDate;
+   for (; currentDate < lastDate; currentDate = currentDate.addMonths(1))
+      dateSpans.push_back(currentDate);
+   dateSpans.push_back(currentDate);
+   return dateSpans;
+}
+
+std::vector<double> InvoiceDbController::toValuesByTimespan(const IncomeData& data, const vector<QDate> dateSpans)
+{
+   std::vector<double> values;
+
+   auto itDate = dateSpans.begin();
+   auto itDateEnd = dateSpans.end()-1;
+   auto itIncome = data.begin();
+
+   for (; itDate != itDateEnd; ++itDate)
+   {
+      double timespanTotal = 0.0;
+      while (itIncome->first < *(itDate+1))
+      {
+         timespanTotal += itIncome->second;
+         ++itIncome;
+      }
+      values.push_back(timespanTotal);
+   }
+   return values;
+}
+
+std::vector<QDate> InvoiceDbController::toSortedDates(QSqlQuery& query)
+{
+   std::vector<QDate> dates;
+   while (query.next())
+   {
+      const auto dateFormatStr = QString("d MMM yyyy");
+      dates.push_back(QDate::fromString(query.value(0).toString(), dateFormatStr));
+   }
+   std::sort(dates.begin(), dates.end());
+   return dates;
 }

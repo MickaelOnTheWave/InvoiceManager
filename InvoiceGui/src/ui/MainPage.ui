@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_6">
+  <layout class="QVBoxLayout" name="verticalLayout_7">
    <item>
     <widget class="TitleBarWidget" name="titleBarWidget" native="true"/>
    </item>
@@ -86,7 +86,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <spacer name="horizontalSpacer_3">
        <property name="orientation">
@@ -119,11 +119,22 @@
       </layout>
      </item>
      <item>
-      <widget class="QPushButton" name="moreButton">
-       <property name="text">
-        <string>More Options</string>
-       </property>
-      </widget>
+      <layout class="QVBoxLayout" name="verticalLayout_6">
+       <item>
+        <widget class="QPushButton" name="chartsButton">
+         <property name="text">
+          <string>Charts</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="moreButton">
+         <property name="text">
+          <string>More Options</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
       <spacer name="horizontalSpacer_4">

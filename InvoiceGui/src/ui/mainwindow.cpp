@@ -25,6 +25,7 @@
 #include <QSqlTableModel>
 
 #include "DbMigrator.h"
+#include "ChartsPage.h"
 #include "NewInvoicePage.h"
 #include "TitleBarWidget.h"
 
@@ -51,6 +52,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->mainPage, &MainPage::createNewInvoice, this, &MainWindow::onGoToCreateNewInvoice);
     connect(ui->mainPage, &MainPage::createNewInvoiceFromLast, this, &MainWindow::onGoToCreateNewInvoiceFromLast);
+    connect(ui->mainPage, &MainPage::goToCharts, this, &MainWindow::onGoToCharts);
     connect(ui->mainPage, &MainPage::goToMore, this, &MainWindow::onGoToMore);
     connect(ui->mainPage, &MainPage::closeDb, this, &MainWindow::onCloseDb);
     connect(ui->mainPage, &MainPage::settingsClicked, this, &MainWindow::onSettings);
@@ -60,6 +62,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->newInvoicePage, &NewInvoicePage::cancel, this, &MainWindow::onBackToMainPage);
     connect(ui->newInvoicePage, &NewInvoicePage::settingsClicked, this, &MainWindow::onSettings);
     connect(ui->newInvoicePage, &NewInvoicePage::aboutClicked, this, &MainWindow::onAbout);
+
+    connect(ui->chartsPage, &ChartsPage::back, this, &MainWindow::onBackToMainPage);
 
     connect(ui->morePage, &MorePage::back, this, &MainWindow::onBackToMainPage);
     connect(ui->morePage, &MorePage::settingsClicked, this, &MainWindow::onSettings);
@@ -194,6 +198,12 @@ void MainWindow::initializeOpenLastDb()
    ui->openLastDbButton->setEnabled(hasLastDbKey);
 }
 
+void MainWindow::onGoToCharts()
+{
+   ui->chartsPage->update();
+   ui->stackedWidget->setCurrentWidget(ui->chartsPage);
+}
+
 void MainWindow::onGoToMore()
 {
     ui->stackedWidget->setCurrentWidget(ui->morePage);
@@ -208,6 +218,7 @@ void MainWindow::createModels()
 
     ui->mainPage->setController(&controller);
     ui->newInvoicePage->setController(&controller);
+    ui->chartsPage->setController(&controller);
 
     ui->mainPage->connectViewsToModels(clientModel, templateModel, stylesheetModel, invoiceModel);
     ui->morePage->connectViewsToModels(clientModel, templateModel, stylesheetModel);

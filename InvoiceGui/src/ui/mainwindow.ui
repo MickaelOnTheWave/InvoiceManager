@@ -18,7 +18,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>7</number>
       </property>
       <widget class="QWidget" name="startPage">
        <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -132,6 +132,7 @@
       <widget class="MorePage" name="morePage"/>
       <widget class="SettingsPage" name="settingsPage"/>
       <widget class="AboutPage" name="aboutPage"/>
+      <widget class="ChartsPage" name="chartsPage"/>
      </widget>
     </item>
    </layout>
@@ -172,6 +173,12 @@
    <class>AboutPage</class>
    <extends>QWidget</extends>
    <header>ui/AboutPage.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ChartsPage</class>
+   <extends>QWidget</extends>
+   <header>ui/ChartsPage.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

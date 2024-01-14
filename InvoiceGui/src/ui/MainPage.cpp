@@ -34,6 +34,7 @@ MainPage::MainPage(QWidget *parent) :
     ui->setupUi(this);
     connect(ui->newInvoiceFromEmptyButton, &QAbstractButton::clicked, this, &MainPage::createNewInvoice);
     connect(ui->newInvoiceFromLastButton, &QAbstractButton::clicked, this, &MainPage::createNewInvoiceFromLast);
+    connect(ui->chartsButton, &QAbstractButton::clicked, this, &MainPage::goToCharts);
     connect(ui->moreButton, &QAbstractButton::clicked, this, &MainPage::goToMore);
     connect(ui->backButton, &QAbstractButton::clicked, this, &MainPage::closeDb);
 

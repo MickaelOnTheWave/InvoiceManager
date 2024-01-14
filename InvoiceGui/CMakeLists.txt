@@ -11,14 +11,15 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt5 COMPONENTS Widgets Sql WebKitWidgets REQUIRED)
-find_package(Qt5 COMPONENTS Widgets Sql WebKitWidgets REQUIRED)
+find_package(QT NAMES Qt5 COMPONENTS Widgets Sql WebKitWidgets Charts REQUIRED)
+find_package(Qt5 COMPONENTS Widgets Sql WebKitWidgets Charts REQUIRED)
 
 set(UI_SOURCES
     src/ui/mainwindow.h src/ui/mainwindow.cpp src/ui/mainwindow.ui
     src/ui/CreatePage.h src/ui/CreatePage.cpp src/ui/CreatePage.ui
     src/ui/MainPage.h src/ui/MainPage.cpp src/ui/MainPage.ui
     src/ui/NewInvoicePage.h src/ui/NewInvoicePage.cpp src/ui/NewInvoicePage.ui
+    src/ui/ChartsPage.h src/ui/ChartsPage.cpp src/ui/ChartsPage.ui
     src/ui/MorePage.h src/ui/MorePage.cpp src/ui/MorePage.ui
     src/ui/DbStatusForm.h src/ui/DbStatusForm.cpp src/ui/DbStatusForm.ui
     src/ui/DataHandlerWidget.h src/ui/DataHandlerWidget.cpp src/ui/DataHandlerWidget.ui
@@ -71,6 +72,7 @@ target_compile_definitions(InvoiceGui PRIVATE APP_VERSION="${APP_VERSION}")
 target_include_directories(InvoiceGui PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(InvoiceGui PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Sql Qt${QT_VERSION_MAJOR}::WebKitWidgets
+    Qt${QT_VERSION_MAJOR}::Charts
     InvoiceLib
 )
 
