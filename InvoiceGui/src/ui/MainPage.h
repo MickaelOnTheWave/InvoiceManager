@@ -56,6 +56,7 @@ signals:
     void closeDb();
     void createNewInvoice();
     void createNewInvoiceFromLast();
+    void goToCharts();
     void goToMore();
     void settingsClicked();
     void aboutClicked();
