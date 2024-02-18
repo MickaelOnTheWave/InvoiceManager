@@ -98,13 +98,6 @@ QString InvoiceDocument::fillTemplate(const QString& templateModel,
    filledTemplate.replace("{CURRENCY}", data.currency);
    filledTemplate.replace("{NOTES}", data.notes);
 
-   {
-      // Debug code only
-      QFile f("/home/mickael/Prog/InvoiceManage/builds/Debug/outputTemplate.html");
-      f.open(QFile::ReadWrite | QFile::Text);
-      f.write(filledTemplate.toUtf8());
-   }
-
    return filledTemplate;
 }
 

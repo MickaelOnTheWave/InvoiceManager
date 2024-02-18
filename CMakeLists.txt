@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(InvoiceManager VERSION 0.2 LANGUAGES CXX)
+file (STRINGS "VERSION" APP_VERSION)
+
+project(InvoiceManager VERSION "${APP_VERSION}" LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -10,8 +12,6 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-file (STRINGS "VERSION" APP_VERSION)
 
 add_subdirectory(InvoiceLib)
 add_subdirectory(InvoiceGui)
