@@ -36,6 +36,7 @@ public:
     bool remove(const QModelIndex& index);
 
 private:
+    const int resourceType;
 };
 
 #endif // FileResourceModel_H

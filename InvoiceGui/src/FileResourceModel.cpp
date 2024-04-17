@@ -19,7 +19,8 @@
 #include "FileResourceModel.h"
 
 FileResourceModel::FileResourceModel(const int typeId, QObject *parent, QSqlDatabase db)
-    : QSqlTableModel(parent, db)
+    : QSqlTableModel(parent, db),
+      resourceType(typeId)
 {
     setTable("fileresource");
     setFilter(QString("typeId = %1").arg(typeId));
@@ -47,6 +48,7 @@ bool FileResourceModel::insertAtEnd(const QString &name,
 
     setData(index(rowIndex, 1), name);
     setData(index(rowIndex, 2), path);
+    setData(index(rowIndex, 3), resourceType);
     return submitAll();
 }
 
