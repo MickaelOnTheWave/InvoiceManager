@@ -11,6 +11,7 @@ on:
 
 env:
   SOURCE_DIR:   ${{ github.workspace }}
+  BUILD_TYPE: Release
 
 jobs:
   build:
@@ -24,13 +25,28 @@ jobs:
         host: 'linux'
         target: 'desktop'
         install-deps: 'true'
+        modules: qtwebengine
 
-    - name: 2 - Create build dir
+    - name: TEST List Qt Versions
+      run: |
+        aqt list-qt linux desktop
+
+    - name: TEST List Qt Archs
+      run: |
+        aqt list-qt linux desktop --arch 5.15.2
+
+    - name: TEST List Qt Modules
+      run: |
+        aqt list-qt linux desktop --modules 5.15.2 gcc_64
+
+    - name: 2 - Checkout
+      uses: actions/checkout@v4
+
+    - name: 3 - Create build dir
       run: |
         mkdir build
 
-    - name: 3 - Compile
-      working-directory: build
+    - name: 4 - Compile
       run: |
-        cmake CMakeLists.txt
+        cmake .
 
