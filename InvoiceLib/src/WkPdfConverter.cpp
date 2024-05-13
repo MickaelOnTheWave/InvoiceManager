@@ -3,14 +3,14 @@
 #include <QDir>
 #include <QTextStream>
 
-#include <pdfconverter.h>
+/*#include <pdfconverter.h>
 #include <pdfsettings.hh>
 #include <utilities.h>
 #include "progressfeedback.h"
 
 using namespace wkhtmltopdf::settings;
 using namespace wkhtmltopdf;
-
+*/
 WkPdfConverter::WkPdfConverter()
 {
 }
@@ -25,6 +25,8 @@ bool WkPdfConverter::ConvertHtmlToFile(const QString& content, const QString& fi
    if (!ok)
       return false;
 
+   return false;
+/*
    PdfGlobal globalSettings;
    globalSettings.out = filename;
    PdfObject def;
@@ -48,7 +50,7 @@ bool WkPdfConverter::ConvertHtmlToFile(const QString& content, const QString& fi
    const bool success = converter.convert();
    const int errorCode = handleError(success, converter.httpErrorCode());
    removeTempFile();
-   return errorCode == EXIT_SUCCESS;
+   return errorCode == EXIT_SUCCESS;*/
 }
 
 bool WkPdfConverter::writeToTempFile(const QString& content)

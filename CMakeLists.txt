@@ -13,6 +13,10 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+file (STRINGS "VERSION" APP_VERSION)
+
+add_compile_definitions(QT_DISABLE_DEPRECATED_BEFORE=0x050F00)
+
 add_subdirectory(InvoiceLib)
 add_subdirectory(InvoiceGui)
 add_subdirectory(InvoiceCli)
