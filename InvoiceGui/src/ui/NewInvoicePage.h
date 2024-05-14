@@ -26,7 +26,6 @@
 #include "ClientModel.h"
 #include "InvoiceDetailsModel.h"
 #include "InvoiceDbController.h"
-#include <QtWebKit>
 #include "FileResourceModel.h"
 
 namespace Ui {

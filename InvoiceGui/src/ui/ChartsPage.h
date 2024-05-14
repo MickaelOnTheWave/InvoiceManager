@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-#include <QtCharts/QPieSeries>
+#include <QPieSeries>
 
 #include "InvoiceDbController.h"
 
@@ -39,7 +39,7 @@ private:
 
    void updateAverages(const double timeSpanCount);
 
-   QtCharts::QPieSeries* createClientSeries(const InvoiceDbController::IncomePerClientVec& incomePerClient) const;
+   QPieSeries* createClientSeries(const InvoiceDbController::IncomePerClientVec& incomePerClient) const;
    QStringList createTimeLabels(const std::pair<QDate, QDate>& boundaries);
 
    static QString doubleToStr(const double value);

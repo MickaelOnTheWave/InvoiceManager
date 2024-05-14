@@ -8,11 +8,11 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt5 COMPONENTS Widgets Sql WebKitWidgets Charts REQUIRED)
-find_package(Qt5 COMPONENTS Widgets Sql WebKitWidgets Charts REQUIRED)
+find_package(QT NAMES Qt6 COMPONENTS Widgets Sql Charts REQUIRED)
+find_package(Qt6 COMPONENTS Widgets Sql Charts REQUIRED)
 
 set(UI_SOURCES
     src/ui/mainwindow.h src/ui/mainwindow.cpp src/ui/mainwindow.ui
@@ -45,36 +45,11 @@ set(OTHER_SOURCES
 )
 set(PROJECT_SOURCES ${UI_SOURCES} ${OTHER_SOURCES})
 
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(InvoiceGui
-        MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
-    )
-# Define target properties for Android with Qt 6 as:
-#    set_property(TARGET InvoiceGui APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
-# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
-else()
-    if(ANDROID)
-        add_library(InvoiceGui SHARED
-            ${PROJECT_SOURCES}
-        )
-# Define properties for Android with Qt 5 after find_package() calls as:
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
-    else()
-        add_executable(InvoiceGui
-            ${PROJECT_SOURCES}
-        )
-    endif()
-endif()
+add_executable(InvoiceGui ${PROJECT_SOURCES})
 
 target_compile_definitions(InvoiceGui PRIVATE APP_VERSION="${APP_VERSION}")
 target_include_directories(InvoiceGui PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
-target_link_libraries(InvoiceGui PRIVATE
-    Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Sql Qt${QT_VERSION_MAJOR}::WebKitWidgets
-    Qt${QT_VERSION_MAJOR}::Charts
-    InvoiceLib
-)
+target_link_libraries(InvoiceGui PRIVATE Qt6::Widgets Qt6::Sql Qt6::Charts InvoiceLib)
 
 set_target_properties(InvoiceGui PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
@@ -83,7 +58,3 @@ set_target_properties(InvoiceGui PROPERTIES
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
-
-if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(InvoiceGui)
-endif()

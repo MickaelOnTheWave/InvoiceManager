@@ -7,11 +7,11 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt5 COMPONENTS Core LinguistTools Sql PrintSupport Gui WebKit Network XmlPatterns Svg WebKitWidgets REQUIRED)
-find_package(Qt5 COMPONENTS Core LinguistTools Sql PrintSupport Gui WebKit Network XmlPatterns Svg WebKitWidgets REQUIRED)
+find_package(QT NAMES Qt6 COMPONENTS Core LinguistTools Sql PrintSupport Gui Network Svg REQUIRED)
+find_package(Qt6 COMPONENTS Core LinguistTools Sql PrintSupport Gui Network Svg REQUIRED)
 
 
 set(SOURCES
@@ -38,19 +38,9 @@ set(HEADERS
     include/Utils.h
 )
 
-add_library(InvoiceLib STATIC
-  ${SOURCES} ${WKHTMLTOPDF_SOURCES}
-  ${HEADERS} ${WKHTMLTOPDF_HEADERS}
-  ${TS_FILES}
-)
+add_library(InvoiceLib STATIC ${SOURCES} ${HEADERS})
 
 target_include_directories(InvoiceLib PUBLIC include/ )
-target_link_libraries(InvoiceLib PUBLIC Qt5::Core Qt5::Sql Qt5::PrintSupport Qt5::Gui Qt5::WebKit Qt5::Network Qt5::XmlPatterns Qt5::Svg Qt5::WebKitWidgets)
+target_link_libraries(InvoiceLib PUBLIC Qt6::Core Qt6::Sql Qt6::PrintSupport Qt6::Gui Qt6::Network Qt6::Svg)
 
 target_compile_definitions(InvoiceLib PRIVATE INVOICELIB_LIBRARY)
-
-if(COMMAND qt_create_translation)
-    qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
-else()
-    qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
-endif()
