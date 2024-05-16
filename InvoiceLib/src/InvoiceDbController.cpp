@@ -44,7 +44,7 @@ double IncomeHistory::getMaxValue() const
    }
 
    auto itMaxElement = max_element(totalsByDateSpan.begin(), totalsByDateSpan.end());
-   return *itMaxElement;
+   return (itMaxElement != totalsByDateSpan.end()) ? *itMaxElement : 0.0;
 }
 
 void IncomeHistory::push_back(const ClientIncomeHistory& newData)
@@ -918,29 +918,31 @@ std::vector<double> InvoiceDbController::toValuesByTimespan(const IncomeData& da
 {
    std::vector<double> values;
 
-   auto itDate = dateSpans.begin();
-   auto itDateEnd = dateSpans.end()-1;
-   auto itIncome = data.begin();
-
-   for (; itDate != itDateEnd; ++itDate)
+    if (!data.empty())
    {
-      double timespanTotal = 0.0;
-      while (itIncome->first < *(itDate+1))
-      {
-         timespanTotal += itIncome->second;
-         ++itIncome;
-      }
-      values.push_back(timespanTotal);
+       auto itDate = dateSpans.begin();
+       auto itDateEnd = dateSpans.end()-1;
+       auto itIncome = data.begin();
+
+       for (; itDate != itDateEnd; ++itDate)
+       {
+          double timespanTotal = 0.0;
+          while (itIncome->first < *(itDate+1))
+          {
+             timespanTotal += itIncome->second;
+             ++itIncome;
+          }
+          values.push_back(timespanTotal);
+       }
    }
    return values;
 }
 
-std::vector<QDate> InvoiceDbController::toSortedDates(QSqlQuery& query)
+std::vector<QDate> InvoiceDbController::toSortedDates(QSqlQuery& query) const
 {
    std::vector<QDate> dates;
    while (query.next())
    {
-      const auto dateFormatStr = QString("d MMM yyyy");
       dates.push_back(QDate::fromString(query.value(0).toString(), dateFormatStr));
    }
    std::sort(dates.begin(), dates.end());

@@ -159,12 +159,12 @@ private:
 
     static std::vector<double> toValuesByTimespan(const IncomeData& data, const std::vector<QDate> dateSpans);
 
-    static std::vector<QDate> toSortedDates(QSqlQuery& query);
+    std::vector<QDate> toSortedDates(QSqlQuery& query) const;
 
     QString dbFilename;
     QSqlDatabase db; // TODO : remove this. See tip from Qt documentation.
     QString lastErrorMessage;
-    const QString dateFormatStr = "d MMM yyyy";
+    const QString dateFormatStr = "d/MM/yyyy";
 };
 
 #endif // INVOICEDBCONTROLLER_H
