@@ -150,7 +150,7 @@
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_2">
            <item>
-            <widget class="QtCharts::QChartView" name="clientsPerChartView" native="true">
+            <widget class="QWidget" name="clientsPerChartView" native="true">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -178,7 +178,7 @@
           </layout>
          </item>
          <item>
-          <widget class="QtCharts::QChartView" name="incomeGraph" native="true">
+          <widget class="QWidget" name="incomeGraph" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>0</horstretch>
@@ -219,14 +219,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QtCharts::QChartView</class>
-   <extends>QWidget</extends>
-   <header location="global">QtCharts/QChartView</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

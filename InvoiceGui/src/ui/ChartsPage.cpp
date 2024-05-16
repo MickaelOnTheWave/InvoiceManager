@@ -8,7 +8,7 @@
 #include <QValueAxis>
 #include <QBarCategoryAxis>
 
-using namespace QtCharts;
+//using namespace QtCharts;
 
 ChartsPage::ChartsPage(QWidget *parent) :
    QWidget(parent),
@@ -96,7 +96,7 @@ void ChartsPage::setupIncomeTimelineView()
    incomeTimeSeries->attachAxis(axisY);
 
 
-   auto incomeTimeChart = new QChart();
+   /*auto incomeTimeChart = new QChart();
    incomeTimeChart->addSeries(incomeTimeSeries);
    incomeTimeChart->setTitle("Income Timeline");
    incomeTimeChart->legend()->show();
@@ -106,21 +106,21 @@ void ChartsPage::setupIncomeTimelineView()
    incomeTimeChart->addAxis(axisY, Qt::AlignLeft);
 
    ui->incomeGraph->setChart(incomeTimeChart);
-   ui->incomeGraph->setRenderHint(QPainter::Antialiasing);
+   ui->incomeGraph->setRenderHint(QPainter::Antialiasing);*/
 }
 
 std::vector<QColor> ChartsPage::setupIncomePerClientChart(const InvoiceDbController::IncomePerClientVec& incomePerClient)
 {
    auto pieSeries = createClientSeries(incomePerClient);
 
-   QChart* pieChart = new QChart();
+   /*QChart* pieChart = new QChart();
    pieChart->addSeries(pieSeries);
    pieChart->setTitle("Income per Client");
    pieChart->legend()->hide();
 
    ui->clientsPerChartView->setChart(pieChart);
    ui->clientsPerChartView->setRenderHint(QPainter::Antialiasing);
-
+*/
    std::vector<QColor> colors;
    for(auto slice : pieSeries->slices())
    {

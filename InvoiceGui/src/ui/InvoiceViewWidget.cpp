@@ -43,6 +43,6 @@ void InvoiceViewWidget::show(const InvoiceUserData& data)
 
 void InvoiceViewWidget::show(const QString& htmlContent)
 {
-   ui->webView->setHtml(htmlContent);
+   //ui->webView->setHtml(htmlContent);
    ui->webView->show();
 }
