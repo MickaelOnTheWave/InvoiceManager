@@ -56,7 +56,7 @@ void CommandLineParserBase::outputSwitches(Outputter * o, bool extended, bool do
 			if (!extended && handler->extended) continue;
 			display.push_back(handler);
 		}
-		qSort(display.begin(), display.end(), ahsort);
+        //qSort(display.begin(), display.end(), ahsort);
 		if (display.size() == 0) continue;
 		o->beginSection(section);
 		if (!sectionDesc[section].isEmpty()) {

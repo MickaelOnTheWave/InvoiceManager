@@ -23,11 +23,11 @@
 #include <QMessageBox>
 #include <QPushButton>
 #include <QSqlTableModel>
+#include <QSettings>
 
 #include "DbMigrator.h"
 #include "ChartsPage.h"
 #include "NewInvoicePage.h"
-#include "TitleBarWidget.h"
 
 // TODO Not that important :
 // - Add versioning to clients / company

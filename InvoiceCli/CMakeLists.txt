@@ -8,11 +8,8 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-find_package(QT NAMES Qt5 COMPONENTS Core LinguistTools Widgets PrintSupport REQUIRED)
-find_package(Qt5 COMPONENTS Core LinguistTools Widgets PrintSupport REQUIRED)
 
 include_directories(src/)
 
@@ -34,4 +31,4 @@ add_executable(InvoiceCli
   ${COMMANDS_SRC}
 )
 target_compile_definitions(InvoiceCli PRIVATE APP_VERSION="${APP_VERSION}")
-target_link_libraries(InvoiceCli Qt5::Core Qt5::Widgets Qt5::PrintSupport InvoiceLib)
+target_link_libraries(InvoiceCli InvoiceLib)

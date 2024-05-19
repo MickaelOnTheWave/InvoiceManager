@@ -265,14 +265,14 @@ int NewInvoicePage::getComboIndex(QComboBox *combobox, const int id) const
 
 QString NewInvoicePage::getTemplateContent() const
 {
-    const int id = ui->templateCombo->currentIndex() + 1;
+    const int id = ui->templateCombo->currentData().toInt();
     return controller->getTemplateData(id);
 }
 
 QString NewInvoicePage::getCssContent() const
 {
-    const int stylesheetId = ui->stylesheetCombo->currentIndex() + 1;
-    return controller->getStylesheetData(stylesheetId);
+    const int id = ui->stylesheetCombo->currentData().toInt();
+    return controller->getStylesheetData(id);
 }
 
 InvoiceUserData NewInvoicePage::createInvoiceTemplateData() const

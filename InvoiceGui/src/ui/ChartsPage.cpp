@@ -1,14 +1,13 @@
 #include "ChartsPage.h"
 #include "ui_ChartsPage.h"
 
-#include <QtCharts/QPieSeries>
+#include <QChart>
+#include <QPieSeries>
 #include <QtCharts/QStackedBarSeries>
 #include <QBarSet>
 
 #include <QValueAxis>
 #include <QBarCategoryAxis>
-
-using namespace QtCharts;
 
 ChartsPage::ChartsPage(QWidget *parent) :
    QWidget(parent),
@@ -192,7 +191,7 @@ QStringList ChartsPage::createTimeLabels(const std::pair<QDate, QDate>& boundari
    QStringList labels;
 
    QDate currentDate(boundaries.first);
-   while (currentDate <= boundaries.second)
+   while (currentDate <= boundaries.second && currentDate.isValid())
    {
       labels << currentDate.toString("MMM yyyy");
       currentDate = currentDate.addMonths(1);

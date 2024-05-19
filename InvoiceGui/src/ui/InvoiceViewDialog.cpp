@@ -63,7 +63,7 @@ void InvoiceViewDialog::onCreatePdf()
    const QString filter = tr("PDF File (*.pdf)");
    const QString pdfFile = QFileDialog::getSaveFileName(this, "PDF File to save", defaultDir, filter);
    if (!pdfFile.isEmpty())
-      invoiceDocument.CreatePdfFile(pdfFile);
+      ui->viewWidget->printToPdf(pdfFile);
 }
 
 void InvoiceViewDialog::onCreateHtml()
