@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>776</width>
+    <width>1166</width>
     <height>627</height>
    </rect>
   </property>
@@ -134,7 +134,7 @@
                  <widget class="QDateEdit" name="dateEdit">
                   <property name="dateTime">
                    <datetime>
-                    <hour>0</hour>
+                    <hour>3</hour>
                     <minute>2</minute>
                     <second>0</second>
                     <year>2023</year>
@@ -425,7 +425,6 @@
        <property name="font">
         <font>
          <pointsize>12</pointsize>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -460,6 +459,12 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>InvoiceViewWidget</class>
+   <extends>QWidget</extends>
+   <header>ui/InvoiceViewWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>DataHandlerWidget</class>
    <extends>QWidget</extends>
    <header>ui/DataHandlerWidget.h</header>
@@ -475,12 +480,6 @@
    <class>TitleBarWidget</class>
    <extends>QWidget</extends>
    <header>ui/TitleBarWidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>InvoiceViewWidget</class>
-   <extends>QWidget</extends>
-   <header>ui/InvoiceViewWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
