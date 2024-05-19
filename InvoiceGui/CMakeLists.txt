@@ -11,8 +11,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 COMPONENTS Widgets Sql Charts REQUIRED)
-find_package(Qt6 COMPONENTS Widgets Sql Charts REQUIRED)
+find_package(QT NAMES Qt6 COMPONENTS Widgets Sql Charts WebEngineWidgets REQUIRED)
+find_package(Qt6 COMPONENTS Widgets Sql Charts WebEngineWidgets REQUIRED)
 
 set(UI_SOURCES
     src/ui/mainwindow.h src/ui/mainwindow.cpp src/ui/mainwindow.ui
@@ -49,7 +49,7 @@ add_executable(InvoiceGui ${PROJECT_SOURCES})
 
 target_compile_definitions(InvoiceGui PRIVATE APP_VERSION="${APP_VERSION}")
 target_include_directories(InvoiceGui PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
-target_link_libraries(InvoiceGui PRIVATE Qt6::Widgets Qt6::Sql Qt6::Charts InvoiceLib)
+target_link_libraries(InvoiceGui PRIVATE Qt6::Widgets Qt6::Sql Qt6::Charts Qt6::WebEngineWidgets InvoiceLib)
 
 set_target_properties(InvoiceGui PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
