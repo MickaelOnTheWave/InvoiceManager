@@ -26,26 +26,21 @@ jobs:
         install-deps: 'true'
         modules: qtcharts qtpositioning qtwebchannel qtwebengine
 
-    - name: TEST List Qt Versions
+    - name: 2 - Install Catch2
       run: |
-        aqt list-qt linux desktop
+        sudo apt install catch2
 
-    - name: TEST List Qt Archs
-      run: |
-        aqt list-qt linux desktop --arch 6.6.3
-
-    - name: TEST List Qt Modules
-      run: |
-        aqt list-qt linux desktop --modules 6.6.3 gcc_64
-
-    - name: 2 - Checkout
+    - name: 3 - Checkout
       uses: actions/checkout@v4
 
-    - name: 3 - Create build dir
+    - name: 4 - Create build dir
       run: |
         mkdir build
 
-    - name: 4 - Compile
+    - name: 5 - Compile
       run: |
-        cmake .
+        cmake -B build/ -S .
 
+    - name: 6 - Compile
+      run: |
+        cmake --build build/
