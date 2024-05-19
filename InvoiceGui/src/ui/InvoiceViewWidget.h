@@ -38,6 +38,8 @@ public:
    void show(const InvoiceUserData& data);
    void show(const QString& htmlContent);
 
+   void printToPdf(const QString& filename);
+
 private:
    Ui::InvoiceViewWidget *ui;
 };

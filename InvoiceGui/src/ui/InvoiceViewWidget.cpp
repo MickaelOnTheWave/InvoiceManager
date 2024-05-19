@@ -46,3 +46,8 @@ void InvoiceViewWidget::show(const QString& htmlContent)
    ui->webView->setHtml(htmlContent);
    ui->webView->show();
 }
+
+void InvoiceViewWidget::printToPdf(const QString &filename)
+{
+   ui->webView->printToPdf(filename);
+}
