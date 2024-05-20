@@ -1,6 +1,6 @@
 # This starter workflow is for a CMake project running on multiple platforms. There is a different starter workflow if you just want a single platform.
 # See: https://github.com/actions/starter-workflows/blob/main/ci/cmake-single-platform.yml
-name: GitHub build
+name: GitHub build (Linux - QT 6.6.3)
 
 on:
   push:
@@ -37,14 +37,14 @@ jobs:
       run: |
         mkdir build
 
-    - name: 5 - Generate Build files
+    - name: 5 - Cmake - Configure
       run: |
         cmake -B build/ -S .
 
-    - name: 6 - Compile
+    - name: 6 - Cmake - Compile
       run: |
         cmake --build build/
 
-    - name: 7 - Run test suite
+    - name: 7 - Cmake - Run tests
       working-directory: ${{github.workspace}}/build/InvoiceTests
       run: ctest -C ${{env.BUILD_TYPE}}
