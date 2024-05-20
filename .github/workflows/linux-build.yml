@@ -1,0 +1,50 @@
+# This starter workflow is for a CMake project running on multiple platforms. There is a different starter workflow if you just want a single platform.
+# See: https://github.com/actions/starter-workflows/blob/main/ci/cmake-single-platform.yml
+name: GitHub build (Linux - QT 6.6.3)
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  SOURCE_DIR:   ${{ github.workspace }}
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 1 - Install Qt
+      uses: jurplel/install-qt-action@v3.3.0
+      with:
+        version: '6.6.3'
+        host: 'linux'
+        target: 'desktop'
+        install-deps: 'true'
+        modules: qtcharts qtpositioning qtwebchannel qtwebengine
+
+    - name: 2 - Install Catch2
+      run: |
+        sudo apt install catch2
+
+    - name: 3 - Checkout
+      uses: actions/checkout@v4
+
+    - name: 4 - Create build dir
+      run: |
+        mkdir build
+
+    - name: 5 - Cmake - Configure
+      run: |
+        cmake -B build/ -S .
+
+    - name: 6 - Cmake - Compile
+      run: |
+        cmake --build build/
+
+    - name: 7 - Cmake - Run tests
+      working-directory: ${{github.workspace}}/build/InvoiceTests
+      run: ctest -C ${{env.BUILD_TYPE}}
