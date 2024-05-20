@@ -20,4 +20,4 @@ add_subdirectory(InvoiceGui)
 add_subdirectory(InvoiceCli)
 add_subdirectory(InvoiceTests)
 
-add_custom_target(Other SOURCES VERSION LICENSE .github/workflows/cmake-single-platform.yml .github/workflows/cmake-multi-platform.yml)
+add_custom_target(Other SOURCES VERSION LICENSE .github/workflows/linux-build.yml)
