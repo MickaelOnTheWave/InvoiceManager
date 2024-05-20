@@ -37,10 +37,14 @@ jobs:
       run: |
         mkdir build
 
-    - name: 5 - Compile
+    - name: 5 - Generate Build files
       run: |
         cmake -B build/ -S .
 
     - name: 6 - Compile
       run: |
         cmake --build build/
+
+    - name: 7 - Run test suite
+      working-directory: ${{github.workspace}}/build/InvoiceTests
+      run: ctest -C ${{env.BUILD_TYPE}}
