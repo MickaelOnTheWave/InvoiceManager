@@ -49,6 +49,19 @@ jobs:
 
   tests:
     steps:
-    - name: Run tests (Cmake)
+    - name: Run Unit Tests
       working-directory: ${{github.workspace}}/build/InvoiceTests
       run: ctest -C ${{env.BUILD_TYPE}}
+
+  deploy:
+    steps:
+    - name: Create DEB Package
+      uses: jiro4989/build-deb-action@v3
+      with:
+        package: Invoice-Manager
+        package_root: build
+        maintainer: 'Mickaël C. Guimarães <mickael.dacruz@gmail.com>'
+        version: 'TESTING'
+        arch: 'amd64'
+        depends: 'None'
+        desc: 'A command-line tool and a Gui to create and manage Invoices.'
