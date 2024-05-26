@@ -13,7 +13,7 @@ on:
 env:
   SOURCE_DIR:   ${{ github.workspace }}
   BUILD_TYPE: Release
-  VERSION_NUMBER: $(cat VERSION)
+  VERSION_NUMBER: not-configured
 
 jobs:
   build:
@@ -37,32 +37,29 @@ jobs:
       uses: actions/checkout@v4
 
     - name: 4 - Create build dir
-      run: |
-        mkdir build
+      run: mkdir build
 
     - name: 5 - Cmake - Configure
-      run: |
-        cmake -B build/ -S .
+      run: cmake -B build/ -S .
 
     - name: 6 - Cmake - Compile
-      run: |
-        cmake --build build/
+      run: cmake --build build/
 
     - name: 7 - Run Unit Tests
       working-directory: ${{github.workspace}}/build/InvoiceTests
       run: ctest -C ${{env.BUILD_TYPE}}
 
-    - name: TEMP - Check version number
-      working-directory: ${{github.workspace}}
-      run: echo ${{env.VERSION_NUMBER}}
+    - name: 8 - Retrieve version
+      id: version
+      run: echo "VERSION_NUMBER=$(cat VERSION)" >> $GITHUB_ENV
 
-    - name: 8 - Create DEB Package
+    - name: 9 - Create DEB Package
       uses: jiro4989/build-deb-action@v3
       with:
         package: Invoice-Manager
         package_root: build
         maintainer: 'Mickaël C. Guimarães <mickael.dacruz@gmail.com>'
-        version: '1234'
+        version: ${{env.VERSION_NUMBER}}
         arch: 'amd64'
         depends: 'None'
         desc: 'A command-line tool and a Gui to create and manage Invoices.'
