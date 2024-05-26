@@ -45,6 +45,8 @@ jobs:
       run: |
         cmake --build build/
 
-    - name: 7 - Cmake - Run tests
+  tests:
+    steps:
+    - name: Run tests (Cmake)
       working-directory: ${{github.workspace}}/build/InvoiceTests
       run: ctest -C ${{env.BUILD_TYPE}}

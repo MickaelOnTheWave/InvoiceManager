@@ -21,7 +21,6 @@
 #include "InvoiceData.h"
 #include "InvoiceDetailsModel.h"
 #include "InvoiceDocument.h"
-#include "Utils.h"
 
 
 InvoiceUserData createDefaultInvoiceData()
@@ -51,7 +50,7 @@ InvoiceUserData createDefaultInvoiceData()
    return data;
 }
 
-TEST_CASE( "InvoiceDocument", "First test" )
+TEST_CASE( "InvoiceDocument", "Create invoice" )
 {
    InvoiceDocument invoiceDoc;
    invoiceDoc.setData(createDefaultInvoiceData());
