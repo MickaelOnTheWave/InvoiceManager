@@ -20,10 +20,10 @@
 #include "ui_MorePage.h"
 
 #include <QMessageBox>
-#include <QSettings>
 
 #include "CompanyData.h"
 #include "CompanyDetailsWidget.h"
+#include "ConfirmRemoveDialog.h"
 #include "GuiUtils.h"
 #include "FileResourceAddWidget.h"
 
@@ -130,20 +130,6 @@ bool MorePage::canRemoveFileResource(const int id, const QString& dbField) const
    return true;
 }
 
-bool MorePage::isRemovalConfirmed() const
-{
-   QSettings settings;
-   const bool confirmRemoval = settings.value("user/removeconfirmation", true).toBool();
-
-   if (confirmRemoval)
-   {
-      // TODO : Create dialog with a "Don't ask me again" checkbox.
-      const auto selectedButton = QMessageBox::question(nullptr, "Removal", "Are you sure?");
-      return (selectedButton == QMessageBox::Yes);
-   }
-   return true;
-}
-
 void MorePage::onRemoveFileResource(const QModelIndex index, FileResourceModel* model,
                                     const QString& dbField)
 {
@@ -160,6 +146,7 @@ void MorePage::onRemoveFromModel(const QModelIndex& index, QAbstractItemModel* m
    if (!canRemoveFileResource(selectedId, dbField))
       return;
 
-   if (isRemovalConfirmed())
+   const bool removed = ConfirmRemoveDialog::ask("Are you sure?", "user/removefileconfirmation");
+   if (removed)
       deleteFunc(index);
 }

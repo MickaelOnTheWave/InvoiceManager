@@ -62,7 +62,6 @@ private slots:
 private:
     void addDataToModel(QWidget* dataWidget, std::function<bool()> insertDataFunc);
     bool canRemoveFileResource(const int id, const QString& dbField) const;
-    bool isRemovalConfirmed() const;
     void onRemoveFileResource(const QModelIndex index, FileResourceModel* model,
                               const QString& dbField);
     void onRemoveFromModel(const QModelIndex& index, QAbstractItemModel* model,

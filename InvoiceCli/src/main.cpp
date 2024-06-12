@@ -34,8 +34,6 @@
 #include "Commands/ListCommand.h"
 #include "DbMigrator.h"
 
-// TODO Make ToolsLib usable lib and use it here instead of using copied cpp/h
-
 using std::string;
 using std::cout;
 using std::endl;

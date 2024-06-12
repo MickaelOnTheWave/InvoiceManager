@@ -48,7 +48,8 @@ void SettingsPage::refresh()
 
 void SettingsPage::onReset()
 {
-   ui->removeConfirmBox->setChecked(true);
+   ui->removeInvoiceBox->setChecked(true);
+   ui->removeFileBox->setChecked(true);
 }
 
 void SettingsPage::onSave()
@@ -60,13 +61,17 @@ void SettingsPage::onSave()
 void SettingsPage::loadSettings()
 {
    QSettings settings;
-   const bool removeConfirm = settings.value("user/removeconfirmation", true).toBool();
 
-   ui->removeConfirmBox->setChecked(removeConfirm);
+   const bool invoiceConfirm = settings.value("user/removeinvoiceconfirmation", true).toBool();
+   ui->removeInvoiceBox->setChecked(invoiceConfirm);
+
+   const bool fileConfirm = settings.value("user/removefileconfirmation", true).toBool();
+   ui->removeFileBox->setChecked(fileConfirm);
 }
 
 void SettingsPage::saveSettings()
 {
    QSettings settings;
-   settings.setValue("user/removeconfirmation", ui->removeConfirmBox->isChecked());
+   settings.setValue("user/removeinvoiceconfirmation", ui->removeInvoiceBox->isChecked());
+   settings.setValue("user/removefileconfirmation", ui->removeFileBox->isChecked());
 }

@@ -23,6 +23,8 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
+#include "ConfirmRemoveDialog.h"
+
 InvoiceViewDialog::InvoiceViewDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::InvoiceViewDialog)
@@ -49,8 +51,10 @@ void InvoiceViewDialog::onDeleteClicked()
 {
    const QString message = tr("This invoice will be permanently removed from the database."
                               "Are you sure you want to proceed ?");
-   const auto selectedButton = QMessageBox::question(nullptr, "Removal", message);
-   if (selectedButton == QMessageBox::Yes)
+
+
+   const bool removed = ConfirmRemoveDialog::ask(message, "user/removeinvoiceconfirmation");
+   if (removed)
    {
       emit deleteConfirmed(invoiceDocument.GetInvoiceId());
       close();

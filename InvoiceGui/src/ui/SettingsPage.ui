@@ -45,9 +45,16 @@
         </spacer>
        </item>
        <item>
-        <widget class="QCheckBox" name="removeConfirmBox">
+        <widget class="QCheckBox" name="removeInvoiceBox">
          <property name="text">
-          <string>Ask confirmation before removal</string>
+          <string>Ask confirmation before removing Invoices</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="removeFileBox">
+         <property name="text">
+          <string>Ask confirmation before removing File resources</string>
          </property>
         </widget>
        </item>

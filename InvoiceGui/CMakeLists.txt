@@ -35,6 +35,7 @@ set(UI_SOURCES
     src/ui/InvoiceSortProxyModel.h src/ui/InvoiceSortProxyModel.cpp
     src/ui/GuiUtils.h src/ui/GuiUtils.cpp
     src/ui/FileResourceDialog.h src/ui/FileResourceDialog.cpp src/ui/FileResourceDialog.ui
+    src/ui/ConfirmRemoveDialog.h src/ui/ConfirmRemoveDialog.cpp src/ui/ConfirmRemoveDialog.ui
 )
 
 set(OTHER_SOURCES
