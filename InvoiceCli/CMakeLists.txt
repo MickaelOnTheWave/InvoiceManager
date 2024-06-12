@@ -11,6 +11,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+add_subdirectory(BasicToolsLib)
+
 include_directories(src/)
 
 set(COMMANDS_SRC
@@ -23,7 +25,6 @@ set(COMMANDS_SRC
 
 add_executable(InvoiceCli
   src/main.cpp
-  src/commandlinemanager.cpp src/commandlinemanager.h
   src/InvoicePrinter.cpp src/InvoicePrinter.h
   src/Tools.cpp src/Tools.h
   src/CliParametersDefinitions.h
@@ -31,4 +32,4 @@ add_executable(InvoiceCli
   ${COMMANDS_SRC}
 )
 target_compile_definitions(InvoiceCli PRIVATE APP_VERSION="${APP_VERSION}")
-target_link_libraries(InvoiceCli InvoiceLib)
+target_link_libraries(InvoiceCli InvoiceLib BasicToolsLib)

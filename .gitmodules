@@ -1,0 +1,3 @@
+[submodule "InvoiceCli/BasicToolsLib"]
+	path = InvoiceCli/BasicToolsLib
+	url = git@github.com:MickaelOnTheWave/BasicToolsLib.git
