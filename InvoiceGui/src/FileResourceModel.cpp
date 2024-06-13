@@ -18,8 +18,8 @@
 
 #include "FileResourceModel.h"
 
-FileResourceModel::FileResourceModel(const int typeId, QObject *parent, QSqlDatabase db)
-    : QSqlTableModel(parent, db),
+FileResourceModel::FileResourceModel(const int typeId, QObject *parent)
+    : QSqlTableModel(parent),
       resourceType(typeId)
 {
     setTable("fileresource");

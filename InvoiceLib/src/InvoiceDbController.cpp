@@ -154,7 +154,7 @@ bool InvoiceDbController::openDb(const QString &filename)
 
 void InvoiceDbController::closeDb()
 {
-    db.close();
+    QSqlDatabase::database().close();
 }
 
 QString InvoiceDbController::getLastError() const
@@ -241,7 +241,7 @@ InvoiceUserData InvoiceDbController::toUserData(const InvoiceDbData& dbData) con
 
 QString InvoiceDbController::getUserCompanyName() const
 {
-    QSqlQuery query(db);
+    QSqlQuery query;
     const bool result = query.exec(createUserCompanyRequest("name"));
     if (result && query.next())
     {
@@ -253,7 +253,7 @@ QString InvoiceDbController::getUserCompanyName() const
 
 int InvoiceDbController::getUserCompanyId() const
 {
-    QSqlQuery query(db);
+    QSqlQuery query;
     const bool result = query.exec(createUserCompanyRequest("id"));
     if (result && query.next())
         return query.value(0).toInt();
@@ -265,7 +265,7 @@ CompanyData InvoiceDbController::getUserCompanyData() const
     CompanyData data;
 
     QString queryStr = "SELECT name, email, phone, address FROM company WHERE isClient = FALSE ORDER BY id DESC LIMIT 1";
-    QSqlQuery query(db);
+    QSqlQuery query;
     const bool result = query.exec(queryStr);
     if (result && query.next())
     {
@@ -399,7 +399,7 @@ QString InvoiceDbController::getDatabaseFile() const
 
 int InvoiceDbController::getDatabaseVersion() const
 {
-    QSqlQuery query(db);
+    QSqlQuery query;
     const bool result = query.exec("SELECT value FROM version");
     if (result && query.next())
     {
@@ -603,11 +603,6 @@ std::pair<QDate, QDate> InvoiceDbController::getBoundaryMonths() const
    return std::make_pair(dates.front(), dates.back());
 }
 
-QSqlDatabase InvoiceDbController::getDatabase()
-{
-   return db;
-}
-
 int InvoiceDbController::getParentCompanyId(const int id)
 {
    const QString queryStr = "SELECT id FROM company WHERE idChild = %1";
@@ -621,7 +616,7 @@ int InvoiceDbController::getParentCompanyId(const int id)
 bool InvoiceDbController::createDbConnection(const QString &filename)
 {
     dbFilename = filename;
-    db = QSqlDatabase::addDatabase("QSQLITE");
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(filename);
     return db.open();
 }

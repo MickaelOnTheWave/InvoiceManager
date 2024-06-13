@@ -27,8 +27,7 @@ class FileResourceModel : public QSqlTableModel
 
 public:
     explicit FileResourceModel(const int typeId,
-                               QObject *parent = nullptr,
-                               QSqlDatabase db = QSqlDatabase());
+                               QObject *parent = nullptr);
 
     int getId(const int i) const;
 

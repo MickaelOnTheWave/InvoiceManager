@@ -110,8 +110,6 @@ public:
 
     bool removeInvoice(const int id);
 
-    QSqlDatabase getDatabase();
-
     int getParentCompanyId(const int id);
     bool updateCompanyParenting(const int targetId, const int childId);
 
@@ -162,7 +160,6 @@ private:
     std::vector<QDate> toSortedDates(QSqlQuery& query) const;
 
     QString dbFilename;
-    QSqlDatabase db; // TODO : remove this. See tip from Qt documentation.
     QString lastErrorMessage;
     const QString dateFormatStr = "d/MM/yyyy";
 };
