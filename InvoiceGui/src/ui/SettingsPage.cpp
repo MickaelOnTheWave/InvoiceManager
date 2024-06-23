@@ -50,6 +50,7 @@ void SettingsPage::onReset()
 {
    ui->removeInvoiceBox->setChecked(true);
    ui->removeFileBox->setChecked(true);
+   ui->childCompaniesBox->setChecked(false);
 }
 
 void SettingsPage::onSave()
@@ -67,6 +68,9 @@ void SettingsPage::loadSettings()
 
    const bool fileConfirm = settings.value("user/removefileconfirmation", true).toBool();
    ui->removeFileBox->setChecked(fileConfirm);
+
+   const bool showChildCompanies = settings.value("user/showchildcompanies", true).toBool();
+   ui->childCompaniesBox->setChecked(showChildCompanies);
 }
 
 void SettingsPage::saveSettings()
@@ -74,4 +78,5 @@ void SettingsPage::saveSettings()
    QSettings settings;
    settings.setValue("user/removeinvoiceconfirmation", ui->removeInvoiceBox->isChecked());
    settings.setValue("user/removefileconfirmation", ui->removeFileBox->isChecked());
+   settings.setValue("user/showchildcompanies", ui->childCompaniesBox->isChecked());
 }

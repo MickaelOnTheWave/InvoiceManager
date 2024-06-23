@@ -30,7 +30,10 @@ class ClientModel : public QSqlQueryModel
 
 public:
     explicit ClientModel(InvoiceDbController* _controller,
+                         const bool _separateChildCompanies,
                          QObject *parent = nullptr);
+
+    void setSeparateChildCompanies(const bool separate);
 
     int getId(const int i) const;
     CompanyData getDataAtRow(const int i) const;
@@ -42,6 +45,7 @@ public:
 
 private:
     InvoiceDbController* controller;
+    bool separateChildCompanies = false;
 };
 
 #endif // CLIENTMODEL_H

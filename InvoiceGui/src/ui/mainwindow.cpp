@@ -182,6 +182,9 @@ void MainWindow::onBackToMainPage()
 void MainWindow::onBackToPreviousPage()
 {
    ui->stackedWidget->setCurrentWidget(previousPage);
+
+   clientModel->setSeparateChildCompanies(areChildCompaniesSeparated());
+   clientModel->refreshModel();
 }
 
 void MainWindow::initializeOpenLastDb()
@@ -213,7 +216,7 @@ void MainWindow::createModels()
 {
     templateModel = new FileResourceModel(InvoiceDbController::templateTypeId, this);
     stylesheetModel = new FileResourceModel(InvoiceDbController::stylesheetTypeId, this);
-    clientModel = new ClientModel(&controller, this);
+    clientModel = new ClientModel(&controller, areChildCompaniesSeparated(), this);
     invoiceModel = new InvoiceModel(this);
 
     ui->mainPage->setController(&controller);
@@ -287,4 +290,10 @@ void MainWindow::openDb(const QString& file)
 
    createModels();
    switchToMainWidget();
+}
+
+bool MainWindow::areChildCompaniesSeparated() const
+{
+   QSettings settings;
+   return settings.value("user/showchildcompanies", false).toBool();
 }

@@ -24,12 +24,18 @@
 #include <QSqlField>
 #include <QSqlRecord>
 
-ClientModel::ClientModel(InvoiceDbController* _controller,
+ClientModel::ClientModel(InvoiceDbController* _controller, const bool _separateChildCompanies,
                          QObject *parent)
     : QSqlQueryModel(parent),
-      controller(_controller)
+   controller(_controller),
+  separateChildCompanies(_separateChildCompanies)
 {
     refreshModel();
+}
+
+void ClientModel::setSeparateChildCompanies(const bool separate)
+{
+   separateChildCompanies = separate;
 }
 
 int ClientModel::getId(const int i) const
@@ -85,10 +91,14 @@ bool ClientModel::remove(const QModelIndex& i)
 
 void ClientModel::refreshModel()
 {
-    setQuery("SELECT * FROM company WHERE isClient = TRUE AND idChild = -1");
-    setHeaderData(0, Qt::Horizontal, tr("Id"));
-    setHeaderData(1, Qt::Horizontal, tr("Name"));
-    setHeaderData(2, Qt::Horizontal, tr("Address"));
-    setHeaderData(3, Qt::Horizontal, tr("Email"));
-    setHeaderData(4, Qt::Horizontal, tr("Phone number"));
+   QString queryStr = "SELECT * FROM company WHERE isClient = TRUE";
+   if (!separateChildCompanies)
+      queryStr += " AND idChild = -1";
+
+   setQuery(queryStr);
+   setHeaderData(0, Qt::Horizontal, tr("Id"));
+   setHeaderData(1, Qt::Horizontal, tr("Name"));
+   setHeaderData(2, Qt::Horizontal, tr("Address"));
+   setHeaderData(3, Qt::Horizontal, tr("Email"));
+   setHeaderData(4, Qt::Horizontal, tr("Phone number"));
 }

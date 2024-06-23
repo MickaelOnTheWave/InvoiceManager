@@ -180,7 +180,7 @@ void ChartsPage::updateAverages(const double timeSpanCount)
 QPieSeries* ChartsPage::createClientSeries(const InvoiceDbController::IncomePerClientVec& incomePerClient) const
 {
    auto series = new QPieSeries();
-   for (auto clientData : incomePerClient)
+   for (const auto& clientData : incomePerClient)
       series->append(clientData.first, clientData.second);
 
    return series;

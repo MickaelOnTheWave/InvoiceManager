@@ -72,6 +72,8 @@ private:
 
     void openDb(const QString& file);
 
+    bool areChildCompaniesSeparated() const;
+
     Ui::MainWindow *ui;
 
     InvoiceDbController controller;

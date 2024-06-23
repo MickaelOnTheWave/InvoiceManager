@@ -87,7 +87,3 @@ TEST_CASE( "InvoiceDetailsModel", "computeTotals" )
 
 /*******************/
 
-TEST_CASE("CommandLineManager", "")
-{
-
-}
