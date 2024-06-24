@@ -117,7 +117,7 @@ public:
 
     /** For Charts Page - Used for statistics **/
     int getTotalInvoiceCount() const;
-    int getTotalClientCount() const;
+    int getTotalClientCount(const bool separateChildCompanies) const;
     double getTotalInvoicedAmount() const;
     int getMonthCount() const;
 

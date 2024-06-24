@@ -21,10 +21,12 @@
 #include "InvoiceData.h"
 #include "InvoiceDetailsModel.h"
 #include "InvoiceDocument.h"
+#include "TestUtilities.h"
 
 
 InvoiceUserData createDefaultInvoiceData()
 {
+   TestUtilities testUtils;
    InvoiceUserData data;
    data.notes = "Some description notes about the invoice";
    data.currency = "$";
@@ -33,15 +35,9 @@ InvoiceUserData createDefaultInvoiceData()
    data.templateData = "template/path.html";
    data.stylesheetData = "stylesheet/path.css";
 
-   data.userCompany.name = "My Company Inc.";
-   data.userCompany.address = "432 Somewhere Street.\n784-456 SOME CITY\nCOUNTRY";
-   data.userCompany.email = "myself@mycompany.com";
-   data.userCompany.phoneNumber = "+99 123-456";
 
-   data.clientCompany.name = "Client Company SA";
-   data.clientCompany.address = "12 Big Avenue.\n123-456 ANOTHER CITY\nCOUNTRY";
-   data.clientCompany.email = "client@company.com";
-   data.clientCompany.phoneNumber = "+99 442-456";
+   data.userCompany = testUtils.createUserCompanyData();
+   data.clientCompany = testUtils.createClientCompanyData(0);
 
    data.details.push_back(InvoiceDetail("Consulting Service", 1.0, 8000.0));
    data.details.push_back(InvoiceDetail("Support Service", 3.0, 500.0));
@@ -50,7 +46,7 @@ InvoiceUserData createDefaultInvoiceData()
    return data;
 }
 
-TEST_CASE( "InvoiceDocument", "Create invoice" )
+TEST_CASE( "InvoiceDocument - Create invoice" )
 {
    InvoiceDocument invoiceDoc;
    invoiceDoc.setData(createDefaultInvoiceData());
@@ -72,7 +68,7 @@ double getModelValue(InvoiceDetailsModel* model, const int row, const int column
    return model->data(model->index(row, column)).toDouble();
 }
 
-TEST_CASE( "InvoiceDetailsModel", "computeTotals" )
+TEST_CASE( "InvoiceDetailsModel - computeTotals" )
 {
    auto model = new InvoiceDetailsModel();
    populateInvoiceModel(model);

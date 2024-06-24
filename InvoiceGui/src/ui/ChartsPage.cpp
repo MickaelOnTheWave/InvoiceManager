@@ -5,6 +5,7 @@
 #include <QPieSeries>
 #include <QtCharts/QStackedBarSeries>
 #include <QBarSet>
+#include <QSettings>
 
 #include <QValueAxis>
 #include <QBarCategoryAxis>
@@ -32,8 +33,11 @@ void ChartsPage::setController(InvoiceDbController* _controller)
 
 void ChartsPage::update()
 {
+   QSettings settings;
+   const bool separateChildCompanies = settings.value("user/showchildcompanies", false).toBool();
+
    ui->totalInvoiceCountLabel->setText(QString::number(controller->getTotalInvoiceCount()));
-   ui->clientCountLabel->setText(QString::number(controller->getTotalClientCount()));
+   ui->clientCountLabel->setText(QString::number(controller->getTotalClientCount(separateChildCompanies)));
 
    const double amount = controller->getTotalInvoicedAmount();
    const QString amountStr = doubleToStr(amount) + " €";

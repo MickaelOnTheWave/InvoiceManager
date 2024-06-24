@@ -478,10 +478,14 @@ int InvoiceDbController::getTotalInvoiceCount() const
    return -1;
 }
 
-int InvoiceDbController::getTotalClientCount() const
+int InvoiceDbController::getTotalClientCount(const bool separateChildCompanies) const
 {
+   QString queryStr = "SELECT COUNT(id) FROM company WHERE isClient = 1";
+   if (!separateChildCompanies)
+      queryStr += " AND idChild = -1";
+
    QSqlQuery query;
-   const bool ok = query.exec("SELECT COUNT(id) FROM company WHERE isClient = 1");
+   const bool ok = query.exec(queryStr);
    if (ok && query.next())
       return query.value(0).toInt();
    return -1;
@@ -538,8 +542,13 @@ InvoiceDbController::IncomePerClientVec InvoiceDbController::getIncomePerClient(
 {
    IncomePerClientVec data;
 
+   QString clientQueryStr = "SELECT company.name, company.id FROM company WHERE isClient = 1";
+   //if (!separateChildCompanies)
+//      clientQueryStr += " AND idChild = -1";
+
+
    QSqlQuery clientQuery;
-   bool ok = clientQuery.exec("SELECT company.name, company.id FROM company WHERE isClient = 1");
+   bool ok = clientQuery.exec(clientQueryStr);
    if (!ok)
       return IncomePerClientVec();
 
