@@ -20,6 +20,8 @@
 #define TESTUTILITIES_H
 
 #include "CompanyData.h"
+#include "InvoiceData.h"
+#include "InvoiceDetail.h"
 
 class TestUtilities
 {
@@ -28,9 +30,17 @@ public:
 
    static CompanyData createUserCompanyData();
    CompanyData createClientCompanyData(const int index) const;
+   InvoiceDbData createInvoiceData(const int index);
+   std::vector<InvoiceDetail> createInvoiceDetails(const int index, const int size);
 
 private:
+   void populateCompanySamples();
+   void populateInvoiceSamples();
+   void populateInvoiceDetailsSamples();
+
    std::vector<CompanyData> clientCompanySamples;
+   std::vector<InvoiceDbData> invoiceSamples;
+   std::vector<InvoiceDetail> invoiceDetailsSamples;
 };
 
 #endif // TESTUTILITIES_H

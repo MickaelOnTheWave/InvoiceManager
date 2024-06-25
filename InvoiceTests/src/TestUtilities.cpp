@@ -18,7 +18,45 @@
 
 #include "TestUtilities.h"
 
+
+using std::vector;
+
 TestUtilities::TestUtilities()
+{
+   populateCompanySamples();
+   populateInvoiceDetailsSamples();
+   populateInvoiceSamples();
+}
+
+CompanyData TestUtilities::createUserCompanyData()
+{
+   CompanyData data;
+   data.name = "My Company Inc.";
+   data.address = "432 Somewhere Street.\n784-456 SOME CITY\nCOUNTRY";
+   data.email = "myself@mycompany.com";
+   data.phoneNumber = "+99 123-456";
+   return data;
+}
+
+CompanyData TestUtilities::createClientCompanyData(const int index) const
+{
+   return clientCompanySamples[index];
+}
+
+InvoiceDbData TestUtilities::createInvoiceData(const int index)
+{
+   return invoiceSamples[index];
+}
+
+vector<InvoiceDetail> TestUtilities::createInvoiceDetails(const int index, const int size)
+{
+   vector<InvoiceDetail> details;
+   for (int i=0; i<size; ++i)
+      details.push_back(invoiceDetailsSamples[index + i]);
+   return details;
+}
+
+void TestUtilities::populateCompanySamples()
 {
    CompanyData data;
    data.name = "Client Company SA";
@@ -46,18 +84,95 @@ TestUtilities::TestUtilities()
    clientCompanySamples.push_back(data);
 }
 
-CompanyData TestUtilities::createUserCompanyData()
+void TestUtilities::populateInvoiceSamples()
 {
-   CompanyData data;
-   data.name = "My Company Inc.";
-   data.address = "432 Somewhere Street.\n784-456 SOME CITY\nCOUNTRY";
-   data.email = "myself@mycompany.com";
-   data.phoneNumber = "+99 123-456";
-   return data;
+   InvoiceDbData data;
+   data.notes = "Some description notes about the invoice";
+   data.currency = "$";
+   data.date = QDate(2023, 12, 10);
+   data.id = 1;
+   data.templateId = -1;
+   data.stylesheetId = -1;
+   data.clientId = 1;
+   invoiceSamples.push_back(data);
+
+   data.notes = "This invoice is also regarding first client";
+   data.currency = "$";
+   data.date = QDate(2023, 12, 14);
+   data.id = 2;
+   data.templateId = -1;
+   data.stylesheetId = -1;
+   data.clientId = 1;
+   invoiceSamples.push_back(data);
+
+   data.notes = "Nothing special to consider here";
+   data.currency = "€";
+   data.date = QDate(2024, 01, 03);
+   data.id = 3;
+   data.templateId = -1;
+   data.stylesheetId = -1;
+   data.clientId = 2;
+   invoiceSamples.push_back(data);
+
+   data.notes = "Another invoice";
+   data.currency = "€";
+   data.date = QDate(2024, 01, 20);
+   data.id = 4;
+   data.templateId = -1;
+   data.stylesheetId = -1;
+   data.clientId = 2;
+   invoiceSamples.push_back(data);
+
+   data.notes = "Some description notes about the invoice";
+   data.currency = "€";
+   data.date = QDate(2024, 01, 02);
+   data.id = 5;
+   data.templateId = -1;
+   data.stylesheetId = -1;
+   data.clientId = 3;
+   invoiceSamples.push_back(data);
+
+   data.notes = "";
+   data.currency = "€";
+   data.date = QDate(2024, 02, 01);
+   data.id = 6;
+   data.templateId = -1;
+   data.stylesheetId = -1;
+   data.clientId = 4;
+   invoiceSamples.push_back(data);
+
+   data.notes = "Facturé en Reals parce que oui";
+   data.currency = "R$";
+   data.date = QDate(2024, 07, 01);
+   data.id = 7;
+   data.templateId = -1;
+   data.stylesheetId = -1;
+   data.clientId = 4;
+   invoiceSamples.push_back(data);
 }
 
-CompanyData TestUtilities::createClientCompanyData(const int index) const
+void TestUtilities::populateInvoiceDetailsSamples()
 {
-   return clientCompanySamples[index];
-}
+   invoiceDetailsSamples.push_back(InvoiceDetail("Consulting Service", 1.0, 8000.0));
+   invoiceDetailsSamples.push_back(InvoiceDetail("Support Service", 3.0, 500.0));
+   invoiceDetailsSamples.push_back(InvoiceDetail("Some Crazy Service", 1.5, 1500.0));
 
+   invoiceDetailsSamples.push_back(InvoiceDetail("Consulting Service", 1.0, 5000.0));
+   invoiceDetailsSamples.push_back(InvoiceDetail("Support Service", 1.0, 200.0));
+
+   invoiceDetailsSamples.push_back(InvoiceDetail("Software development", 1.0, 4000.0));
+   invoiceDetailsSamples.push_back(InvoiceDetail("Support Service", 1.0, 250.0));
+
+   invoiceDetailsSamples.push_back(InvoiceDetail("Software development", 1.0, 2500.0));
+
+   invoiceDetailsSamples.push_back(InvoiceDetail("Research and Development", 2.0, 5500.0));
+
+   invoiceDetailsSamples.push_back(InvoiceDetail("Playing video games", 28.2, 12.78));
+   invoiceDetailsSamples.push_back(InvoiceDetail("Product license", 2.0, 1000.0));
+   invoiceDetailsSamples.push_back(InvoiceDetail("Some other product", 1.0, 500.0));
+
+   invoiceDetailsSamples.push_back(InvoiceDetail("Recherche et développement", 3.0, 1500.0));
+   invoiceDetailsSamples.push_back(InvoiceDetail("Glandouillage", 1.0, 18000.0));
+   invoiceDetailsSamples.push_back(InvoiceDetail("Conseil", 1.0, 6500.0));
+   invoiceDetailsSamples.push_back(InvoiceDetail("Autres services débiles", 3.0, 300.0));
+}
