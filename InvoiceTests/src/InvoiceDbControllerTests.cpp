@@ -24,7 +24,7 @@
 
 /*******************/
 
-const QString dbFilename = "autotestDb.db";
+const char* dbFilename = "autotestDb.idb";
 
 bool writeClientCompany(InvoiceDbController& controller, const CompanyData& data)
 {
@@ -107,34 +107,31 @@ TEST_CASE( "InvoiceDbController - getIncomePerClient" )
       const InvoiceDbController::IncomePerClientVec result = controller.getIncomePerClient();
       REQUIRE( result.size() == 4 );
 
-      std::pair<QString, double> resultData = result[0];
-      CompanyData sampleData = testUtils.createClientCompanyData(0);
-      REQUIRE( resultData.first ==  sampleData.name );
+      std::map<QString, double> expectedResults;
       const double totalInvoice1 = 8000 + 3 * 500 + 1.5 * 1500;
       const double totalInvoice2 = 5200;
       double expectedTotal = totalInvoice1 + totalInvoice2;
-      REQUIRE_THAT( resultData.second, Catch::Matchers::WithinAbs(expectedTotal, 0.00001));
+      expectedResults[testUtils.createClientCompanyData(0).name] = expectedTotal;
 
-      resultData = result[1];
-      sampleData = testUtils.createClientCompanyData(1);
-      REQUIRE( resultData.first ==  sampleData.name );
       const double totalInvoice3 = 4250;
       const double totalInvoice4 = 2500;
-      expectedTotal = totalInvoice1 + totalInvoice2 + totalInvoice3;
-      REQUIRE_THAT( resultData.second, Catch::Matchers::WithinAbs(expectedTotal, 0.00001));
+      expectedTotal = totalInvoice3 + totalInvoice4;
+      expectedResults[testUtils.createClientCompanyData(1).name] = expectedTotal;
 
-      resultData = result[2];
-      const double totalInvoice5 = 11000;
-      sampleData = testUtils.createClientCompanyData(2);
-      REQUIRE( resultData.first ==  sampleData.name );
-      REQUIRE_THAT( resultData.second, Catch::Matchers::WithinAbs(totalInvoice5, 0.00001));
+      expectedTotal = 11000;
+      expectedResults[testUtils.createClientCompanyData(2).name] = expectedTotal;
 
-      resultData = result[3];
       const double totalInvoice6 = 28.2 * 12.78 + 2000 + 500;
-      const double totalInvoice7 = 3 * 1500 + 18000 + 6500;
-      sampleData = testUtils.createClientCompanyData(3);
-      REQUIRE( resultData.first ==  sampleData.name );
-      REQUIRE_THAT( resultData.second, Catch::Matchers::WithinAbs(totalInvoice6 + totalInvoice7, 0.00001));
+      const double totalInvoice7 = 3 * 1500 + 18000 + 6500 + 3 * 300;
+      expectedTotal = totalInvoice6 + totalInvoice7;
+      expectedResults[testUtils.createClientCompanyData(3).name] = expectedTotal;
+
+      for (const auto& resultData : result)
+      {
+         auto itExpected = expectedResults.find(resultData.first);
+         REQUIRE( itExpected != expectedResults.end());
+         REQUIRE_THAT( resultData.second, Catch::Matchers::WithinAbs(itExpected->second, 0.00001));
+      }
    }
 
    SECTION("Child companies grouped")

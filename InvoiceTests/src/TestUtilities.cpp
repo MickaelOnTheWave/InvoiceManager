@@ -93,7 +93,7 @@ void TestUtilities::populateInvoiceSamples()
    data.id = 1;
    data.templateId = -1;
    data.stylesheetId = -1;
-   data.clientId = 1;
+   data.clientId = 2;
    invoiceSamples.push_back(data);
 
    data.notes = "This invoice is also regarding first client";
@@ -102,7 +102,7 @@ void TestUtilities::populateInvoiceSamples()
    data.id = 2;
    data.templateId = -1;
    data.stylesheetId = -1;
-   data.clientId = 1;
+   data.clientId = 2;
    invoiceSamples.push_back(data);
 
    data.notes = "Nothing special to consider here";
@@ -111,7 +111,7 @@ void TestUtilities::populateInvoiceSamples()
    data.id = 3;
    data.templateId = -1;
    data.stylesheetId = -1;
-   data.clientId = 2;
+   data.clientId = 3;
    invoiceSamples.push_back(data);
 
    data.notes = "Another invoice";
@@ -120,7 +120,7 @@ void TestUtilities::populateInvoiceSamples()
    data.id = 4;
    data.templateId = -1;
    data.stylesheetId = -1;
-   data.clientId = 2;
+   data.clientId = 3;
    invoiceSamples.push_back(data);
 
    data.notes = "Some description notes about the invoice";
@@ -129,7 +129,7 @@ void TestUtilities::populateInvoiceSamples()
    data.id = 5;
    data.templateId = -1;
    data.stylesheetId = -1;
-   data.clientId = 3;
+   data.clientId = 4;
    invoiceSamples.push_back(data);
 
    data.notes = "";
@@ -138,7 +138,7 @@ void TestUtilities::populateInvoiceSamples()
    data.id = 6;
    data.templateId = -1;
    data.stylesheetId = -1;
-   data.clientId = 4;
+   data.clientId = 5;
    invoiceSamples.push_back(data);
 
    data.notes = "Facturé en Reals parce que oui";
@@ -147,7 +147,7 @@ void TestUtilities::populateInvoiceSamples()
    data.id = 7;
    data.templateId = -1;
    data.stylesheetId = -1;
-   data.clientId = 4;
+   data.clientId = 5;
    invoiceSamples.push_back(data);
 }
 
