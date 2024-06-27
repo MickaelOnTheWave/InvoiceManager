@@ -121,7 +121,7 @@ public:
     double getTotalInvoicedAmount() const;
     int getMonthCount() const;
 
-    IncomePerClientVec getIncomePerClient() const;
+    IncomePerClientVec getIncomePerClient(const bool separateChildCompanies) const;
     IncomeHistory getIncomeHistory() const;
     std::pair<QDate, QDate> getBoundaryMonths() const;
 
@@ -157,7 +157,10 @@ private:
 
     static std::vector<double> toValuesByTimespan(const IncomeData& data, const std::vector<QDate> dateSpans);
 
+    static QString buildIdsString(const std::map<int, double>& incomeMap);
+
     std::vector<QDate> toSortedDates(QSqlQuery& query) const;
+
 
     QString dbFilename;
     QString lastErrorMessage;

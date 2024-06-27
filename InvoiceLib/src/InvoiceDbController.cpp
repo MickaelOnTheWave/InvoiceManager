@@ -538,14 +538,11 @@ int InvoiceDbController::getMonthCount() const
    }
 }
 
-InvoiceDbController::IncomePerClientVec InvoiceDbController::getIncomePerClient() const
+InvoiceDbController::IncomePerClientVec InvoiceDbController::getIncomePerClient(const bool separateChildCompanies) const
 {
-   IncomePerClientVec data;
+   std::map<int, double> idData;
 
-   QString clientQueryStr = "SELECT company.name, company.id FROM company WHERE isClient = 1";
-   //if (!separateChildCompanies)
-//      clientQueryStr += " AND idChild = -1";
-
+   QString clientQueryStr = "SELECT company.id FROM company WHERE isClient = 1";
 
    QSqlQuery clientQuery;
    bool ok = clientQuery.exec(clientQueryStr);
@@ -554,8 +551,7 @@ InvoiceDbController::IncomePerClientVec InvoiceDbController::getIncomePerClient(
 
    while (clientQuery.next())
    {
-      const QString companyName = clientQuery.value(0).toString();
-      const int companyId = clientQuery.value(1).toInt();
+      const int companyId = clientQuery.value(0).toInt();
       const IncomeData clientIncomeData = getClientInvoicedValues(companyId);
 
       auto sumFunc = [](double total, const std::pair<QDate, double>& value)
@@ -564,7 +560,44 @@ InvoiceDbController::IncomePerClientVec InvoiceDbController::getIncomePerClient(
       };
       const double clientTotal = std::accumulate(clientIncomeData.begin(), clientIncomeData.end(), 0.0, sumFunc);
 
-      data.push_back(std::make_pair(companyName, clientTotal));
+      idData[companyId] = clientTotal;
+   }
+
+   IncomePerClientVec data;
+   const QString idString = buildIdsString(idData);
+   if (separateChildCompanies)
+   {
+      const QString nameQueryStr = "SELECT company.name FROM company WHERE company.id IN (%1)";
+      QSqlQuery query;
+      bool ok = query.exec(nameQueryStr.arg(idString));
+      if (!ok)
+         return IncomePerClientVec();
+
+      auto itTotals = idData.begin();
+      while (query.next())
+      {
+         const QString companyName = query.value(0).toString();
+         data.push_back(std::make_pair(companyName, itTotals->second));
+         ++itTotals;
+      }
+   }
+   else
+   {
+      const QString queryStr = "SELECT company.id, company.idChild FROM company WHERE company.id IN (%1) AND idChild != -1";
+      QSqlQuery query;
+      bool ok = query.exec(queryStr.arg(idString));
+      if (!ok)
+         return IncomePerClientVec();
+
+      while (query.next())
+      {
+         const int companyId = query.value(0).toInt();
+         const int childId = query.value(1).toInt();
+
+         // TODO : implement a real id chain to the first child, to make sure they are all treated in chain.
+         // TODO : starting from first child, remove the old companies from data and add their data to their parent.
+      }
+
    }
 
    return data;
@@ -940,6 +973,14 @@ std::vector<double> InvoiceDbController::toValuesByTimespan(const IncomeData& da
        }
    }
    return values;
+}
+
+QString InvoiceDbController::buildIdsString(const std::map<int, double> &incomeMap)
+{
+   QString idString;
+   for (const auto& data: incomeMap)
+      idString += QString::number(data.first) + ",";
+   return idString.chopped(1);
 }
 
 std::vector<QDate> InvoiceDbController::toSortedDates(QSqlQuery& query) const

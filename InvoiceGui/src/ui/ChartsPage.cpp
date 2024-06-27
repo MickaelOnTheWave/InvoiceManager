@@ -65,7 +65,10 @@ void ChartsPage::onPerYearClicked()
 
 void ChartsPage::setupIncomePerClientViews()
 {
-   const InvoiceDbController::IncomePerClientVec incomePerClient = controller->getIncomePerClient();
+   QSettings settings;
+   const bool separateChildCompanies = settings.value("user/showchildcompanies", false).toBool();
+
+   const InvoiceDbController::IncomePerClientVec incomePerClient = controller->getIncomePerClient(separateChildCompanies);
    auto colors = setupIncomePerClientChart(incomePerClient);
    setupIncomePerClientTable(incomePerClient, colors);
 }
