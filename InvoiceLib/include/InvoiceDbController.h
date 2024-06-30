@@ -25,6 +25,7 @@
 #include <QString>
 
 #include "CompanyData.h"
+#include "IdParentingMap.h"
 #include "InvoiceData.h"
 #include "InvoiceDetail.h"
 
@@ -42,9 +43,7 @@ public:
    std::vector<ClientIncomeHistory>::const_iterator begin() const;
    std::vector<ClientIncomeHistory>::const_iterator end() const;
 
-
 private:
-
    std::vector<ClientIncomeHistory> data;
 };
 
@@ -127,6 +126,9 @@ public:
 
 
 private:
+    using IncomePerClientId = std::map<int, double>;
+    using CompanyChildMap = std::map<int, int>;
+
     bool createDbConnection(const QString& filename);
 
     static QString createUserCompanyRequest(const QString& field);
@@ -160,6 +162,13 @@ private:
     static QString buildIdsString(const std::map<int, double>& incomeMap);
 
     std::vector<QDate> toSortedDates(QSqlQuery& query) const;
+
+    IncomePerClientId getIncomePerClientId() const;
+    IncomePerClientVec addNameToResults(const IncomePerClientId& results) const;
+
+    CompanyChildMap getCompaniesWithChilds(const QString& companyIds) const;
+    static IdParentingMap createFinalParentMap(const CompanyChildMap& companyAndChildIds);
+    static void groupCompanyResults(const IdParentingMap& finalParentMap, IncomePerClientId& idData);
 
 
     QString dbFilename;

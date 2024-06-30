@@ -540,67 +540,16 @@ int InvoiceDbController::getMonthCount() const
 
 InvoiceDbController::IncomePerClientVec InvoiceDbController::getIncomePerClient(const bool separateChildCompanies) const
 {
-   std::map<int, double> idData;
+   IncomePerClientId idData = getIncomePerClientId();
 
-   QString clientQueryStr = "SELECT company.id FROM company WHERE isClient = 1";
-
-   QSqlQuery clientQuery;
-   bool ok = clientQuery.exec(clientQueryStr);
-   if (!ok)
-      return IncomePerClientVec();
-
-   while (clientQuery.next())
+   if (!separateChildCompanies)
    {
-      const int companyId = clientQuery.value(0).toInt();
-      const IncomeData clientIncomeData = getClientInvoicedValues(companyId);
-
-      auto sumFunc = [](double total, const std::pair<QDate, double>& value)
-      {
-         return total + value.second;
-      };
-      const double clientTotal = std::accumulate(clientIncomeData.begin(), clientIncomeData.end(), 0.0, sumFunc);
-
-      idData[companyId] = clientTotal;
+      const CompanyChildMap companyAndChildIds = getCompaniesWithChilds(buildIdsString(idData));
+      const IdParentingMap finalParentsMap = createFinalParentMap(companyAndChildIds);
+      groupCompanyResults(finalParentsMap, idData);
    }
 
-   IncomePerClientVec data;
-   const QString idString = buildIdsString(idData);
-   if (separateChildCompanies)
-   {
-      const QString nameQueryStr = "SELECT company.name FROM company WHERE company.id IN (%1)";
-      QSqlQuery query;
-      bool ok = query.exec(nameQueryStr.arg(idString));
-      if (!ok)
-         return IncomePerClientVec();
-
-      auto itTotals = idData.begin();
-      while (query.next())
-      {
-         const QString companyName = query.value(0).toString();
-         data.push_back(std::make_pair(companyName, itTotals->second));
-         ++itTotals;
-      }
-   }
-   else
-   {
-      const QString queryStr = "SELECT company.id, company.idChild FROM company WHERE company.id IN (%1) AND idChild != -1";
-      QSqlQuery query;
-      bool ok = query.exec(queryStr.arg(idString));
-      if (!ok)
-         return IncomePerClientVec();
-
-      while (query.next())
-      {
-         const int companyId = query.value(0).toInt();
-         const int childId = query.value(1).toInt();
-
-         // TODO : implement a real id chain to the first child, to make sure they are all treated in chain.
-         // TODO : starting from first child, remove the old companies from data and add their data to their parent.
-      }
-
-   }
-
-   return data;
+   return addNameToResults(idData);
 }
 
 IncomeHistory InvoiceDbController::getIncomeHistory() const
@@ -992,4 +941,106 @@ std::vector<QDate> InvoiceDbController::toSortedDates(QSqlQuery& query) const
    }
    std::sort(dates.begin(), dates.end());
    return dates;
+}
+
+InvoiceDbController::IncomePerClientId InvoiceDbController::getIncomePerClientId() const
+{
+   IncomePerClientId data;
+
+   QString clientQueryStr = "SELECT company.id FROM company WHERE isClient = 1";
+
+   QSqlQuery clientQuery;
+   bool ok = clientQuery.exec(clientQueryStr);
+   if (!ok)
+      return IncomePerClientId();
+
+   while (clientQuery.next())
+   {
+      const int companyId = clientQuery.value(0).toInt();
+      const IncomeData clientIncomeData = getClientInvoicedValues(companyId);
+
+      auto sumFunc = [](double total, const std::pair<QDate, double>& value)
+      {
+         return total + value.second;
+      };
+      const double clientTotal = std::accumulate(clientIncomeData.begin(), clientIncomeData.end(), 0.0, sumFunc);
+
+      data[companyId] = clientTotal;
+   }
+   return data;
+}
+
+InvoiceDbController::IncomePerClientVec InvoiceDbController::addNameToResults(const std::map<int, double> &results) const
+{
+   IncomePerClientVec data;
+
+   const QString idString = buildIdsString(results);
+   const QString nameQueryStr = "SELECT company.name FROM company WHERE company.id IN (%1)";
+   QSqlQuery query;
+   bool ok = query.exec(nameQueryStr.arg(idString));
+   if (!ok)
+      return IncomePerClientVec();
+
+   auto itTotals = results.begin();
+   while (query.next())
+   {
+      const QString companyName = query.value(0).toString();
+      data.push_back(std::make_pair(companyName, itTotals->second));
+      ++itTotals;
+   }
+   return data;
+}
+
+std::map<int, int> InvoiceDbController::getCompaniesWithChilds(const QString& companyIds) const
+{
+   std::map<int, int> resultData;
+   const QString queryStr = "SELECT company.id, company.idChild FROM company WHERE company.id IN (%1) AND idChild != -1";
+   QSqlQuery query;
+   bool ok = query.exec(queryStr.arg(companyIds));
+   if (!ok)
+      return resultData;
+
+   while (query.next())
+   {
+      const int companyId = query.value(0).toInt();
+      const int childId = query.value(1).toInt();
+      resultData[companyId] = childId;
+   }
+
+   return resultData;
+}
+
+IdParentingMap InvoiceDbController::createFinalParentMap(const CompanyChildMap& companyAndChildIds)
+{
+   IdParentingMap resultData;
+   for (const auto idPair : companyAndChildIds)
+   {
+      /*auto itNewerParent = companyAndChildIds.hasAsChild(idPair.first);
+      if (itNewerParent != companyAndChildIds.end())
+      {
+
+
+
+
+      }*/
+
+   }
+   return resultData;
+}
+
+void InvoiceDbController::groupCompanyResults(const IdParentingMap &finalParentMap, IncomePerClientId &idData)
+{
+   auto itResults = idData.begin();
+   while (itResults != idData.end())
+   {
+      auto itParent = finalParentMap.findParentIt(itResults->first);
+      if (itParent != finalParentMap.end())
+      {
+         auto itFinalParent = idData.find(itParent->first);
+         itFinalParent->second += itResults->second;
+         itResults = idData.erase(itResults);
+      }
+      else
+         ++itResults;
+   }
 }

@@ -15,8 +15,9 @@ find_package(Qt6 COMPONENTS Core LinguistTools Sql PrintSupport Gui Network Svg 
 
 
 set(SOURCES
-    src/InvoiceDbController.cpp
     src/CompanyData.cpp
+    src/IdParentingMap.cpp
+    src/InvoiceDbController.cpp
     src/InvoiceDetail.cpp
     src/InvoiceData.cpp
     src/InvoiceDocument.cpp
@@ -27,8 +28,9 @@ set(SOURCES
 )
 
 set(HEADERS
-    include/InvoiceDbController.h
     include/CompanyData.h
+    include/IdParentingMap.h
+    include/InvoiceDbController.h
     include/InvoiceDetail.h
     include/InvoiceData.h
     include/InvoiceDocument.h
