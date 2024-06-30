@@ -27,52 +27,6 @@
 
 using namespace std;
 
-double IncomeHistory::getMaxValue() const
-{
-   std::vector<double> totalsByDateSpan;
-   for (int i=0; i<data.front().second.size(); ++i)
-      totalsByDateSpan.push_back(0.0);
-
-   for(const auto& clientIncome : data)
-   {
-      auto itTotals = totalsByDateSpan.begin();
-      for (const auto& incomeData : clientIncome.second)
-      {
-         *itTotals += incomeData;
-         ++itTotals;
-      }
-   }
-
-   auto itMaxElement = max_element(totalsByDateSpan.begin(), totalsByDateSpan.end());
-   return (itMaxElement != totalsByDateSpan.end()) ? *itMaxElement : 0.0;
-}
-
-void IncomeHistory::push_back(const ClientIncomeHistory& newData)
-{
-   data.push_back(newData);
-}
-
-vector<IncomeHistory::ClientIncomeHistory>::iterator IncomeHistory::begin()
-{
-   return data.begin();
-}
-
-vector<IncomeHistory::ClientIncomeHistory>::iterator IncomeHistory::end()
-{
-   return data.end();
-}
-
-vector<IncomeHistory::ClientIncomeHistory>::const_iterator IncomeHistory::begin() const
-{
-   return data.begin();
-}
-
-vector<IncomeHistory::ClientIncomeHistory>::const_iterator IncomeHistory::end() const
-{
-   return data.end();
-}
-
-
 
 InvoiceDbController::InvoiceDbController()
 {
@@ -991,9 +945,9 @@ InvoiceDbController::IncomePerClientVec InvoiceDbController::addNameToResults(co
    return data;
 }
 
-std::map<int, int> InvoiceDbController::getCompaniesWithChilds(const QString& companyIds) const
+CompanyChildMap InvoiceDbController::getCompaniesWithChilds(const QString& companyIds) const
 {
-   std::map<int, int> resultData;
+   CompanyChildMap resultData;
    const QString queryStr = "SELECT company.id, company.idChild FROM company WHERE company.id IN (%1) AND idChild != -1";
    QSqlQuery query;
    bool ok = query.exec(queryStr.arg(companyIds));
@@ -1015,15 +969,23 @@ IdParentingMap InvoiceDbController::createFinalParentMap(const CompanyChildMap& 
    IdParentingMap resultData;
    for (const auto idPair : companyAndChildIds)
    {
-      /*auto itNewerParent = companyAndChildIds.hasAsChild(idPair.first);
-      if (itNewerParent != companyAndChildIds.end())
       {
+         auto itNewerParent = companyAndChildIds.findParentIt(idPair.first);
+         if (itNewerParent != companyAndChildIds.end())
+         {
+            vector<int>& newerParentChildren = resultData[itNewerParent->first];
+            newerParentChildren.push_back(idPair.first);
 
-
-
-
-      }*/
-
+            auto itAlreadyHandledParent = resultData.find(idPair.first);
+            if (itAlreadyHandledParent != resultData.end())
+            {
+               newerParentChildren.insert(newerParentChildren.end(), itAlreadyHandledParent->second.begin(), itAlreadyHandledParent->second.end());
+               resultData.erase(itAlreadyHandledParent);
+            }
+            else
+               newerParentChildren.push_back(idPair.second);
+         }
+      }
    }
    return resultData;
 }

@@ -24,28 +24,12 @@
 #include <QObject>
 #include <QString>
 
+#include "CompanyChildMap.h"
 #include "CompanyData.h"
 #include "IdParentingMap.h"
+#include "IncomeHistory.h"
 #include "InvoiceData.h"
 #include "InvoiceDetail.h"
-
-class IncomeHistory
-{
-public:
-   using ClientIncomeHistory = std::pair<QString, std::vector<double>>;
-
-   double getMaxValue() const;
-
-   void push_back(const ClientIncomeHistory& newData);
-
-   std::vector<ClientIncomeHistory>::iterator begin();
-   std::vector<ClientIncomeHistory>::iterator end();
-   std::vector<ClientIncomeHistory>::const_iterator begin() const;
-   std::vector<ClientIncomeHistory>::const_iterator end() const;
-
-private:
-   std::vector<ClientIncomeHistory> data;
-};
 
 class InvoiceDbController : public QObject
 {
@@ -124,10 +108,8 @@ public:
     IncomeHistory getIncomeHistory() const;
     std::pair<QDate, QDate> getBoundaryMonths() const;
 
-
 private:
     using IncomePerClientId = std::map<int, double>;
-    using CompanyChildMap = std::map<int, int>;
 
     bool createDbConnection(const QString& filename);
 

@@ -15,8 +15,10 @@ find_package(Qt6 COMPONENTS Core LinguistTools Sql PrintSupport Gui Network Svg 
 
 
 set(SOURCES
+    src/CompanyChildMap.cpp
     src/CompanyData.cpp
     src/IdParentingMap.cpp
+    src/IncomeHistory.cpp
     src/InvoiceDbController.cpp
     src/InvoiceDetail.cpp
     src/InvoiceData.cpp
@@ -28,8 +30,10 @@ set(SOURCES
 )
 
 set(HEADERS
+    include/CompanyChildMap.h
     include/CompanyData.h
     include/IdParentingMap.h
+    include/IncomeHistory.h
     include/InvoiceDbController.h
     include/InvoiceDetail.h
     include/InvoiceData.h

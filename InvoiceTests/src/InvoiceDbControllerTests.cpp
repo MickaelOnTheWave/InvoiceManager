@@ -103,6 +103,11 @@ TEST_CASE( "InvoiceDbController - getTotalClientCount" )
 
 TEST_CASE( "InvoiceDbController - groupCompanyResults" )
 {
+   // Co 1 : 1
+   // Co 2 : 2
+   // Co 1 Ren : 3 (childId : 1)
+   // Co 1 Ren2 : 4 (childId : 3)
+   // Co 1 Ren3 : 5 (childId : 4)
    InvoiceDbController::IncomePerClientId incomeData = {
       {1, 1000.0},
       {2, 1200.0},
@@ -126,7 +131,7 @@ TEST_CASE( "InvoiceDbController - createFinalParentMap" )
    // Co 1 Ren : 3 (childId : 1)
    // Co 1 Ren2 : 4 (childId : 3)
    // Co 1 Ren3 : 5 (childId : 4)
-   InvoiceDbController::CompanyChildMap idMap;
+   CompanyChildMap idMap;
    idMap[3] = 1;
    idMap[4] = 3;
    idMap[5] = 4;
@@ -134,10 +139,9 @@ TEST_CASE( "InvoiceDbController - createFinalParentMap" )
    IdParentingMap parentingMap = InvoiceDbController::createFinalParentMap(idMap);
 
    REQUIRE( parentingMap.size() == 1 );
-   /*parentingMap[5] = {1, 3, 4};
-   REQUIRE( parentingMap[3] == 1 );
-   REQUIRE( parentingMap[4] == 1 );
-   REQUIRE( parentingMap[5] == 1 );*/
+   REQUIRE( parentingMap[5][0] == 4 );
+   REQUIRE( parentingMap[5][1] == 3 );
+   REQUIRE( parentingMap[5][2] == 1 );
 }
 
 TEST_CASE( "InvoiceDbController - getIncomePerClient" )

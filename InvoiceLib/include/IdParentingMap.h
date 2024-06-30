@@ -19,9 +19,12 @@ public:
 
    /** Forwards from std::map  **/
 
+   DataMap::iterator find(const DataMap::key_type& k);
+   DataMap::mapped_type& operator[](const std::size_t i);
    std::size_t size() const;
    DataMapIt end();
    DataMapConstIt end() const;
+   DataMap::iterator erase(const DataMap::iterator it);
 
 private:
    DataMap data;
