@@ -149,7 +149,6 @@ private:
     IncomePerClientVec addNameToResults(const IncomePerClientId& results) const;
 
     CompanyChildMap getCompaniesWithChilds(const QString& companyIds) const;
-    static IdParentingMap createFinalParentMap(const CompanyChildMap& companyAndChildIds);
     static void groupCompanyResults(const IdParentingMap& finalParentMap, IncomePerClientId& idData);
 
 

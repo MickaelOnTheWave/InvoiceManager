@@ -50,14 +50,18 @@ void populateWithCompanies(InvoiceDbController& controller)
    REQUIRE ( ok == true );
 
    // Add client companies
-   for (int i=0; i<3; ++i)
-   {
-      ok = writeClientCompany(controller, testUtils.createClientCompanyData(i));
-      REQUIRE ( ok == true );
-   }
-
-   ok = controller.writeUpdatedCompany(testUtils.createClientCompanyData(3), 2);
+   ok = writeClientCompany(controller, testUtils.createClientCompanyData(0));
    REQUIRE ( ok == true );
+
+   ok = controller.writeUpdatedCompany(testUtils.createClientCompanyData(1), 2);
+   REQUIRE ( ok == true );
+
+   ok = writeClientCompany(controller, testUtils.createClientCompanyData(2));
+   REQUIRE ( ok == true );
+
+   ok = writeClientCompany(controller, testUtils.createClientCompanyData(3));
+   REQUIRE ( ok == true );
+
 }
 
 void populateWithCompaniesAndInvoices(InvoiceDbController& controller)
@@ -124,24 +128,38 @@ TEST_CASE( "InvoiceDbController - groupCompanyResults" )
    REQUIRE_THAT( incomeData[5], Catch::Matchers::WithinAbs(2200.0, 0.001));
 }
 
-TEST_CASE( "InvoiceDbController - createFinalParentMap" )
+TEST_CASE( "IdParentingMap - Construct from CompanyChildMap" )
 {
-   // Co 1 : 1
-   // Co 2 : 2
-   // Co 1 Ren : 3 (childId : 1)
-   // Co 1 Ren2 : 4 (childId : 3)
-   // Co 1 Ren3 : 5 (childId : 4)
-   CompanyChildMap idMap;
-   idMap[3] = 1;
-   idMap[4] = 3;
-   idMap[5] = 4;
+   SECTION("Chained parents")
+   {
+      // Co 1 : 1
+      // Co 2 : 2
+      // Co 1 Ren : 3 (childId : 1)
+      // Co 1 Ren2 : 4 (childId : 3)
+      // Co 1 Ren3 : 5 (childId : 4)
+      CompanyChildMap idMap;
+      idMap[3] = 1;
+      idMap[4] = 3;
+      idMap[5] = 4;
 
-   IdParentingMap parentingMap = InvoiceDbController::createFinalParentMap(idMap);
+      IdParentingMap parentingMap(idMap);
 
-   REQUIRE( parentingMap.size() == 1 );
-   REQUIRE( parentingMap[5][0] == 4 );
-   REQUIRE( parentingMap[5][1] == 3 );
-   REQUIRE( parentingMap[5][2] == 1 );
+      REQUIRE( parentingMap.size() == 1 );
+      REQUIRE( parentingMap[5][0] == 4 );
+      REQUIRE( parentingMap[5][1] == 3 );
+      REQUIRE( parentingMap[5][2] == 1 );
+   }
+
+   SECTION("Simple parents")
+   {
+      CompanyChildMap idMap;
+      idMap[1] = 0;
+
+      IdParentingMap parentingMap(idMap);
+
+      REQUIRE( parentingMap.size() == 1 );
+      REQUIRE( parentingMap[1][0] == 0 );
+   }
 }
 
 TEST_CASE( "InvoiceDbController - getIncomePerClient" )

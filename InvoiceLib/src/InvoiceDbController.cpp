@@ -499,7 +499,7 @@ InvoiceDbController::IncomePerClientVec InvoiceDbController::getIncomePerClient(
    if (!separateChildCompanies)
    {
       const CompanyChildMap companyAndChildIds = getCompaniesWithChilds(buildIdsString(idData));
-      const IdParentingMap finalParentsMap = createFinalParentMap(companyAndChildIds);
+      const IdParentingMap finalParentsMap(companyAndChildIds);
       groupCompanyResults(finalParentsMap, idData);
    }
 
@@ -958,35 +958,9 @@ CompanyChildMap InvoiceDbController::getCompaniesWithChilds(const QString& compa
    {
       const int companyId = query.value(0).toInt();
       const int childId = query.value(1).toInt();
-      resultData[companyId] = childId;
+      resultData[childId] = companyId;
    }
 
-   return resultData;
-}
-
-IdParentingMap InvoiceDbController::createFinalParentMap(const CompanyChildMap& companyAndChildIds)
-{
-   IdParentingMap resultData;
-   for (const auto idPair : companyAndChildIds)
-   {
-      {
-         auto itNewerParent = companyAndChildIds.findParentIt(idPair.first);
-         if (itNewerParent != companyAndChildIds.end())
-         {
-            vector<int>& newerParentChildren = resultData[itNewerParent->first];
-            newerParentChildren.push_back(idPair.first);
-
-            auto itAlreadyHandledParent = resultData.find(idPair.first);
-            if (itAlreadyHandledParent != resultData.end())
-            {
-               newerParentChildren.insert(newerParentChildren.end(), itAlreadyHandledParent->second.begin(), itAlreadyHandledParent->second.end());
-               resultData.erase(itAlreadyHandledParent);
-            }
-            else
-               newerParentChildren.push_back(idPair.second);
-         }
-      }
-   }
    return resultData;
 }
 

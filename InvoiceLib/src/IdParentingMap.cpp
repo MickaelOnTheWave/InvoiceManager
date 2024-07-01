@@ -13,6 +13,30 @@ IdParentingMap::IdParentingMap(initializer_list<DataMap::value_type> initList)
 {
 }
 
+IdParentingMap::IdParentingMap(const CompanyChildMap &childMap)
+{
+   for (const auto idPair : childMap)
+   {
+      auto itNewerParent = childMap.findParentIt(idPair.first);
+      if (itNewerParent != childMap.end())
+      {
+         vector<int>& newerParentChildren = data[itNewerParent->first];
+         newerParentChildren.push_back(idPair.first);
+
+         auto itAlreadyHandledParent = data.find(idPair.first);
+         if (itAlreadyHandledParent != data.end())
+         {
+            newerParentChildren.insert(newerParentChildren.end(), itAlreadyHandledParent->second.begin(), itAlreadyHandledParent->second.end());
+            data.erase(itAlreadyHandledParent);
+         }
+         else
+            newerParentChildren.push_back(idPair.second);
+      }
+      else
+         data[idPair.first].push_back(idPair.second);
+   }
+}
+
 IdParentingMap::DataMapConstIt IdParentingMap::findParentIt(const int id) const
 {
    for (auto it = data.begin(); it != data.end(); ++it)

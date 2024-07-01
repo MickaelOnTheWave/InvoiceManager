@@ -5,6 +5,8 @@
 #include <map>
 #include <vector>
 
+#include "CompanyChildMap.h"
+
 class IdParentingMap
 {
 public:
@@ -14,6 +16,7 @@ public:
 
    IdParentingMap();
    IdParentingMap(std::initializer_list<DataMap::value_type> initList);
+   IdParentingMap(const CompanyChildMap& childMap);
 
    DataMapConstIt findParentIt(const int id) const;
 
