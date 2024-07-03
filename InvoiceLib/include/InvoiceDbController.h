@@ -105,7 +105,7 @@ public:
     int getMonthCount() const;
 
     IncomePerClientVec getIncomePerClient(const bool separateChildCompanies) const;
-    IncomeHistory getIncomeHistory() const;
+    IncomeHistory getIncomeHistory(const bool separateChildCompanies) const;
     std::pair<QDate, QDate> getBoundaryMonths() const;
 
 private:
@@ -150,7 +150,6 @@ private:
 
     CompanyChildMap getCompaniesWithChilds(const QString& companyIds) const;
     static void groupCompanyResults(const IdParentingMap& finalParentMap, IncomePerClientId& idData);
-
 
     QString dbFilename;
     QString lastErrorMessage;

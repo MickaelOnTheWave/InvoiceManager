@@ -20,9 +20,24 @@ double IncomeHistory::getMaxValue() const
    return (itMaxElement != totalsByDateSpan.end()) ? *itMaxElement : 0.0;
 }
 
+IncomeHistory::DataMap::iterator IncomeHistory::find(const QString &key)
+{
+   for (auto it=data.begin(); it!=data.end(); ++it)
+   {
+      if (it->first == key)
+         return it;
+   }
+   return data.end();
+}
+
 void IncomeHistory::push_back(const DataValue& newData)
 {
    data.push_back(newData);
+}
+
+const size_t IncomeHistory::size() const
+{
+   return data.size();
 }
 
 IncomeHistory::DataMap::iterator IncomeHistory::begin()

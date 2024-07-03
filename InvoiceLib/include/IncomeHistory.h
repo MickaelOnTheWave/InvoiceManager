@@ -11,13 +11,17 @@ public:
 
    double getMaxValue() const;
 
-   void push_back(const DataValue& newData);
+   DataMap::iterator find(const QString& key);
+
 
    /** Forwards from std::vector  **/
+   void push_back(const DataValue& newData);
+   const size_t size() const;
    DataMap::iterator begin();
    DataMap::iterator end();
    DataMap::const_iterator begin() const;
    DataMap::const_iterator end() const;
+
 
 private:
    DataMap data;

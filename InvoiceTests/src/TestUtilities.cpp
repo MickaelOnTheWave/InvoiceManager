@@ -98,7 +98,7 @@ void TestUtilities::populateInvoiceSamples()
 
    data.notes = "This invoice is also regarding first client";
    data.currency = "$";
-   data.date = QDate(2023, 12, 14);
+   data.date = QDate(2024, 03, 14);
    data.id = 2;
    data.templateId = -1;
    data.stylesheetId = -1;

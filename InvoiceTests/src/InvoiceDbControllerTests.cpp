@@ -30,6 +30,8 @@
 
 /*******************/
 
+using namespace std;
+
 const char* dbFilename = "autotestDb.idb";
 
 bool writeClientCompany(InvoiceDbController& controller, const CompanyData& data)
@@ -175,7 +177,6 @@ TEST_CASE( "InvoiceDbController - getIncomePerClient" )
    SECTION("Child companies separated")
    {
       result = controller.getIncomePerClient(true);
-      REQUIRE( result.size() == 4 );
 
       const double totalInvoice1 = 8000 + 3 * 500 + 1.5 * 1500;
       const double totalInvoice2 = 5200;
@@ -199,7 +200,6 @@ TEST_CASE( "InvoiceDbController - getIncomePerClient" )
    SECTION("Child companies grouped")
    {
       result = controller.getIncomePerClient(false);
-      REQUIRE( result.size() == 3 );
 
       const double totalInvoice1 = 8000 + 3 * 500 + 1.5 * 1500;
       const double totalInvoice2 = 5200;
@@ -217,16 +217,64 @@ TEST_CASE( "InvoiceDbController - getIncomePerClient" )
       expectedResults[testUtils.createClientCompanyData(3).name] = expectedTotal;
    }
 
-   SECTION("Several chained grouped child companies")
-   {
-
-   }
-
+   REQUIRE( result.size() == expectedResults.size() );
    for (const auto& resultData : result)
    {
       auto itExpected = expectedResults.find(resultData.first);
       REQUIRE( itExpected != expectedResults.end());
       REQUIRE_THAT( resultData.second, Catch::Matchers::WithinAbs(itExpected->second, 0.00001));
+   }
+
+}
+
+TEST_CASE( "InvoiceDbController - getIncomeHistory" )
+{
+   InvoiceDbController controller;
+   populateWithCompaniesAndInvoices(controller);
+
+   IncomeHistory result;
+   IncomeHistory expectedResult;
+   TestUtilities testUtils;
+
+   SECTION("Child companies separated")
+   {
+      result = controller.getIncomeHistory(true);
+
+      std::vector<double> incomeHistory = { 11750.0, 0.0, 0.0, 5200.0, 0.0, 0.0, 0.0, 0.0 };
+      expectedResult.push_back(make_pair(testUtils.createClientCompanyData(0).name, incomeHistory));
+
+      incomeHistory = { 0.0, 6750.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+      expectedResult.push_back(make_pair(testUtils.createClientCompanyData(1).name, incomeHistory));
+
+      incomeHistory = { 0.0, 11000.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+      expectedResult.push_back(make_pair(testUtils.createClientCompanyData(2).name, incomeHistory));
+
+      incomeHistory = { 0.0, 0.0, 2860.396, 0.0, 0.0, 0.0, 0.0, 29900.0 };
+      expectedResult.push_back(make_pair(testUtils.createClientCompanyData(3).name, incomeHistory));
+   }
+
+   SECTION("Child companies grouped")
+   {
+      result = controller.getIncomeHistory(false);
+
+      std::vector<double> incomeHistory = { 11750.0, 6750.0, 0.0, 5200.0, 0.0, 0.0, 0.0, 0.0 };
+      expectedResult.push_back(make_pair(testUtils.createClientCompanyData(1).name, std::vector<double>{0.0}));
+
+      incomeHistory = { 0.0, 11000.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+      expectedResult.push_back(make_pair(testUtils.createClientCompanyData(2).name, std::vector<double>{0.0}));
+
+      incomeHistory = { 0.0, 0.0, 2860.396, 0.0, 0.0, 0.0, 0.0, 29900.0 };
+      expectedResult.push_back(make_pair(testUtils.createClientCompanyData(3).name, std::vector<double>{0.0}));
+   }
+
+   REQUIRE( result.size() == expectedResult.size() );
+   for (const auto& resultData : result)
+   {
+      auto itExpected = expectedResult.find(resultData.first);
+      REQUIRE( itExpected != expectedResult.end());
+      REQUIRE( resultData.second.size() == itExpected->second.size() );
+      for (int i = 0; i < resultData.second.size(); ++i)
+         REQUIRE_THAT( resultData.second[i], Catch::Matchers::WithinAbs(itExpected->second[i], 0.00001));
    }
 
 }

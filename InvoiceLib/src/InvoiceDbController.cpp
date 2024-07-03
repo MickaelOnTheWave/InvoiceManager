@@ -506,7 +506,7 @@ InvoiceDbController::IncomePerClientVec InvoiceDbController::getIncomePerClient(
    return addNameToResults(idData);
 }
 
-IncomeHistory InvoiceDbController::getIncomeHistory() const
+IncomeHistory InvoiceDbController::getIncomeHistory(const bool separateChildCompanies) const
 {
    IncomeHistory history;
 
@@ -844,7 +844,7 @@ vector<QDate> InvoiceDbController::createDateSpans() const
    const pair<QDate, QDate> dateBoundaries = getBoundaryMonths();
 
    QDate firstDate(dateBoundaries.first.year(), dateBoundaries.first.month(), 1);
-   QDate lastDate(dateBoundaries.second.year(), dateBoundaries.first.month(), 31);
+   QDate lastDate(dateBoundaries.second.year(), dateBoundaries.second.month(), 31);
 
    vector<QDate> dateSpans;
    QDate currentDate = firstDate;

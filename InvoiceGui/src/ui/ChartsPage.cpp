@@ -75,7 +75,10 @@ void ChartsPage::setupIncomePerClientViews()
 
 void ChartsPage::setupIncomeTimelineView()
 {
-   const IncomeHistory incomeHistory = controller->getIncomeHistory();
+   QSettings settings;
+   const bool separateChildCompanies = settings.value("user/showchildcompanies", false).toBool();
+
+   const IncomeHistory incomeHistory = controller->getIncomeHistory(separateChildCompanies);
 
    auto incomeTimeSeries = new QStackedBarSeries();
    for (const auto& clientData : incomeHistory)
