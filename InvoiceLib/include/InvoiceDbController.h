@@ -147,12 +147,33 @@ private:
 
     IncomePerClientId getIncomePerClientId() const;
     IncomeHistoryId getIncomeHistoryId() const;
-    IncomePerClientVec addNameToResults(const IncomePerClientId& results) const;
-    IncomeHistory addNameToResults(const IncomeHistoryId& results) const;
 
     CompanyChildMap getCompaniesWithChilds(const QString& companyIds) const;
     static void groupCompanyResults(const IdParentingMap& finalParentMap, IncomePerClientId& idData);
     static void groupHistoryResults(const IdParentingMap& finalParentMap, IncomeHistoryId& idData);
+
+    template <class R, class T>
+    R addNameToResults(const T &results) const
+    {
+       R data;
+
+       const QString idString = buildIdsString(results);
+       const QString nameQueryStr = "SELECT company.name FROM company WHERE company.id IN (%1)";
+       QSqlQuery query;
+       bool ok = query.exec(nameQueryStr.arg(idString));
+       if (!ok)
+          return R();
+
+       auto itTotals = results.begin();
+       while (query.next())
+       {
+          const QString companyName = query.value(0).toString();
+          data.push_back(std::make_pair(companyName, itTotals->second));
+          ++itTotals;
+       }
+       return data;
+    }
+
 
     template <class T>
     static QString buildIdsString(const std::map<int, T>& incomeMap)

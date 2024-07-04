@@ -503,7 +503,7 @@ InvoiceDbController::IncomePerClientVec InvoiceDbController::getIncomePerClient(
       groupCompanyResults(finalParentsMap, idData);
    }
 
-   return addNameToResults(idData);
+   return addNameToResults<IncomePerClientVec>(idData);
 }
 
 IncomeHistory InvoiceDbController::getIncomeHistory(const bool separateChildCompanies) const
@@ -517,7 +517,7 @@ IncomeHistory InvoiceDbController::getIncomeHistory(const bool separateChildComp
       groupHistoryResults(finalParentsMap, historyPerId);
    }
 
-   return addNameToResults(historyPerId);
+   return addNameToResults<IncomeHistory>(historyPerId);
 }
 
 std::pair<QDate, QDate> InvoiceDbController::getBoundaryMonths() const
@@ -926,49 +926,6 @@ InvoiceDbController::IncomeHistoryId InvoiceDbController::getIncomeHistoryId() c
    }
    return historyPerId;
 }
-
-InvoiceDbController::IncomePerClientVec InvoiceDbController::addNameToResults(const std::map<int, double> &results) const
-{
-   IncomePerClientVec data;
-
-   const QString idString = buildIdsString(results);
-   const QString nameQueryStr = "SELECT company.name FROM company WHERE company.id IN (%1)";
-   QSqlQuery query;
-   bool ok = query.exec(nameQueryStr.arg(idString));
-   if (!ok)
-      return IncomePerClientVec();
-
-   auto itTotals = results.begin();
-   while (query.next())
-   {
-      const QString companyName = query.value(0).toString();
-      data.push_back(std::make_pair(companyName, itTotals->second));
-      ++itTotals;
-   }
-   return data;
-}
-
-IncomeHistory InvoiceDbController::addNameToResults(const IncomeHistoryId& results) const
-{
-   IncomeHistory data;
-
-   const QString idString = buildIdsString(results);
-   const QString nameQueryStr = "SELECT company.name FROM company WHERE company.id IN (%1)";
-   QSqlQuery query;
-   bool ok = query.exec(nameQueryStr.arg(idString));
-   if (!ok)
-      return IncomeHistory();
-
-   auto itTotals = results.begin();
-   while (query.next())
-   {
-      const QString companyName = query.value(0).toString();
-      data.push_back(std::make_pair(companyName, itTotals->second));
-      ++itTotals;
-   }
-   return data;
-}
-
 CompanyChildMap InvoiceDbController::getCompaniesWithChilds(const QString& companyIds) const
 {
    CompanyChildMap resultData;

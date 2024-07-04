@@ -25,8 +25,6 @@
 #include "InvoiceSortProxyModel.h"
 #include "InvoiceViewDialog.h"
 
-// TODO add checkbox to display (or not) old parent companies
-
 MainPage::MainPage(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MainPage)
