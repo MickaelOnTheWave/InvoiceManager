@@ -857,7 +857,7 @@ std::vector<double> InvoiceDbController::toValuesByTimespan(const IncomeData& da
        for (; itDate != itDateEnd; ++itDate)
        {
           double timespanTotal = 0.0;
-          while (itIncome->first < *(itDate+1))
+          while (itIncome->first < *(itDate+1) && itIncome != data.end())
           {
              timespanTotal += itIncome->second;
              ++itIncome;
