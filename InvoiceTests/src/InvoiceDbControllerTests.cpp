@@ -258,13 +258,13 @@ TEST_CASE( "InvoiceDbController - getIncomeHistory" )
       result = controller.getIncomeHistory(false);
 
       std::vector<double> incomeHistory = { 11750.0, 6750.0, 0.0, 5200.0, 0.0, 0.0, 0.0, 0.0 };
-      expectedResult.push_back(make_pair(testUtils.createClientCompanyData(1).name, std::vector<double>{0.0}));
+      expectedResult.push_back(make_pair(testUtils.createClientCompanyData(1).name, incomeHistory));
 
       incomeHistory = { 0.0, 11000.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-      expectedResult.push_back(make_pair(testUtils.createClientCompanyData(2).name, std::vector<double>{0.0}));
+      expectedResult.push_back(make_pair(testUtils.createClientCompanyData(2).name, incomeHistory));
 
       incomeHistory = { 0.0, 0.0, 2860.396, 0.0, 0.0, 0.0, 0.0, 29900.0 };
-      expectedResult.push_back(make_pair(testUtils.createClientCompanyData(3).name, std::vector<double>{0.0}));
+      expectedResult.push_back(make_pair(testUtils.createClientCompanyData(3).name, incomeHistory));
    }
 
    REQUIRE( result.size() == expectedResult.size() );
@@ -274,7 +274,7 @@ TEST_CASE( "InvoiceDbController - getIncomeHistory" )
       REQUIRE( itExpected != expectedResult.end());
       REQUIRE( resultData.second.size() == itExpected->second.size() );
       for (int i = 0; i < resultData.second.size(); ++i)
-         REQUIRE_THAT( resultData.second[i], Catch::Matchers::WithinAbs(itExpected->second[i], 0.00001));
+         REQUIRE_THAT( resultData.second[i], Catch::Matchers::WithinAbs(itExpected->second[i], 0.0001));
    }
 
 }

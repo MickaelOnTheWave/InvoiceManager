@@ -20,6 +20,7 @@
 #define INVOICEDBCONTROLLER_H
 
 #include <QtSql/qsqldatabase.h>
+#include <QtSql/QSqlQuery>
 #include <QStringListModel>
 #include <QObject>
 #include <QString>
@@ -110,6 +111,7 @@ public:
 
 private:
     using IncomePerClientId = std::map<int, double>;
+    using IncomeHistoryId = std::map<int, std::vector<double>>;
 
     bool createDbConnection(const QString& filename);
 
@@ -141,15 +143,25 @@ private:
 
     static std::vector<double> toValuesByTimespan(const IncomeData& data, const std::vector<QDate> dateSpans);
 
-    static QString buildIdsString(const std::map<int, double>& incomeMap);
-
     std::vector<QDate> toSortedDates(QSqlQuery& query) const;
 
     IncomePerClientId getIncomePerClientId() const;
+    IncomeHistoryId getIncomeHistoryId() const;
     IncomePerClientVec addNameToResults(const IncomePerClientId& results) const;
+    IncomeHistory addNameToResults(const IncomeHistoryId& results) const;
 
     CompanyChildMap getCompaniesWithChilds(const QString& companyIds) const;
     static void groupCompanyResults(const IdParentingMap& finalParentMap, IncomePerClientId& idData);
+    static void groupHistoryResults(const IdParentingMap& finalParentMap, IncomeHistoryId& idData);
+
+    template <class T>
+    static QString buildIdsString(const std::map<int, T>& incomeMap)
+    {
+       QString idString;
+       for (const auto& data: incomeMap)
+          idString += QString::number(data.first) + ",";
+       return idString.chopped(1);
+    }
 
     QString dbFilename;
     QString lastErrorMessage;

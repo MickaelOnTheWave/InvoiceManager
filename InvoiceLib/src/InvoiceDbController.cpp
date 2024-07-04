@@ -508,26 +508,16 @@ InvoiceDbController::IncomePerClientVec InvoiceDbController::getIncomePerClient(
 
 IncomeHistory InvoiceDbController::getIncomeHistory(const bool separateChildCompanies) const
 {
-   IncomeHistory history;
+   IncomeHistoryId historyPerId = getIncomeHistoryId();
 
-   QSqlQuery clientQuery;
-   bool ok = clientQuery.exec("SELECT company.name, company.id FROM company WHERE isClient = 1");
-   if (!ok)
-      return IncomeHistory();
-
-   const vector<QDate> datespans = createDateSpans();
-   while (clientQuery.next())
+   if (!separateChildCompanies)
    {
-      const QString companyName = clientQuery.value(0).toString();
-      const int companyId = clientQuery.value(1).toInt();
-      const IncomeData clientIncomeData = getClientInvoicedValues(companyId);
-
-      const std::vector<double> valuesByTimespan = toValuesByTimespan(clientIncomeData, datespans);
-
-      history.push_back(std::make_pair(companyName, valuesByTimespan));
+      const CompanyChildMap companyAndChildIds = getCompaniesWithChilds(buildIdsString(historyPerId));
+      const IdParentingMap finalParentsMap(companyAndChildIds);
+      groupHistoryResults(finalParentsMap, historyPerId);
    }
 
-   return history;
+   return addNameToResults(historyPerId);
 }
 
 std::pair<QDate, QDate> InvoiceDbController::getBoundaryMonths() const
@@ -844,7 +834,7 @@ vector<QDate> InvoiceDbController::createDateSpans() const
    const pair<QDate, QDate> dateBoundaries = getBoundaryMonths();
 
    QDate firstDate(dateBoundaries.first.year(), dateBoundaries.first.month(), 1);
-   QDate lastDate(dateBoundaries.second.year(), dateBoundaries.second.month(), 31);
+   QDate lastDate(dateBoundaries.second.year(), dateBoundaries.second.month(), dateBoundaries.second.daysInMonth());
 
    vector<QDate> dateSpans;
    QDate currentDate = firstDate;
@@ -876,14 +866,6 @@ std::vector<double> InvoiceDbController::toValuesByTimespan(const IncomeData& da
        }
    }
    return values;
-}
-
-QString InvoiceDbController::buildIdsString(const std::map<int, double> &incomeMap)
-{
-   QString idString;
-   for (const auto& data: incomeMap)
-      idString += QString::number(data.first) + ",";
-   return idString.chopped(1);
 }
 
 std::vector<QDate> InvoiceDbController::toSortedDates(QSqlQuery& query) const
@@ -924,6 +906,27 @@ InvoiceDbController::IncomePerClientId InvoiceDbController::getIncomePerClientId
    return data;
 }
 
+InvoiceDbController::IncomeHistoryId InvoiceDbController::getIncomeHistoryId() const
+{
+   IncomeHistoryId historyPerId;
+
+   QSqlQuery clientQuery;
+   bool ok = clientQuery.exec("SELECT company.id FROM company WHERE isClient = 1");
+   if (!ok)
+      return IncomeHistoryId();
+
+   const vector<QDate> datespans = createDateSpans();
+   while (clientQuery.next())
+   {
+      const int companyId = clientQuery.value(0).toInt();
+      const IncomeData clientIncomeData = getClientInvoicedValues(companyId);
+
+      const std::vector<double> valuesByTimespan = toValuesByTimespan(clientIncomeData, datespans);
+      historyPerId[companyId] = valuesByTimespan;
+   }
+   return historyPerId;
+}
+
 InvoiceDbController::IncomePerClientVec InvoiceDbController::addNameToResults(const std::map<int, double> &results) const
 {
    IncomePerClientVec data;
@@ -934,6 +937,27 @@ InvoiceDbController::IncomePerClientVec InvoiceDbController::addNameToResults(co
    bool ok = query.exec(nameQueryStr.arg(idString));
    if (!ok)
       return IncomePerClientVec();
+
+   auto itTotals = results.begin();
+   while (query.next())
+   {
+      const QString companyName = query.value(0).toString();
+      data.push_back(std::make_pair(companyName, itTotals->second));
+      ++itTotals;
+   }
+   return data;
+}
+
+IncomeHistory InvoiceDbController::addNameToResults(const IncomeHistoryId& results) const
+{
+   IncomeHistory data;
+
+   const QString idString = buildIdsString(results);
+   const QString nameQueryStr = "SELECT company.name FROM company WHERE company.id IN (%1)";
+   QSqlQuery query;
+   bool ok = query.exec(nameQueryStr.arg(idString));
+   if (!ok)
+      return IncomeHistory();
 
    auto itTotals = results.begin();
    while (query.next())
@@ -974,6 +998,24 @@ void InvoiceDbController::groupCompanyResults(const IdParentingMap &finalParentM
       {
          auto itFinalParent = idData.find(itParent->first);
          itFinalParent->second += itResults->second;
+         itResults = idData.erase(itResults);
+      }
+      else
+         ++itResults;
+   }
+}
+
+void InvoiceDbController::groupHistoryResults(const IdParentingMap &finalParentMap, IncomeHistoryId &idData)
+{
+   auto itResults = idData.begin();
+   while (itResults != idData.end())
+   {
+      auto itParent = finalParentMap.findParentIt(itResults->first);
+      if (itParent != finalParentMap.end())
+      {
+         auto itFinalParent = idData.find(itParent->first);
+         for (int i=0; i<itFinalParent->second.size(); ++i)
+            itFinalParent->second[i] += itResults->second[i];
          itResults = idData.erase(itResults);
       }
       else
