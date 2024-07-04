@@ -87,6 +87,11 @@ void populateWithCompaniesAndInvoices(InvoiceDbController& controller)
    }
 }
 
+void addExpectedHistory(IncomeHistory& expected, const int companyIndex, const vector<double> values)
+{
+   TestUtilities testUtils;
+   expected.push_back(make_pair(testUtils.createClientCompanyData(companyIndex).name, values));
+}
 
 /*******************/
 
@@ -240,31 +245,19 @@ TEST_CASE( "InvoiceDbController - getIncomeHistory" )
    {
       result = controller.getIncomeHistory(true);
 
-      std::vector<double> incomeHistory = { 11750.0, 0.0, 0.0, 5200.0, 0.0, 0.0, 0.0, 0.0 };
-      expectedResult.push_back(make_pair(testUtils.createClientCompanyData(0).name, incomeHistory));
-
-      incomeHistory = { 0.0, 6750.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-      expectedResult.push_back(make_pair(testUtils.createClientCompanyData(1).name, incomeHistory));
-
-      incomeHistory = { 0.0, 11000.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-      expectedResult.push_back(make_pair(testUtils.createClientCompanyData(2).name, incomeHistory));
-
-      incomeHistory = { 0.0, 0.0, 2860.396, 0.0, 0.0, 0.0, 0.0, 29900.0 };
-      expectedResult.push_back(make_pair(testUtils.createClientCompanyData(3).name, incomeHistory));
+      addExpectedHistory(expectedResult, 0, { 11750.0, 0.0, 0.0, 5200.0, 0.0, 0.0, 0.0, 0.0 });
+      addExpectedHistory(expectedResult, 1, { 0.0, 6750.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 });
+      addExpectedHistory(expectedResult, 2, { 0.0, 11000.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 });
+      addExpectedHistory(expectedResult, 3, { 0.0, 0.0, 2860.396, 0.0, 0.0, 0.0, 0.0, 29900.0 });
    }
 
    SECTION("Child companies grouped")
    {
       result = controller.getIncomeHistory(false);
 
-      std::vector<double> incomeHistory = { 11750.0, 6750.0, 0.0, 5200.0, 0.0, 0.0, 0.0, 0.0 };
-      expectedResult.push_back(make_pair(testUtils.createClientCompanyData(1).name, incomeHistory));
-
-      incomeHistory = { 0.0, 11000.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-      expectedResult.push_back(make_pair(testUtils.createClientCompanyData(2).name, incomeHistory));
-
-      incomeHistory = { 0.0, 0.0, 2860.396, 0.0, 0.0, 0.0, 0.0, 29900.0 };
-      expectedResult.push_back(make_pair(testUtils.createClientCompanyData(3).name, incomeHistory));
+      addExpectedHistory(expectedResult, 1, { 11750.0, 6750.0, 0.0, 5200.0, 0.0, 0.0, 0.0, 0.0 });
+      addExpectedHistory(expectedResult, 2, { 0.0, 11000.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 });
+      addExpectedHistory(expectedResult, 3, { 0.0, 0.0, 2860.396, 0.0, 0.0, 0.0, 0.0, 29900.0 });
    }
 
    REQUIRE( result.size() == expectedResult.size() );
