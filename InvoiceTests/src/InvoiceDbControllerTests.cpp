@@ -19,9 +19,7 @@
 #include <catch2/catch.hpp>
 #include <QSqlQuery>
 
-
 #include "TestUtilities.h"
-
 
 #define private public
 #include "IdParentingMap.h"
