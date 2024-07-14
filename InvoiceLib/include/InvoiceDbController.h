@@ -145,6 +145,8 @@ private:
 
     std::vector<QDate> toSortedDates(QSqlQuery& query) const;
 
+    void fillInvoiceDbCommonData(InvoiceDbData& data, QSqlQuery& query) const;
+
     IncomePerClientId getIncomePerClientId() const;
     IncomeHistoryId getIncomeHistoryId() const;
 

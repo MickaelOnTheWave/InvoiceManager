@@ -251,25 +251,18 @@ int InvoiceDbController::GetInvoiceId(const QDate target) const
    return -1;
 }
 
-// TODO : Remove duplication between here and getInvoiceTemplateData()
 InvoiceDbData InvoiceDbController::getLastInvoiceData() const
 {
-    InvoiceDbData data;
-    QSqlQuery query;
-    const bool ok = query.exec("SELECT id, clientId, templateId, stylesheetId, notes, currency FROM invoice ORDER BY id DESC LIMIT 1");
-    if (ok && query.next())
-    {
-
-        data.clientId = query.value(1).toInt();
-        data.templateId = query.value(2).toInt();
-        data.stylesheetId = query.value(3).toInt();
-        data.notes = query.value(4).toString();
-        data.currency = query.value(5).toString();
-
-        const int invoiceId = query.value(0).toInt();
-        data.detailsIds = getInvoiceElements(invoiceId);
-    }
-    return data;
+   InvoiceDbData data;
+   QSqlQuery query;
+   const bool ok = query.exec("SELECT clientId, templateId, stylesheetId, notes, currency, id FROM invoice ORDER BY id DESC LIMIT 1");
+   if (ok && query.next())
+   {
+      fillInvoiceDbCommonData(data, query);
+      const int invoiceId = query.value(5).toInt();
+      data.detailsIds = getInvoiceElements(invoiceId);
+   }
+   return data;
 }
 
 InvoiceDbData InvoiceDbController::getInvoiceDbData(const int invoiceId) const
@@ -277,26 +270,16 @@ InvoiceDbData InvoiceDbController::getInvoiceDbData(const int invoiceId) const
    InvoiceDbData data;
    data.id = invoiceId;
 
-   const QString queryStr = "SELECT companyId, clientId, templateId, stylesheetId, date, notes, currency "
+   const QString queryStr = "SELECT clientId, templateId, stylesheetId, notes, currency, date  "
                             "FROM invoice WHERE id = %1";
    QSqlQuery query(queryStr.arg(invoiceId));
    if (query.first())
    {
-      //const int companyId = query.value(0).toInt();
-      const int clientId = query.value(1).toInt();
-      const int templateId = query.value(2).toInt();
-      const int stylesheetId = query.value(3).toInt();
-      const QString dateStr = query.value(4).toString();
-      const QString notes = query.value(5).toString();
-      const QString currency = query.value(6).toString();
+      fillInvoiceDbCommonData(data, query);
 
+      const QString dateStr = query.value(5).toString();
       data.date = QDate::fromString(dateStr, dateFormatStr);
-      data.detailsIds = getInvoiceElements(invoiceId);
-      data.notes = notes;
-      data.currency = currency;
-      data.clientId = clientId;
-      data.templateId = templateId;
-      data.stylesheetId = stylesheetId;
+      data.detailsIds = getInvoiceElements(invoiceId);      
    }
 
    return data;
@@ -877,6 +860,15 @@ std::vector<QDate> InvoiceDbController::toSortedDates(QSqlQuery& query) const
    }
    std::sort(dates.begin(), dates.end());
    return dates;
+}
+
+void InvoiceDbController::fillInvoiceDbCommonData(InvoiceDbData &data, QSqlQuery &query) const
+{
+   data.clientId = query.value(0).toInt();
+   data.templateId = query.value(1).toInt();
+   data.stylesheetId = query.value(2).toInt();
+   data.notes = query.value(3).toString();
+   data.currency = query.value(4).toString();
 }
 
 InvoiceDbController::IncomePerClientId InvoiceDbController::getIncomePerClientId() const
