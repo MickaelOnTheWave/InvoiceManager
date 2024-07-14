@@ -64,11 +64,12 @@ void populateWithCompanies(InvoiceDbController& controller)
 
 }
 
+const std::vector<int> invoiceDetailsSizes = { 3, 2, 2, 1, 1, 3, 4};
+
 void populateWithCompaniesAndInvoices(InvoiceDbController& controller)
 {
    populateWithCompanies(controller);
 
-   const std::vector<int> invoiceDetailsSizes = { 3, 2, 2, 1, 1, 3, 4};
    TestUtilities testUtils;
    // Add invoices
    int iDetails = 0;
@@ -89,6 +90,36 @@ void addExpectedHistory(IncomeHistory& expected, const int companyIndex, const v
 {
    TestUtilities testUtils;
    expected.push_back(make_pair(testUtils.createClientCompanyData(companyIndex).name, values));
+}
+
+InvoiceDbData getPopulatedInvoice(const int index)
+{
+   TestUtilities testUtils;
+   InvoiceDbData expectedData = testUtils.createInvoiceData(index);
+
+
+   int startingI = 0;
+   for (int i=0; i<index; ++i)
+      startingI += invoiceDetailsSizes[i];
+   const int detailCount = invoiceDetailsSizes[index];
+   for (int i=0; i<detailCount; ++i)
+      expectedData.detailsIds.push_back(i+startingI+1);
+   return expectedData;
+}
+
+void checkInvoiceDataEqual(const InvoiceDbData& invoiceData, const InvoiceDbData& expectedData)
+{
+   REQUIRE( invoiceData.clientId == expectedData.clientId );
+   REQUIRE( invoiceData.templateId == expectedData.templateId );
+   REQUIRE( invoiceData.stylesheetId == expectedData.stylesheetId );
+   REQUIRE( invoiceData.notes == expectedData.notes );
+   REQUIRE( invoiceData.currency == expectedData.currency );
+   //REQUIRE( invoiceData.date == expectedData.date );
+   //REQUIRE( invoiceData.id == expectedData.id );
+
+   REQUIRE( invoiceData.detailsIds.size() == expectedData.detailsIds.size() );
+   for (int i=0; i<invoiceData.detailsIds.size(); ++i)
+      REQUIRE( invoiceData.detailsIds[i] == expectedData.detailsIds[i] );
 }
 
 /*******************/
@@ -267,7 +298,22 @@ TEST_CASE( "InvoiceDbController - getIncomeHistory" )
       for (int i = 0; i < resultData.second.size(); ++i)
          REQUIRE_THAT( resultData.second[i], Catch::Matchers::WithinAbs(itExpected->second[i], 0.0001));
    }
+}
 
+TEST_CASE( "InvoiceDbController - getLastInvoiceData" )
+{
+   InvoiceDbController controller;
+   populateWithCompaniesAndInvoices(controller);
+
+   TestUtilities testUtils;
+   InvoiceDbData expectedData = getPopulatedInvoice(6);
+   InvoiceDbData invoiceData = controller.getLastInvoiceData();
+
+   checkInvoiceDataEqual(invoiceData, expectedData);
+}
+
+TEST_CASE( "InvoiceDbController - getInvoiceDbData" )
+{
 }
 
 /*******************/
