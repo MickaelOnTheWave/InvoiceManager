@@ -114,12 +114,16 @@ void checkInvoiceDataEqual(const InvoiceDbData& invoiceData, const InvoiceDbData
    REQUIRE( invoiceData.stylesheetId == expectedData.stylesheetId );
    REQUIRE( invoiceData.notes == expectedData.notes );
    REQUIRE( invoiceData.currency == expectedData.currency );
-   //REQUIRE( invoiceData.date == expectedData.date );
-   //REQUIRE( invoiceData.id == expectedData.id );
 
    REQUIRE( invoiceData.detailsIds.size() == expectedData.detailsIds.size() );
    for (int i=0; i<invoiceData.detailsIds.size(); ++i)
       REQUIRE( invoiceData.detailsIds[i] == expectedData.detailsIds[i] );
+}
+
+void checkInvoiceIdAndDateEqual(const InvoiceDbData& invoiceData, const InvoiceDbData& expectedData)
+{
+   REQUIRE( invoiceData.date == expectedData.date );
+   REQUIRE( invoiceData.id == expectedData.id );
 }
 
 /*******************/
@@ -306,14 +310,25 @@ TEST_CASE( "InvoiceDbController - getLastInvoiceData" )
    populateWithCompaniesAndInvoices(controller);
 
    TestUtilities testUtils;
-   InvoiceDbData expectedData = getPopulatedInvoice(6);
-   InvoiceDbData invoiceData = controller.getLastInvoiceData();
+   const InvoiceDbData expectedData = getPopulatedInvoice(6);
+   const InvoiceDbData invoiceData = controller.getLastInvoiceData();
 
    checkInvoiceDataEqual(invoiceData, expectedData);
 }
 
 TEST_CASE( "InvoiceDbController - getInvoiceDbData" )
 {
+   InvoiceDbController controller;
+   populateWithCompaniesAndInvoices(controller);
+
+   TestUtilities testUtils;
+   for (int i=0; i<6; ++i)
+   {
+      const InvoiceDbData expectedData = getPopulatedInvoice(i);
+      const InvoiceDbData invoiceData = controller.getInvoiceDbData(i+1);
+      checkInvoiceDataEqual(invoiceData, expectedData);
+      checkInvoiceIdAndDateEqual(invoiceData, expectedData);
+   }
 }
 
 /*******************/
