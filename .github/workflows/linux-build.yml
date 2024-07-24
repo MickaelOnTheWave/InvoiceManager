@@ -54,7 +54,7 @@ jobs:
       run: ctest -C ${{env.BUILD_TYPE}}
 
     - name: 8 - Release
-       uses: softprops/action-gh-release@v2
+       uses: softprops/action-gh-release@v1
        with:
          files: |
             build/InvoiceCli/InvoiceCli
